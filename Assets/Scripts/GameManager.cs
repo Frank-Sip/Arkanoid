@@ -6,29 +6,36 @@ using UnityEngine.PlayerLoop;
 
 public class GameManager : MonoBehaviour
 {
-    private static PlayerLoopSystem originalPlayerLoop;
+    private static bool firstFrame = false;
     
+    [Header("GameObject references")]
     public Transform ball;
     public Transform paddle;
+    
+    [Header("GameObject Settings")]
+    public PaddleSO paddleSO;
+    public BallSO ballSO;
+    public ScreenEdgesSO screenEdgesSO;
+
+    private static PlayerLoopSystem originalPlayerLoop;
 
     private void Awake()
     {
-        BallPhysics.Inititate(ball);
-        PaddlePhysics.Initiate(paddle);
+        BallPhysics.Inititate(ball, ballSO, screenEdgesSO);
+        PaddlePhysics.Initiate(paddle, paddleSO, screenEdgesSO);
         MakePlayerLoop();
     }
 
     private void MakePlayerLoop()
     {
         originalPlayerLoop = PlayerLoop.GetCurrentPlayerLoop();
-        
         var loop = PlayerLoop.GetDefaultPlayerLoop();
 
         for (int i = 0; i < loop.subSystemList.Length; i++)
         {
             if (loop.subSystemList[i].type == typeof(Update))
             {
-                var updateList = new System.Collections.Generic.List<PlayerLoopSystem>(loop.subSystemList[i].subSystemList);
+                var updateList = new List<PlayerLoopSystem>(loop.subSystemList[i].subSystemList);
 
                 var customSystem = new PlayerLoopSystem
                 {
@@ -47,12 +54,18 @@ public class GameManager : MonoBehaviour
 
     private static void CustomUpdate()
     {
+        if (!firstFrame)
+        {
+            firstFrame = true;
+            return;
+        }
+        
         PaddlePhysics.Frame();
         BallPhysics.Frame();
     }
 
     private struct CustomGameLogic {}
-    
+
 #if UNITY_EDITOR
     [UnityEditor.InitializeOnLoadMethod]
     private static void ResetPlayerLoopInEditor()
