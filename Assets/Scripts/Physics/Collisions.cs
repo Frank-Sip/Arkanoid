@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class Collision
+public static class Collisions
 {
     public static bool CheckCollisions(Vector3 ballPosition, float radius)
     {

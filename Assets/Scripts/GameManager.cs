@@ -6,6 +6,8 @@ using UnityEngine.PlayerLoop;
 
 public class GameManager : MonoBehaviour
 {
+    private static PlayerLoopSystem originalPlayerLoop;
+    
     public Transform ball;
     public Transform paddle;
 
@@ -18,6 +20,8 @@ public class GameManager : MonoBehaviour
 
     private void MakePlayerLoop()
     {
+        originalPlayerLoop = PlayerLoop.GetCurrentPlayerLoop();
+        
         var loop = PlayerLoop.GetDefaultPlayerLoop();
 
         for (int i = 0; i < loop.subSystemList.Length; i++)
@@ -37,16 +41,29 @@ public class GameManager : MonoBehaviour
                 break;
             }
         }
-        
+
         PlayerLoop.SetPlayerLoop(loop);
     }
-    
-    static void CustomUpdate()
+
+    private static void CustomUpdate()
     {
         PaddlePhysics.Frame();
         BallPhysics.Frame();
     }
 
-    struct CustomGameLogic {}
-
+    private struct CustomGameLogic {}
+    
+#if UNITY_EDITOR
+    [UnityEditor.InitializeOnLoadMethod]
+    private static void ResetPlayerLoopInEditor()
+    {
+        UnityEditor.EditorApplication.playModeStateChanged += state =>
+        {
+            if (state == UnityEditor.PlayModeStateChange.ExitingPlayMode)
+            {
+                PlayerLoop.SetPlayerLoop(originalPlayerLoop);
+            }
+        };
+    }
+#endif
 }
