@@ -51,7 +51,12 @@ public class GameManager : MonoBehaviour
         }
         
         PaddlePhysics.Frame();
-        BallPhysics.Frame();
+        
+        var balls = new List<BallController>(BallManager.GetBalls());
+        foreach (var ball in balls)
+        {
+            ball.Frame();
+        }
     }
 
     private struct CustomGameLogic {}

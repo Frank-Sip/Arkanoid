@@ -42,12 +42,13 @@ public class BrickManager : MonoBehaviour
             }
         }
     }
-    
 
     public static void Register(BrickController brick)
     {
         if (!bricks.Contains(brick))
+        {
             bricks.Add(brick);
+        }
     }
 
     public static void Unregister(BrickController brick)

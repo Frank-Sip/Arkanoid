@@ -6,9 +6,24 @@ public class BallController : MonoBehaviour
 {
     [SerializeField] private BallSO ballSo;
     [SerializeField] private ScreenEdgesSO screenEdgesSO;
-
+    
+    public Vector3 Direction { get; set; }
+    
     private void Awake()
     {
-        BallPhysics.Initiate(transform, ballSo, screenEdgesSO);
+        BallManager.Register(this);
+        BallPhysics.Initiate(transform, ballSo, screenEdgesSO, this);
+        Direction = BallPhysics.GetInitialDirection();
+    }
+
+    public void Frame()
+    {
+        BallPhysics.Frame(transform, ballSo, screenEdgesSO, this);
+    }
+
+    public void DestroyBall()
+    {
+        BallManager.Unregister(this);
+        Destroy(gameObject);
     }
 }
