@@ -32,11 +32,6 @@ public static class PaddlePhysics
 
         paddle.position = position;
 
-        bounds = new Rect(
-            paddle.position.x - halfWidth,
-            paddle.position.y - (paddleConfig.height / 2f),
-            paddleConfig.width,
-            paddleConfig.height
-        );
+        bounds = new Rect(paddle.position.x - halfWidth, paddle.position.y - (paddleConfig.height / 2f), paddleConfig.width, paddleConfig.height);
     }
 }

@@ -7,22 +7,11 @@ using UnityEngine.PlayerLoop;
 public class GameManager : MonoBehaviour
 {
     private static bool firstFrame = false;
-    
-    [Header("GameObject references")]
-    public Transform ball;
-    public Transform paddle;
-    
-    [Header("GameObject Settings")]
-    public PaddleSO paddleSO;
-    public BallSO ballSO;
-    public ScreenEdgesSO screenEdgesSO;
 
     private static PlayerLoopSystem originalPlayerLoop;
 
     private void Awake()
     {
-        BallPhysics.Inititate(ball, ballSO, screenEdgesSO);
-        PaddlePhysics.Initiate(paddle, paddleSO, screenEdgesSO);
         MakePlayerLoop();
     }
 
@@ -54,6 +43,7 @@ public class GameManager : MonoBehaviour
 
     private static void CustomUpdate()
     {
+        //Skips the first frame because it freezes
         if (!firstFrame)
         {
             firstFrame = true;
