@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class BallManager : MonoBehaviour
+public class BallManager
 {
     private static List<BallController> balls = new List<BallController>();
+    private static List<BallController> activeBalls = new List<BallController>();
 
     public static void Register(BallController ball)
     {
@@ -17,12 +18,9 @@ public class BallManager : MonoBehaviour
 
     public static void Unregister(BallController ball)
     {
-        if (balls.Contains(ball))
-        {
-            balls.Remove(ball);
-        }
+        activeBalls.Remove(ball);
 
-        if (balls.Count <= 0)
+        if (activeBalls.Count <= 0)
         {
             Debug.Log("You lose!");
         }
@@ -31,5 +29,10 @@ public class BallManager : MonoBehaviour
     public static List<BallController> GetBalls()
     {
         return balls;
+    }
+    
+    public static List<BallController> GetActiveBalls()
+    {
+        return activeBalls;
     }
 }

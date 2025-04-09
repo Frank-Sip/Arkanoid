@@ -7,9 +7,10 @@ public class BrickController : MonoBehaviour
     public BrickSO brickConfig;
     public Rect bounds { get; private set; }
 
-    private void Awake()
+    public void Activate()
     {
         BrickPhysics.Initiate(transform, brickConfig, this);
+        gameObject.SetActive(true);
     }
 
     public void UpdateBounds()
@@ -26,6 +27,6 @@ public class BrickController : MonoBehaviour
     public void OnDestroyBrick()
     {
         BrickManager.Unregister(this);
-        Destroy(gameObject);
+        BrickPool.Instance.ReturnToPool(this);
     }
 }

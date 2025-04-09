@@ -23,7 +23,6 @@ public class BallController : MonoBehaviour
 
     public void DestroyBall()
     {
-        BallManager.Unregister(this);
-        Destroy(gameObject);
+        BallPool.Instance.ReturnToPool(this);
     }
 }

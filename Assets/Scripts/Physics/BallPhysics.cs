@@ -84,7 +84,10 @@ public static class BallPhysics
     {
         foreach (var other in BallManager.GetBalls())
         {
-            if (other == null || other == self) continue;
+            if (other == null || other == self)
+            {
+                continue;
+            }
 
             Vector3 otherPos = other.transform.position;
             Vector3 delta = otherPos - position;

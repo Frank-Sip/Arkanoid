@@ -25,8 +25,13 @@ public static class BrickPhysics
     {
         Rect ballRect = new Rect(ballPos.x - radius, ballPos.y - radius, radius * 2, radius * 2);
 
-        foreach (var brick in BrickManager.GetBricks())
+        foreach (var brick in BrickManager.GetActiveBricks())
         {
+            if (brick == null || !brick.gameObject.activeInHierarchy || !brick.enabled)
+            {
+                continue;
+            }
+
             if (brick.bounds.Overlaps(ballRect))
             {
                 brick.OnDestroyBrick();

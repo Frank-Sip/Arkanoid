@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.LowLevel;
@@ -6,12 +5,25 @@ using UnityEngine.PlayerLoop;
 
 public class GameManager : MonoBehaviour
 {
-    private static bool firstFrame = false;
+    public static GameManager Instance { get; private set; }
 
+    [Header("Ball Settings")]
+    [SerializeField] private Vector3 initialBallPosition;
+
+    [Header("Brick Grid Settings")]
+    [SerializeField] private int columns = 5;
+    [SerializeField] private int rows = 5;
+    [SerializeField] private float spacing = 0.3f;
+    [SerializeField] private Vector2 startPoint = new Vector2(-7f, 4f);
+
+    private static bool firstFrame = false;
+    private static bool initialBallSpawned = false;
+    private static bool initialBricksSpawned = false;
     private static PlayerLoopSystem originalPlayerLoop;
 
     private void Awake()
     {
+        Instance = this;
         MakePlayerLoop();
     }
 
@@ -43,23 +55,59 @@ public class GameManager : MonoBehaviour
 
     private static void CustomUpdate()
     {
-        //Skips the first frame because it freezes
+        //Needed because the game freezes in the first frame
         if (!firstFrame)
         {
             firstFrame = true;
             return;
         }
-        
-        PaddlePhysics.Frame();
-        
-        var balls = new List<BallController>(BallManager.GetBalls());
-        foreach (var ball in balls)
+
+        if (!initialBallSpawned)
         {
-            ball.Frame();
+            initialBallSpawned = true;
+            BallPool.Instance.SpawnBall(Instance.initialBallPosition);
+        }
+
+        if (!initialBricksSpawned)
+        {
+            initialBricksSpawned = true;
+            Instance.SpawnBricksGrid();
+        }
+
+        PaddlePhysics.Frame();
+
+        foreach (var ball in BallManager.GetBalls())
+        {
+            if (ball.gameObject.activeInHierarchy)
+                ball.Frame();
         }
     }
 
-    private struct CustomGameLogic {}
+    private void SpawnBricksGrid()
+    {
+        BrickSO config = BrickPool.Instance.GetBrickSO();
+        float width = config.width;
+        float height = config.height;
+
+        for (int row = 0; row < rows; row++)
+        {
+            for (int col = 0; col < columns; col++)
+            {
+                Vector3 pos = new Vector3(
+                    startPoint.x + col * (width + spacing),
+                    startPoint.y - row * (height + spacing),
+                    0f
+                );
+
+                BrickController brick = BrickPool.Instance.SpawnBrick();
+                brick.transform.position = pos;
+                brick.Activate();
+            }
+        }
+    }
+
+
+    private struct CustomGameLogic { }
 
 #if UNITY_EDITOR
     [UnityEditor.InitializeOnLoadMethod]
