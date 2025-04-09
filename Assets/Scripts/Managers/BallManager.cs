@@ -22,7 +22,7 @@ public class BallManager
 
         if (activeBalls.Count <= 0)
         {
-            Debug.Log("You lose!");
+            GameManager.Instance.ChangeGameStatus(new DefeatState());
         }
     }
     

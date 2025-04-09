@@ -44,3 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d6a346c9e5aa5e46afd908bd0c29d84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialBallPosition: {x: 0, y: 0, z: 0}
+  columns: 5
+  rows: 5
+  spacing: 0.1
+  startPoint: {x: -22.5, y: 14}

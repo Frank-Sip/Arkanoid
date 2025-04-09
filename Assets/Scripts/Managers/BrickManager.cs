@@ -18,7 +18,7 @@ public static class BrickManager
 
         if (activeBricks.Count <= 0)
         {
-            Debug.Log("You win!");
+            GameManager.Instance.ChangeGameStatus(new VictoryState());
         }
     }
 
