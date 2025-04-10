@@ -47,6 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   brickConfig: {fileID: 11400000, guid: 2013bc294ead9e54a96ca28d658255cb, type: 2}
   visual: {fileID: 5116235896570062131}
+  powerUpDropChance: 0.2
 --- !u!1001 &4650595594372661976
 PrefabInstance:
   m_ObjectHideFlags: 0

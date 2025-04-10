@@ -5,6 +5,7 @@ public class BrickController : MonoBehaviour
 {
     [SerializeField] public BrickSO brickConfig;
     [SerializeField] private Transform visual;
+    [SerializeField] private float powerUpDropChance = 0.1f; // 10% de probabilidad
 
     public Rect bounds { get; private set; }
 
@@ -27,6 +28,12 @@ public class BrickController : MonoBehaviour
 
     public void OnDestroyBrick()
     {
+        // Intentar soltar un power-up
+        if (Random.value < powerUpDropChance)
+        {
+            PowerUpManager.SpawnPowerUp(transform.position);
+        }
+
         BrickManager.Unregister(this);
         BrickPool.Instance.ReturnToPool(this);
     }

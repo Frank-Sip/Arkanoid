@@ -102,6 +102,8 @@ public class GameManager : MonoBehaviour
             if (ball.gameObject.activeInHierarchy)
                 ball.Frame();
         }
+
+        PowerUpManager.Frame();
     }
 
     private void SpawnBricksGrid()
