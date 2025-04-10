@@ -10,6 +10,12 @@ public class PaddleController : MonoBehaviour
     [SerializeField] private Transform visual;
     private Vector3 initialPosition;
 
+    private void Awake()
+    {
+        Renderer renderer = visual.GetComponent<Renderer>();
+        AtlasManager.ActivateAtlas(renderer, "paddle");
+    }
+
     public void Initiate()
     {
         PaddlePhysics.Initiate(transform, visual, paddleSO, screenEdgesSO);
