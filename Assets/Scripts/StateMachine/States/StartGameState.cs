@@ -12,7 +12,7 @@ public class StartGameState : GameState
         Debug.Log("Press Space to Start");
     }
 
-    public override void Update(GameManager gameManager)
+    public override void Tick(GameManager gameManager)
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {

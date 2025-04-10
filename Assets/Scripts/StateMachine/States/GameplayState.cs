@@ -10,7 +10,7 @@ public class GameplayState : GameState
         Time.timeScale = 1f;
     }
 
-    public override void Update(GameManager gameManager)
+    public override void Tick(GameManager gameManager)
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {

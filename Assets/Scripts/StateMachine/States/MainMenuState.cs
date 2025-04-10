@@ -11,7 +11,7 @@ public class MainMenuState : GameState
         Debug.Log("Press any key to Play");
     }
 
-    public override void Update(GameManager gameManager)
+    public override void Tick(GameManager gameManager)
     {
         if (Input.anyKeyDown)
         {

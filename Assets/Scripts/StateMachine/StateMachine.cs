@@ -21,7 +21,7 @@ public class StateMachine
     {
         if (currentState != null)
         {
-            currentState.Update(gameManager);
+            currentState.Tick(gameManager);
         }
     }
 }

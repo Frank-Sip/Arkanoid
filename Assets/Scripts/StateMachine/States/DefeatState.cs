@@ -10,7 +10,7 @@ public class DefeatState : GameState
         Time.timeScale = 0f;
     }
 
-    public override void Update(GameManager gameManager)
+    public override void Tick(GameManager gameManager)
     {
         if (Input.GetKeyDown(KeyCode.R))
         {

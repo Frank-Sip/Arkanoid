@@ -5,11 +5,31 @@ using UnityEngine;
 
 public class PaddleController : MonoBehaviour
 {
-    [SerializeField] private PaddleSO paddleSo;
+    [SerializeField] private PaddleSO paddleSO;
     [SerializeField] private ScreenEdgesSO screenEdgesSO;
+    [SerializeField] private Transform visual;
 
-    private void Awake()
+    public void Initiate()
     {
-        PaddlePhysics.Initiate(transform, paddleSo, screenEdgesSO);
+        PaddlePhysics.Initiate(transform, visual, paddleSO, screenEdgesSO);
     }
+    
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        // Bounds de físicas
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireCube(PaddlePhysics.bounds.center, PaddlePhysics.bounds.size);
+
+        // Bounds visuales (calculados directamente desde la mesh escalada)
+        if (visual != null)
+        {
+            Gizmos.color = Color.red;
+            Bounds meshBounds = visual.GetComponent<MeshFilter>()?.sharedMesh?.bounds ?? new Bounds(Vector3.zero, Vector3.one);
+            Vector3 size = Vector3.Scale(meshBounds.size, visual.lossyScale);
+            Vector3 center = visual.position + Vector3.Scale(meshBounds.center, visual.lossyScale);
+            Gizmos.DrawWireCube(center, size);
+        }
+    }
+#endif
 }

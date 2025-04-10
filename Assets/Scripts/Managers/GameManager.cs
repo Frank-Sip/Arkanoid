@@ -9,8 +9,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
     
-    [Header("Ball Settings")]
+    [Header("GameObject Settings")]
     [SerializeField] private Vector3 initialBallPosition;
+    [SerializeField] private PaddleController paddleController;
 
     [Header("Brick Grid Settings")]
     [SerializeField] private int columns = 5;
@@ -35,6 +36,8 @@ public class GameManager : MonoBehaviour
         gameIsReloading = false;
 
         MakePlayerLoop();
+        
+        paddleController.Initiate();
     }
 
     private void MakePlayerLoop()

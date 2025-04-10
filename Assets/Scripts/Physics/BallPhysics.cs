@@ -5,7 +5,6 @@ using UnityEngine;
 public static class BallPhysics
 {
     private static Transform ball;
-    private static Vector3 direction = new Vector3(1, 1, 0);
     private static BallSO ballConfig;
     private static ScreenEdgesSO screenConfig;
     private static BallController ballController;
@@ -31,7 +30,6 @@ public static class BallPhysics
     public static void ResetBallDirection()
     {
         float x = Random.value < 0.5f ? -1f : 1f;
-        direction = new Vector3(x, -1f, 0);
     }
 
     public static void Frame(Transform ball, BallSO ballConfig, ScreenEdgesSO screenConfig, BallController ballController)
