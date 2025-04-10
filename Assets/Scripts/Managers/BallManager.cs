@@ -11,9 +11,18 @@ public class BallManager
     public static void Register(BallController ball)
     {
         if (!balls.Contains(ball))
-        {
             balls.Add(ball);
-        }
+    }
+
+    public static void SetActive(BallController ball)
+    {
+        if (!activeBalls.Contains(ball))
+            activeBalls.Add(ball);
+    }
+
+    public static void SetWaiting(BallController ball)
+    {
+        activeBalls.Remove(ball);
     }
 
     public static void Unregister(BallController ball)
@@ -22,17 +31,19 @@ public class BallManager
 
         if (activeBalls.Count <= 0)
         {
-            GameManager.Instance.ChangeGameStatus(new DefeatState());
+            RespawnSingleBall();
         }
     }
-    
-    public static List<BallController> GetBalls()
+
+    private static void RespawnSingleBall()
     {
-        return balls;
+        Vector3 paddlePos = PaddlePhysics.bounds.center;
+        Vector3 ballPos = new Vector3(paddlePos.x, paddlePos.y + 3f, 0f);
+
+        BallController newBall = BallPool.Instance.SpawnBall(ballPos);
+        newBall.SetWaitingOnPaddle();
     }
-    
-    public static List<BallController> GetActiveBalls()
-    {
-        return activeBalls;
-    }
+
+    public static List<BallController> GetBalls() => balls;
+    public static List<BallController> GetActiveBalls() => activeBalls;
 }

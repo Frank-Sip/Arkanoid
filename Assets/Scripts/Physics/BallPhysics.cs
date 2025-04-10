@@ -41,8 +41,9 @@ public class BallPhysics //Do not make this class static
 
     public static Vector3 GetInitialDirection()
     {
-        float x = Random.value < 0.5f ? -1f : 1f;
-        return new Vector3(x, 1f, 0f).normalized;
+        float x = Random.Range(-1f, 1f);
+        float y = Mathf.Sqrt(1f - x * x);
+        return new Vector3(x, y, 0f).normalized;
     }
 
     public void Frame()
