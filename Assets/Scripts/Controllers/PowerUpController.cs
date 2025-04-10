@@ -58,11 +58,9 @@ public class PowerUpController : MonoBehaviour
         Vector3 paddlePos = PaddlePhysics.bounds.center;
         Vector3 ballPos = new Vector3(paddlePos.x, paddlePos.y + 3f, 0f);
 
-        // Spawn dos nuevas pelotas
         BallController ball1 = BallPool.Instance.SpawnBall(ballPos);
         BallController ball2 = BallPool.Instance.SpawnBall(ballPos);
 
-        // Configurar las direcciones de las nuevas pelotas
         ball1.Direction = new Vector3(-0.5f, 1f, 0f).normalized;
         ball2.Direction = new Vector3(0.5f, 1f, 0f).normalized;
     }
