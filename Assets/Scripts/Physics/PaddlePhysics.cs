@@ -30,8 +30,7 @@ public static class PaddlePhysics
             float scaleY = paddleConfig.height / baseHeight;
 
             visual.localScale = new Vector3(scaleX, scaleY, 1f);
-
-            // Centrado automático usando el centro del mesh
+            
             Vector3 centerOffset = Vector3.Scale(meshBounds.center, visual.localScale);
             visual.localPosition = -centerOffset;
 
@@ -39,7 +38,6 @@ public static class PaddlePhysics
         }
         else
         {
-            // Fallback si no hay mesh
             visual.localScale = new Vector3(paddleSO.width, paddleSO.height, 1f);
             visual.localPosition = Vector3.zero;
         }

@@ -17,11 +17,9 @@ public class PaddleController : MonoBehaviour
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        // Bounds de físicas
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireCube(PaddlePhysics.bounds.center, PaddlePhysics.bounds.size);
-
-        // Bounds visuales (calculados directamente desde la mesh escalada)
+        
         if (visual != null)
         {
             Gizmos.color = Color.red;

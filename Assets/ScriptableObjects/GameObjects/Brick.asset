@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45ac92bee3192694eb72ee13f7cc66e0, type: 3}
   m_Name: Brick
   m_EditorClassIdentifier: 
-  width: 3
-  height: 0.5
+  width: 5
+  height: 2

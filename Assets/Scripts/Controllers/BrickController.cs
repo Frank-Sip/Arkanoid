@@ -1,15 +1,16 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BrickController : MonoBehaviour
 {
-    public BrickSO brickConfig;
+    [SerializeField] public BrickSO brickConfig;
+    [SerializeField] private Transform visual;
+
     public Rect bounds { get; private set; }
 
     public void Activate()
     {
-        BrickPhysics.Initiate(transform, brickConfig, this);
+        BrickPhysics.Initiate(transform, visual, brickConfig, this);
         gameObject.SetActive(true);
     }
 
@@ -29,4 +30,22 @@ public class BrickController : MonoBehaviour
         BrickManager.Unregister(this);
         BrickPool.Instance.ReturnToPool(this);
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireCube(bounds.center, bounds.size);
+
+        if (visual != null)
+        {
+            Gizmos.color = Color.red;
+            Bounds meshBounds = visual.GetComponent<MeshFilter>()?.sharedMesh?.bounds ?? new Bounds(Vector3.zero, Vector3.one);
+            Vector3 size = Vector3.Scale(meshBounds.size, visual.lossyScale);
+            Vector3 center = visual.position + Vector3.Scale(meshBounds.center, visual.lossyScale);
+            Gizmos.DrawWireCube(center, size);
+        }
+    }
+#endif
+
 }

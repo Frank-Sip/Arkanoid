@@ -4,16 +4,39 @@ using UnityEngine;
 
 public static class BrickPhysics
 {
-    public static void Initiate(Transform t, BrickSO config, BrickController controller)
+    public static void Initiate(Transform brickTransform, Transform visual, BrickSO config, BrickController controller)
     {
-        t.localScale = new Vector3(config.width, config.height, 1f);
-        
-        Vector3 pos = t.position;
+        Mesh mesh = visual.GetComponent<MeshFilter>()?.sharedMesh;
+        if (mesh != null)
+        {
+            Bounds meshBounds = mesh.bounds;
+
+            float baseWidth = meshBounds.size.x;
+            float baseHeight = meshBounds.size.y;
+
+            float scaleX = config.width / baseWidth;
+            float scaleY = config.height / baseHeight;
+
+            visual.localScale = new Vector3(scaleX, scaleY, 1f);
+
+            Vector3 centerOffset = Vector3.Scale(meshBounds.center, visual.localScale);
+            visual.localPosition = -centerOffset;
+
+            visual.localRotation = Quaternion.identity;
+        }
+        else
+        {
+            visual.localScale = new Vector3(config.width, config.height, 1f);
+            visual.localPosition = Vector3.zero;
+        }
+
+        Vector3 pos = brickTransform.position;
         Rect bounds = new Rect(pos.x - config.width / 2f, pos.y - config.height / 2f, config.width, config.height);
         controller.SetBounds(bounds);
-        
+
         BrickManager.Register(controller);
     }
+
 
     public static void UpdateBounds(Transform t, BrickSO config, out Rect bounds)
     {
@@ -28,9 +51,7 @@ public static class BrickPhysics
         foreach (var brick in BrickManager.GetActiveBricks())
         {
             if (brick == null || !brick.gameObject.activeInHierarchy || !brick.enabled)
-            {
                 continue;
-            }
 
             if (brick.bounds.Overlaps(ballRect))
             {
@@ -41,4 +62,19 @@ public static class BrickPhysics
 
         return false;
     }
+
+#if UNITY_EDITOR
+    public static void DrawVisualGizmo(Transform visual)
+    {
+        Mesh mesh = visual.GetComponent<MeshFilter>()?.sharedMesh;
+        if (mesh == null) return;
+
+        Gizmos.color = Color.cyan;
+        
+        Matrix4x4 localToWorld = visual.localToWorldMatrix;
+        Gizmos.matrix = localToWorld;
+        Gizmos.DrawWireCube(mesh.bounds.center, mesh.bounds.size);
+        Gizmos.matrix = Matrix4x4.identity;
+    }
+#endif
 }

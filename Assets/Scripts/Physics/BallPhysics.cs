@@ -24,7 +24,7 @@ public static class BallPhysics
     public static Vector3 GetInitialDirection()
     {
         float x = Random.value < 0.5f ? -1f : 1f;
-        return new Vector3(x, -1f, 0f).normalized;
+        return new Vector3(x, 1f, 0f).normalized;
     }
 
     public static void ResetBallDirection()
