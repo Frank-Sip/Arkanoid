@@ -7,12 +7,9 @@
     <list default="true" id="08aa10c6-3c95-4827-a6a9-2721c79f9d1b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Arkanoid/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Arkanoid/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Level 1.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Level 1.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/GameObjects/Ball.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/GameObjects/Ball.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Controllers/BallController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Controllers/BallController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Managers/BallManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/BallManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Physics/BallPhysics.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Physics/BallPhysics.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/StateMachine/States/StartGameState.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/StateMachine/States/StartGameState.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Physics/BrickPhysics.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Physics/BrickPhysics.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Physics/PaddlePhysics.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Physics/PaddlePhysics.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,6 +104,7 @@
       <workItem from="1744167532810" duration="3079000" />
       <workItem from="1744170650022" duration="5000" />
       <workItem from="1744237046462" duration="21143000" />
+      <workItem from="1744308468685" duration="2362000" />
     </task>
     <servers />
   </component>

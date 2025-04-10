@@ -44,20 +44,37 @@ public static class BrickPhysics
         bounds = new Rect(pos.x - config.width / 2f, pos.y - config.height / 2f, config.width, config.height);
     }
 
-    public static bool CheckCollision(Vector3 ballPos, float radius)
+    public static bool CheckCollision(Vector3 ballPos, float radius, ref Vector3 direction, out Vector3 correction)
     {
         Rect ballRect = new Rect(ballPos.x - radius, ballPos.y - radius, radius * 2, radius * 2);
+        correction = Vector3.zero;
 
         foreach (var brick in BrickManager.GetActiveBricks())
         {
             if (brick == null || !brick.gameObject.activeInHierarchy || !brick.enabled)
                 continue;
 
-            if (brick.bounds.Overlaps(ballRect))
-            {
-                brick.OnDestroyBrick();
-                return true;
-            }
+            if (!brick.bounds.Overlaps(ballRect)) continue;
+
+            Vector2 ballCenter = ballPos;
+            Vector2 brickCenter = brick.bounds.center;
+            Vector2 delta = ballCenter - brickCenter;
+
+            float bx = brick.bounds.width / 2f;
+            float by = brick.bounds.height / 2f;
+
+            float dx = Mathf.Clamp(delta.x, -bx, bx);
+            float dy = Mathf.Clamp(delta.y, -by, by);
+            Vector2 closest = brickCenter + new Vector2(dx, dy);
+
+            Vector2 contactVector = ballCenter - closest;
+            Vector2 normal = contactVector.normalized;
+
+            direction = Vector3.Reflect(direction, normal);
+            correction = normal * (radius - contactVector.magnitude);
+
+            brick.OnDestroyBrick();
+            return true;
         }
 
         return false;

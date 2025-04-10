@@ -30,10 +30,8 @@ public static class PaddlePhysics
             float scaleY = paddleConfig.height / baseHeight;
 
             visual.localScale = new Vector3(scaleX, scaleY, 1f);
-            
             Vector3 centerOffset = Vector3.Scale(meshBounds.center, visual.localScale);
             visual.localPosition = -centerOffset;
-
             visual.localRotation = Quaternion.identity;
         }
         else
@@ -55,11 +53,26 @@ public static class PaddlePhysics
         position.x = Mathf.Clamp(position.x, screenConfig.left + halfWidth, screenConfig.right - halfWidth);
         paddle.position = position;
 
-        bounds = new Rect(
-            paddle.position.x - halfWidth,
-            paddle.position.y - paddleConfig.height / 2f,
-            paddleConfig.width,
-            paddleConfig.height
-        );
+        bounds = new Rect(paddle.position.x - halfWidth, paddle.position.y - paddleConfig.height / 2f, paddleConfig.width, paddleConfig.height);
+    }
+
+    public static bool CheckCollision(Vector3 ballPos, float radius, ref Vector3 direction, out Vector3 correction)
+    {
+        Rect ballRect = new Rect(ballPos.x - radius, ballPos.y - radius, radius * 2, radius * 2);
+        correction = Vector3.zero;
+
+        if (!bounds.Overlaps(ballRect)) return false;
+        
+        float hitPoint = (ballPos.x - bounds.x) / bounds.width;
+        float hitFactor = (hitPoint - 0.5f) * 2f;
+        
+        float maxBounceAngle = 75f;
+        float angle = Mathf.Deg2Rad * (maxBounceAngle * hitFactor);
+        
+        direction = new Vector3(Mathf.Sin(angle), Mathf.Cos(angle), 0f).normalized;
+        
+        correction = Vector3.up * (radius - Mathf.Abs(ballPos.y - bounds.yMax));
+
+        return true;
     }
 }

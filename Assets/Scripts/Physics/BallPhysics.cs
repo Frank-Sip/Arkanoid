@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BallPhysics //Do not make this class static
+public class BallPhysics
 {
     private Transform ball;
     private BallSO ballConfig;
@@ -38,7 +38,6 @@ public class BallPhysics //Do not make this class static
         }
     }
 
-
     public static Vector3 GetInitialDirection()
     {
         float x = Random.Range(-1f, 1f);
@@ -55,24 +54,22 @@ public class BallPhysics //Do not make this class static
 
         position += direction.normalized * speed * Time.deltaTime;
 
-        if (Collisions.CheckCollisions(position, radius))
+        if (PaddlePhysics.CheckCollision(position, radius, ref direction, out Vector3 correction))
         {
-            float offset = position.x - PaddlePhysics.bounds.center.x;
-            direction = new Vector3(offset, 1f, 0f).normalized;
-            position.y = PaddlePhysics.bounds.yMax + radius;
+            position += correction;
         }
         else if (position.x < screenConfig.left + radius || position.x > screenConfig.right - radius)
         {
             direction.x *= -1;
             position.x = Mathf.Clamp(position.x, screenConfig.left + radius, screenConfig.right - radius);
         }
-        else if (BrickPhysics.CheckCollision(position, radius))
+        else if (BrickPhysics.CheckCollision(position, radius, ref direction, out Vector3 brickCorrection))
         {
-            direction.y *= -1;
+            position += brickCorrection;
         }
         else if (CheckBallToBallCollision(ref position, ref direction, radius, ballController))
         {
-            //Already handled. Leave It empty
+            //Already handled, leave it empty
         }
         else if (position.y > screenConfig.up - radius)
         {
