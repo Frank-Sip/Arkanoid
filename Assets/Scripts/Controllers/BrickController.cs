@@ -10,7 +10,13 @@ public class BrickController : MonoBehaviour
 
     private Vector3 initialPosition;
     private bool isSubscribed = false;
-
+    
+    void Awake()
+    {
+        Renderer renderer = visual.GetComponent<Renderer>();
+        AtlasManager.ActivateAtlas(renderer, "brick");
+    }
+    
     public void Activate()
     {
         BrickPhysics.Initiate(transform, visual, brickConfig, this);

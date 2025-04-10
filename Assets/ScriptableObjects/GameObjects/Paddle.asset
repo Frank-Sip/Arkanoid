@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 20
   width: 10
-  height: 0.5
+  height: 2
