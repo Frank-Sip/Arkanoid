@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f37736e6ee00424aa2ba4c29459689e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ballPrefab: {fileID: 708127461099396053, guid: bd3da876ae6cad04c8c0bf0b8c218e37, type: 3}
+  ballPrefab: {fileID: 3035589167204003195, guid: 7be116d5c76b1c54ca0176c85bd920d7, type: 3}
   initialBallCount: 0
   poolContainer: {fileID: 699445419}
 --- !u!4 &40534683

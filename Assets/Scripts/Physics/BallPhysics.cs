@@ -2,73 +2,83 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class BallPhysics
+public class BallPhysics //Do not make this class static
 {
-    private static Transform ball;
-    private static BallSO ballConfig;
-    private static ScreenEdgesSO screenConfig;
-    private static BallController ballController;
+    private Transform ball;
+    private BallSO ballConfig;
+    private ScreenEdgesSO screenConfig;
+    private BallController ballController;
 
-    public static void Initiate(Transform t, BallSO ballSO, ScreenEdgesSO screenSO, BallController controller)
+    private float radius => ballConfig.radius;
+    private float speed => ballConfig.speed;
+
+    public void Initiate(Transform t, BallSO ballSO, ScreenEdgesSO screenSO, BallController controller)
     {
-        ResetBallDirection();
-        
         ball = t;
         ballConfig = ballSO;
         screenConfig = screenSO;
         ballController = controller;
 
-        ball.localScale = Vector3.one * (ballConfig.radius * 2f);
+        ApplyScaleAndCenterMesh();
     }
-    
+
+    private void ApplyScaleAndCenterMesh()
+    {
+        MeshRenderer meshRenderer = ball.GetComponentInChildren<MeshRenderer>();
+        if (meshRenderer != null)
+        {
+            Vector3 meshSize = meshRenderer.bounds.size;
+            float maxDimension = Mathf.Max(meshSize.x, meshSize.y, meshSize.z);
+            float scaleFactor = (radius * 2f) / maxDimension;
+
+            ball.localScale = Vector3.one * scaleFactor;
+
+            Vector3 offset = meshRenderer.localBounds.center;
+            ball.localPosition -= offset * scaleFactor;
+        }
+    }
+
+
     public static Vector3 GetInitialDirection()
     {
         float x = Random.value < 0.5f ? -1f : 1f;
         return new Vector3(x, 1f, 0f).normalized;
     }
 
-    public static void ResetBallDirection()
-    {
-        float x = Random.value < 0.5f ? -1f : 1f;
-    }
-
-    public static void Frame(Transform ball, BallSO ballConfig, ScreenEdgesSO screenConfig, BallController ballController)
+    public void Frame()
     {
         if (ball == null) return;
-
-        float radius = ballConfig.radius;
-        float speed = ballConfig.speed;
 
         Vector3 position = ball.position;
         Vector3 direction = ballController.Direction;
 
         position += direction.normalized * speed * Time.deltaTime;
 
-        if (Collisions.CheckCollisions(position, radius)) //Ball-Paddle collision
+        if (Collisions.CheckCollisions(position, radius))
         {
             float offset = position.x - PaddlePhysics.bounds.center.x;
             direction = new Vector3(offset, 1f, 0f).normalized;
             position.y = PaddlePhysics.bounds.yMax + radius;
         }
-        else if (position.x < screenConfig.left + radius || position.x > screenConfig.right - radius) //Ball-Walls collision
+        else if (position.x < screenConfig.left + radius || position.x > screenConfig.right - radius)
         {
             direction.x *= -1;
             position.x = Mathf.Clamp(position.x, screenConfig.left + radius, screenConfig.right - radius);
         }
-        else if (BrickPhysics.CheckCollision(position, radius)) //Ball-Brick collision
+        else if (BrickPhysics.CheckCollision(position, radius))
         {
             direction.y *= -1;
         }
         else if (CheckBallToBallCollision(ref position, ref direction, radius, ballController))
         {
-            
+            //Already handled. Leave It empty
         }
-        else if (position.y > screenConfig.up - radius) //Ball-Top collision
+        else if (position.y > screenConfig.up - radius)
         {
             direction.y *= -1;
             position.y = screenConfig.up - radius;
         }
-        else if (position.y < screenConfig.down) //Ball-Bottom collision
+        else if (position.y < screenConfig.down)
         {
             ballController.DestroyBall();
             return;
@@ -77,15 +87,12 @@ public static class BallPhysics
         ball.position = position;
         ballController.Direction = direction;
     }
-    
-    private static bool CheckBallToBallCollision(ref Vector3 position, ref Vector3 direction, float radius, BallController self)
+
+    private bool CheckBallToBallCollision(ref Vector3 position, ref Vector3 direction, float radius, BallController self)
     {
         foreach (var other in BallManager.GetBalls())
         {
-            if (other == null || other == self)
-            {
-                continue;
-            }
+            if (other == null || other == self) continue;
 
             Vector3 otherPos = other.transform.position;
             Vector3 delta = otherPos - position;
@@ -101,7 +108,7 @@ public static class BallPhysics
 
                 direction = Vector3.Reflect(thisDir, normal);
                 other.Direction = Vector3.Reflect(otherDir, -normal);
-                
+
                 float penetration = combinedRadius - dist;
                 Vector3 correction = normal * (penetration / 2f);
                 position -= correction;
