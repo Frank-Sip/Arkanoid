@@ -12,12 +12,22 @@ public class BallController : MonoBehaviour
     public bool IsLaunched { get; private set; } = false;
 
     private BallPhysics physics = new BallPhysics();
+    private Vector3 initialPosition;
+    private bool isSubscribed = false;
 
     private void Awake()
     {
         BallManager.Register(this);
         physics.Initiate(transform, ballSo, screenEdgesSO, this);
         Direction = BallPhysics.GetInitialDirection();
+
+        initialPosition = transform.position;
+
+        if (!isSubscribed)
+        {
+            EventManager.OnReset += ResetBall;
+            isSubscribed = true;
+        }
     }
 
     public void Frame()
@@ -39,7 +49,7 @@ public class BallController : MonoBehaviour
 
         physics.Frame();
     }
-    
+
     public void SetWaitingOnPaddle()
     {
         followPaddle = true;
@@ -50,6 +60,12 @@ public class BallController : MonoBehaviour
     public void DestroyBall()
     {
         BallPool.Instance.ReturnToPool(this);
+    }
+
+    private void ResetBall()
+    {
+        transform.position = initialPosition;
+        SetWaitingOnPaddle();
     }
 
 #if UNITY_EDITOR

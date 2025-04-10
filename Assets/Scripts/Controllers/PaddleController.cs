@@ -8,10 +8,19 @@ public class PaddleController : MonoBehaviour
     [SerializeField] private PaddleSO paddleSO;
     [SerializeField] private ScreenEdgesSO screenEdgesSO;
     [SerializeField] private Transform visual;
+    private Vector3 initialPosition;
 
     public void Initiate()
     {
         PaddlePhysics.Initiate(transform, visual, paddleSO, screenEdgesSO);
+        initialPosition = transform.position;
+
+        EventManager.OnReset += ResetPaddle;
+    }
+
+    private void ResetPaddle()
+    {
+        transform.position = initialPosition;
     }
     
 #if UNITY_EDITOR

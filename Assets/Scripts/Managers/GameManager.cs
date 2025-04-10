@@ -21,22 +21,24 @@ public class GameManager : MonoBehaviour
 
     private StateMachine stateMachine = new StateMachine();
     private static bool firstFrame = false;
+    private bool bricksSpawned = false;
+    private bool ballSpawned = false;
     private static bool initialBallSpawned = false;
     private static bool initialBricksSpawned = false;
     private static PlayerLoopSystem originalPlayerLoop;
     private static bool gameIsReloading = false;
-
+    
+    private struct CustomGameLogic { }
+    
     private void Awake()
     {
         Instance = this;
-        
+
         firstFrame = false;
-        initialBallSpawned = false;
-        initialBricksSpawned = false;
-        gameIsReloading = false;
+        bricksSpawned = false;
+        ballSpawned = false;
 
         MakePlayerLoop();
-        
         paddleController.Initiate();
     }
 
@@ -132,14 +134,14 @@ public class GameManager : MonoBehaviour
         stateMachine.ChangeState(newState, this);
     }
     
-    public static void ReloadGame()
+    public static void ResetGame()
     {
-        gameIsReloading = true;
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        EventManager.ResetGame();
+        Instance.bricksSpawned = false;
+        Instance.ballSpawned = false;
+        Instance.ChangeGameStatus(new GameplayState());
     }
     
-    private struct CustomGameLogic { }
 
 #if UNITY_EDITOR
     [UnityEditor.InitializeOnLoadMethod]

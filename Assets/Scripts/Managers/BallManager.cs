@@ -11,18 +11,17 @@ public class BallManager
     public static void Register(BallController ball)
     {
         if (!balls.Contains(ball))
+        {
             balls.Add(ball);
+        }
     }
 
     public static void SetActive(BallController ball)
     {
         if (!activeBalls.Contains(ball))
+        {
             activeBalls.Add(ball);
-    }
-
-    public static void SetWaiting(BallController ball)
-    {
-        activeBalls.Remove(ball);
+        }
     }
 
     public static void Unregister(BallController ball)
