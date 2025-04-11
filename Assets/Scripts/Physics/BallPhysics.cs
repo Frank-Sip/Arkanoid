@@ -81,7 +81,14 @@ public class BallPhysics //Do not make this class static
         }
         else if (position.y < screenConfig.down)
         {
-            ballController.DestroyBall();
+            if (ballController.IsMainBall() || BallManager.GetBallCount() == 1)
+            {
+                ballController.SetWaitingOnPaddle();
+            }
+            else
+            {
+                ballController.DestroyBall();
+            }
             return;
         }
 

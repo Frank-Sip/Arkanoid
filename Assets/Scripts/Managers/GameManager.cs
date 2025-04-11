@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.LowLevel;
 using UnityEngine.PlayerLoop;
@@ -97,9 +98,10 @@ public class GameManager : MonoBehaviour
 
         PaddlePhysics.Frame();
 
-        foreach (var ball in BallManager.GetBalls())
+        var ballsToUpdate = BallManager.GetBalls().ToList();
+        foreach (var ball in ballsToUpdate)
         {
-            if (ball.gameObject.activeInHierarchy)
+            if (ball != null && ball.gameObject.activeInHierarchy)
                 ball.Frame();
         }
 

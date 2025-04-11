@@ -5,7 +5,7 @@ using UnityEngine;
 public class BallPool : MonoBehaviour
 {
     [SerializeField] private BallController ballPrefab;
-    [SerializeField] private int initialBallCount = 10;
+    [SerializeField] private int initialBallCount = 0;
     [SerializeField] private Transform poolContainer;
     private int expandBallCount = 10;
     private ObjectPool<BallController> pool;

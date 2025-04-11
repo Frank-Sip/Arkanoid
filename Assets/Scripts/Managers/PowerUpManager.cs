@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public static class PowerUpManager
@@ -18,18 +19,18 @@ public static class PowerUpManager
 
     public static void Frame()
     {
-        for (int i = activePowerUps.Count - 1; i >= 0; i--)
+        var powerUpsToUpdate = activePowerUps.ToList();
+        
+        for (int i = powerUpsToUpdate.Count - 1; i >= 0; i--)
         {
-            var powerUp = activePowerUps[i];
+            var powerUp = powerUpsToUpdate[i];
             if (powerUp != null && powerUp.gameObject.activeInHierarchy)
             {
                 powerUp.Frame();
             }
-            else
-            {
-                activePowerUps.RemoveAt(i);
-            }
         }
+        
+        activePowerUps.RemoveAll(p => p == null || !p.gameObject.activeInHierarchy);
     }
 
     public static void SpawnPowerUp(Vector3 position)

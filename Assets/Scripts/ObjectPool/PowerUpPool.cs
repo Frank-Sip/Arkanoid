@@ -3,9 +3,9 @@ using UnityEngine;
 public class PowerUpPool : MonoBehaviour
 {
     [SerializeField] private PowerUpController powerUpPrefab;
-    [SerializeField] private int initialPowerUpCount = 5;
+    [SerializeField] private int initialPowerUpCount = 1;
     [SerializeField] private Transform poolContainer;
-    private int expandPowerUpCount = 5;
+    private int expandPowerUpCount = 1;
     private ObjectPool<PowerUpController> pool;
     public static PowerUpPool Instance { get; private set; }
 

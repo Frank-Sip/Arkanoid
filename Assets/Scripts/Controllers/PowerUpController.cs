@@ -56,13 +56,26 @@ public class PowerUpController : MonoBehaviour
     private void SpawnAdditionalBalls()
     {
         Vector3 paddlePos = PaddlePhysics.bounds.center;
-        Vector3 ballPos = new Vector3(paddlePos.x, paddlePos.y + 3f, 0f);
+        Vector3 ballPos = new Vector3(paddlePos.x, paddlePos.y + 1f, 0f);
+
+        BallController mainBall = BallManager.GetMainBall();
 
         BallController ball1 = BallPool.Instance.SpawnBall(ballPos);
         BallController ball2 = BallPool.Instance.SpawnBall(ballPos);
 
-        ball1.Direction = new Vector3(-0.5f, 1f, 0f).normalized;
-        ball2.Direction = new Vector3(0.5f, 1f, 0f).normalized;
+        if (ball1 != null)
+        {
+            BallManager.RegisterAdditional(ball1);
+            ball1.Direction = new Vector3(-0.5f, 1f, 0f).normalized;
+            ball1.LaunchImmediately();
+        }
+
+        if (ball2 != null)
+        {
+            BallManager.RegisterAdditional(ball2);
+            ball2.Direction = new Vector3(0.5f, 1f, 0f).normalized;
+            ball2.LaunchImmediately();
+        }
     }
 
 #if UNITY_EDITOR

@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ballPrefab: {fileID: 3035589167204003195, guid: 7be116d5c76b1c54ca0176c85bd920d7, type: 3}
-  initialBallCount: 0
+  initialBallCount: 1
   poolContainer: {fileID: 699445419}
 --- !u!4 &40534683
 Transform:
@@ -490,7 +490,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powerUpPrefab: {fileID: 517807628763023660, guid: 2900bb7c550b68948abefaefb00141a4, type: 3}
-  initialPowerUpCount: 5
+  initialPowerUpCount: 1
   poolContainer: {fileID: 395767609}
 --- !u!4 &1008568424
 Transform:
