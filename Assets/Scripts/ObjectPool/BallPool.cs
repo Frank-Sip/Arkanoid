@@ -21,7 +21,20 @@ public class BallPool : MonoBehaviour
     {
         var ball = pool.Get();
         ball.transform.position = position;
+        return ball;
+    }
+    
+    public BallController SpawnMainBall(Vector3 position)
+    {
+        var ball = SpawnBall(position);
         BallManager.Register(ball);
+        return ball;
+    }
+    
+    public BallController SpawnAdditionalBall(Vector3 position)
+    {
+        var ball = SpawnBall(position);
+        BallManager.RegisterAdditional(ball);
         return ball;
     }
 

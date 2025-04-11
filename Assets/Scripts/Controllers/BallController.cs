@@ -17,7 +17,6 @@ public class BallController : MonoBehaviour
 
     private void Awake()
     {
-        BallManager.Register(this);
         physics.Initiate(transform, ballSo, screenEdgesSO, this);
         Direction = BallPhysics.GetInitialDirection();
     }
@@ -26,11 +25,18 @@ public class BallController : MonoBehaviour
     {
         if (!IsLaunched && followPaddle)
         {
+            if (PaddlePhysics.bounds.width <= 0 || PaddlePhysics.bounds.height <= 0)
+            {
+                Debug.LogWarning("Bounds de la paleta no inicializados. La bola no puede seguir a la paleta.");
+                return;
+            }
+            
             Vector3 paddlePos = PaddlePhysics.bounds.center;
             transform.position = new Vector3(paddlePos.x, paddlePos.y + ballSo.radius * 3, 0f);
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                Debug.Log("Input de espacio detectado. Lanzando bola desde: " + transform.position);
                 IsLaunched = true;
                 followPaddle = false;
                 Direction = BallPhysics.GetInitialDirection();

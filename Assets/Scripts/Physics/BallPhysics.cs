@@ -78,10 +78,14 @@ public class BallPhysics
         }
         else if (position.y < screenConfig.down)
         {
-            if (ballController.IsMainBall() || BallManager.GetBallCount() == 1)
+            int totalBalls = BallManager.GetBallCount();
+            
+            // Si es la última pelota (ya sea la principal o no), posicionarla en la paleta
+            if (totalBalls <= 1)
             {
                 ballController.SetWaitingOnPaddle();
             }
+            // En caso contrario, simplemente destruirla
             else
             {
                 ballController.DestroyBall();

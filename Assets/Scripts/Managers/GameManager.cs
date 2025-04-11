@@ -81,10 +81,17 @@ public class GameManager : MonoBehaviour
 
         Instance.stateMachine.Update(Instance);
 
+        if (PaddlePhysics.bounds.width <= 0 || PaddlePhysics.bounds.height <= 0)
+        {
+            Debug.LogWarning("Los bounds de la paleta no están inicializados. Iniciando paleta...");
+            Instance.paddleController.Initiate();
+        }
+
         if (!initialBallSpawned)
         {
             initialBallSpawned = true;
-            BallPool.Instance.SpawnBall(Instance.initialBallPosition);
+            Debug.Log("Spawning initial ball at: " + Instance.initialBallPosition);
+            BallPool.Instance.SpawnMainBall(Instance.initialBallPosition);
         }
 
         if (!initialBricksSpawned)

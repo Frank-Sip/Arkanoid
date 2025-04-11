@@ -39,6 +39,9 @@ public static class PaddlePhysics
             visual.localScale = new Vector3(paddleSO.width, paddleSO.height, 1f);
             visual.localPosition = Vector3.zero;
         }
+        
+        float halfWidth = paddleConfig.width / 2f;
+        bounds = new Rect(paddle.position.x - halfWidth, paddle.position.y - paddleConfig.height / 2f, paddleConfig.width, paddleConfig.height);
     }
 
     public static void Frame()

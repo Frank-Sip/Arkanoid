@@ -60,19 +60,17 @@ public class PowerUpController : MonoBehaviour
 
         BallController mainBall = BallManager.GetMainBall();
 
-        BallController ball1 = BallPool.Instance.SpawnBall(ballPos);
-        BallController ball2 = BallPool.Instance.SpawnBall(ballPos);
+        BallController ball1 = BallPool.Instance.SpawnAdditionalBall(ballPos);
+        BallController ball2 = BallPool.Instance.SpawnAdditionalBall(ballPos);
 
         if (ball1 != null)
         {
-            BallManager.RegisterAdditional(ball1);
             ball1.Direction = new Vector3(-0.5f, 1f, 0f).normalized;
             ball1.LaunchImmediately();
         }
 
         if (ball2 != null)
         {
-            BallManager.RegisterAdditional(ball2);
             ball2.Direction = new Vector3(0.5f, 1f, 0f).normalized;
             ball2.LaunchImmediately();
         }
