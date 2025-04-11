@@ -14,8 +14,8 @@ public class VictoryState : GameState
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            Time.timeScale = 1f;
-            //GameManager.ReloadGame();
+            GameManager.ResetGame();
+            gameManager.ChangeGameStatus(new GameplayState());
         }
         else if (Input.GetKeyDown(KeyCode.Escape))
         {

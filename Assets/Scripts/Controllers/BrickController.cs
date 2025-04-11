@@ -9,10 +9,21 @@ public class BrickController : MonoBehaviour
 
     public Rect bounds { get; private set; }
 
+    private Vector3 initialPosition;
+    private bool isSubscribed = false;
+
     public void Activate()
     {
         BrickPhysics.Initiate(transform, visual, brickConfig, this);
         gameObject.SetActive(true);
+
+        initialPosition = transform.position;
+
+        if (!isSubscribed)
+        {
+            EventManager.OnReset += ResetBrick;
+            isSubscribed = true;
+        }
     }
 
     public void UpdateBounds()
@@ -37,6 +48,12 @@ public class BrickController : MonoBehaviour
         BrickPool.Instance.ReturnToPool(this);
     }
 
+    private void ResetBrick()
+    {
+        transform.position = initialPosition;
+        Activate();
+    }
+
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
@@ -53,5 +70,4 @@ public class BrickController : MonoBehaviour
         }
     }
 #endif
-
 }

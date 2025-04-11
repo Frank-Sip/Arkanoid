@@ -559,11 +559,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
       propertyPath: rows
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
       propertyPath: columns
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
       propertyPath: spacing
@@ -652,7 +652,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9103919070043877630, guid: e5f774b959507f148b9feb56fc1022e2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -10.78
+      value: -12.22
       objectReference: {fileID: 0}
     - target: {fileID: 9103919070043877630, guid: e5f774b959507f148b9feb56fc1022e2, type: 3}
       propertyPath: m_LocalPosition.z
