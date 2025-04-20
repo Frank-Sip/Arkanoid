@@ -123,12 +123,16 @@ public class GameManager : MonoBehaviour
                 currentPos.y -= height + spacing;
             }
 
-            BrickPool.Instance.SpawnBrick(currentPos);
+            var brick = BrickPool.Instance.SpawnBrick(currentPos);
+            brick.transform.position = currentPos;
+            
+            BrickManager.Register(brick);
+
             currentPos.x += width + spacing;
             bricksPlaced++;
         }
+        
     }
-
 
     public void ChangeGameStatus(GameState newState)
     {
@@ -140,6 +144,17 @@ public class GameManager : MonoBehaviour
         EventManager.ResetGame();
         Instance.bricksSpawned = false;
         Instance.ballSpawned = false;
+        
+        foreach (var brick in BrickManager.GetBricks())
+        {
+            brick.gameObject.SetActive(false);
+        }
+        
+        BrickManager.GetBricks().Clear();
+        BrickManager.GetActiveBricks().Clear();
+        
+        Instance.SpawnBricksGrid();
+        
         Instance.ChangeGameStatus(new GameplayState());
     }
 

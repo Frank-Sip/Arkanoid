@@ -4,16 +4,22 @@ using UnityEngine;
 
 public class PowerUpController : MonoBehaviour
 {
-    [SerializeField] private PowerUpSO config;
-    [SerializeField] private ScreenEdgesSO screenEdges;
+    [SerializeField] private PowerUpSO powerUpSO;
+    [SerializeField] private ScreenEdgesSO screenEdgesSO;
 
-    private PowerUpPhysics physics = new PowerUpPhysics();
+    private PowerUpPhysics physics;
+    private bool isSubscribed = false;
 
-    public void Initiate(PowerUpSO newConfig, ScreenEdgesSO screen)
+    private void Awake()
     {
-        config = newConfig;
-        screenEdges = screen;
-        physics.Initiate(transform, config, screenEdges, this);
+        physics = new PowerUpPhysics();
+        physics.Initiate(transform, powerUpSO, screenEdgesSO, this);
+
+        if (!isSubscribed)
+        {
+            EventManager.OnReset += ResetPowerUp;
+            isSubscribed = true;
+        }
     }
 
     public void Frame()
@@ -21,15 +27,24 @@ public class PowerUpController : MonoBehaviour
         physics.Frame();
     }
 
-    public void Activate()
+    public void CollideWithPaddle()
     {
-        PowerUpManager.Unregister(this);
-        gameObject.SetActive(false);
+        ActivateMultiball();
+        DestroyPowerUp();
     }
 
-    public void Deactivate()
+    public void DestroyPowerUp()
     {
-        PowerUpManager.Unregister(this);
+        PowerUpPool.Instance.ReturnToPool(this);
+    }
+
+    private void ActivateMultiball()
+    {
+        BallManager.SpawnMultipleBalls();
+    }
+
+    private void ResetPowerUp()
+    {
         gameObject.SetActive(false);
     }
 }

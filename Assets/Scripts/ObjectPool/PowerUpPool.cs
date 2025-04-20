@@ -5,29 +5,29 @@ using UnityEngine;
 public class PowerUpPool : MonoBehaviour
 {
     [SerializeField] private PowerUpController powerUpPrefab;
-    [SerializeField] private int initialPowerUpCount = 3;
+    [SerializeField] private int initialPowerUpCount = 10;
     [SerializeField] private Transform poolContainer;
-    private int expandPowerUpCount = 3;
+
     private ObjectPool<PowerUpController> pool;
     public static PowerUpPool Instance { get; private set; }
 
     private void Awake()
     {
         Instance = this;
-        pool = new ObjectPool<PowerUpController>(powerUpPrefab, poolContainer, initialPowerUpCount, expandPowerUpCount);
+        pool = new ObjectPool<PowerUpController>(powerUpPrefab, poolContainer, initialPowerUpCount);
     }
 
     public PowerUpController SpawnPowerUp(Vector3 position)
     {
         var powerUp = pool.Get();
         powerUp.transform.position = position;
-        PowerUpManager.Register(powerUp);
+        powerUp.gameObject.SetActive(true);
         return powerUp;
     }
 
     public void ReturnToPool(PowerUpController powerUp)
     {
-        PowerUpManager.Unregister(powerUp);
+        powerUp.gameObject.SetActive(false);
         pool.Return(powerUp);
     }
 }

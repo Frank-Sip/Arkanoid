@@ -42,6 +42,20 @@ public class BallManager
         BallController newBall = BallPool.Instance.SpawnBall(ballPos);
         newBall.SetWaitingOnPaddle();
     }
+    
+    public static void SpawnMultipleBalls()
+    {
+        int numberOfBalls = 2;
+        
+        for (int i = 0; i < numberOfBalls; i++)
+        {
+            Vector3 paddlePos = PaddlePhysics.bounds.center;
+            Vector3 ballPos = new Vector3(paddlePos.x + Random.Range(-1f, 1f), paddlePos.y + 3f, 0f);
+
+            BallController newBall = BallPool.Instance.SpawnBall(ballPos);
+            newBall.SetWaitingOnPaddle();
+        }
+    }
 
     public static List<BallController> GetBalls() => balls;
     public static List<BallController> GetActiveBalls() => activeBalls;

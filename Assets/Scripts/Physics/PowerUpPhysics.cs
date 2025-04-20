@@ -12,13 +12,11 @@ public class PowerUpPhysics
     private float radius => powerUpConfig.radius;
     private float speed => powerUpConfig.speed;
 
-    private Vector3 direction = Vector3.down;
-
-    public void Initiate(Transform t, PowerUpSO config, ScreenEdgesSO screen, PowerUpController controller)
+    public void Initiate(Transform t, PowerUpSO powerUpSO, ScreenEdgesSO screenSO, PowerUpController controller)
     {
         powerUp = t;
-        powerUpConfig = config;
-        screenConfig = screen;
+        powerUpConfig = powerUpSO;
+        screenConfig = screenSO;
         powerUpController = controller;
 
         ApplyScaleAndCenterMesh();
@@ -46,24 +44,20 @@ public class PowerUpPhysics
 
         Vector3 position = powerUp.position;
         
-        position += direction * speed * Time.deltaTime;
+        position += Vector3.down * speed * Time.deltaTime;
         
-        Vector3 correction = Vector3.zero;
-        
-        if (PaddlePhysics.CheckCollision(position, radius, ref direction, out correction))
+        Vector3 direction = Vector3.zero;
+        if (PaddlePhysics.CheckCollision(position, radius, ref direction, out Vector3 correction))
         {
-            powerUpController.Activate();
-            
-            powerUpController.Deactivate();
-            return;
+            position += correction;
+            powerUpController.CollideWithPaddle();
         }
         
-        if (position.y < screenConfig.down)
+        else if (position.y < screenConfig.down)
         {
-            powerUpController.Deactivate();
-            return;
+            powerUpController.DestroyPowerUp();
         }
-        
+
         powerUp.position = position;
     }
 }

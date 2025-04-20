@@ -76,7 +76,7 @@ public class BallPhysics
             direction.y *= -1;
             position.y = screenConfig.up - radius;
         }
-        else if (position.y < screenConfig.down)
+        else if (position.y < screenConfig.down + radius)
         {
             ballController.DestroyBall();
             return;

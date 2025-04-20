@@ -476,7 +476,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1034917783
+--- !u!1 &1274889589
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1274889590}
+  m_Layer: 0
+  m_Name: BrickPoolContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1274889590
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1274889589}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.4909575, y: -2.191829, z: 5.958823}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1526538618
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -490,11 +521,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7133128463654480984, guid: 5298fee04214af740b1faa22e1a24d71, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.59
+      value: -6.2464867
       objectReference: {fileID: 0}
     - target: {fileID: 7133128463654480984, guid: 5298fee04214af740b1faa22e1a24d71, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.96
+      value: 41.970028
       objectReference: {fileID: 0}
     - target: {fileID: 7133128463654480984, guid: 5298fee04214af740b1faa22e1a24d71, type: 3}
       propertyPath: m_LocalPosition.z
@@ -529,42 +560,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 6509181425596207705, guid: 5298fee04214af740b1faa22e1a24d71, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5298fee04214af740b1faa22e1a24d71, type: 3}
---- !u!1 &1274889589
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1274889590}
-  m_Layer: 0
-  m_Name: BrickPoolContainer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1274889590
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1274889589}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.4909575, y: -2.191829, z: 5.958823}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1897331453
 GameObject:
   m_ObjectHideFlags: 0
@@ -617,11 +616,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
       propertyPath: rows
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
       propertyPath: columns
-      value: 15
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
       propertyPath: spacing
@@ -771,4 +770,4 @@ SceneRoots:
   - {fileID: 699445419}
   - {fileID: 1274889590}
   - {fileID: 1897331454}
-  - {fileID: 1034917783}
+  - {fileID: 1526538618}
