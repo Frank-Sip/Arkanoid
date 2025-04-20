@@ -40,7 +40,7 @@ public class BallPhysics
 
     public static Vector3 GetInitialDirection()
     {
-        float x = Random.Range(-1f, 1f);
+        float x = Random.Range(-0.5f, 0.5f);  
         float y = Mathf.Sqrt(1f - x * x);
         return new Vector3(x, y, 0f).normalized;
     }
