@@ -15,15 +15,21 @@ public class BrickPool : MonoBehaviour
         pool = new ObjectPool<BrickController>(brickPrefab, poolContainer, initialBrickCount, expandBrickCount);
     }
 
-    public BrickController SpawnBrick()
+    public BrickController SpawnBrick(Vector3 position)
     {
-        return pool.Get();
+        var brick = pool.Get();
+        brick.transform.position = position;
+        BrickManager.Register(brick);
+        brick.Activate();
+        
+        return brick;
     }
 
     public void ReturnToPool(BrickController brick)
     {
         BrickManager.Unregister(brick);
         pool.Return(brick);
+        brick.gameObject.SetActive(false);
     }
 
     public BrickSO GetBrickSO()

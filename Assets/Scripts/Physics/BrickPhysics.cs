@@ -33,8 +33,6 @@ public static class BrickPhysics
         Vector3 pos = brickTransform.position;
         Rect bounds = new Rect(pos.x - config.width / 2f, pos.y - config.height / 2f, config.width, config.height);
         controller.SetBounds(bounds);
-
-        BrickManager.Register(controller);
     }
 
 

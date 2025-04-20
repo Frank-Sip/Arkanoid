@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
-    
+
     [Header("GameObject Settings")]
     [SerializeField] private Vector3 initialBallPosition;
     [SerializeField] private PaddleController paddleController;
@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int rows = 5;
     [SerializeField] private float spacing = 0.3f;
     [SerializeField] private Vector2 startPoint = new Vector2(-7f, 4f);
+    [SerializeField] private Vector2 endPoint = new Vector2(-7f, 4f);
 
     private StateMachine stateMachine = new StateMachine();
     private static bool firstFrame = false;
@@ -27,9 +28,9 @@ public class GameManager : MonoBehaviour
     private static bool initialBricksSpawned = false;
     private static PlayerLoopSystem originalPlayerLoop;
     private static bool gameIsReloading = false;
-    
+
     private struct CustomGameLogic { }
-    
+
     private void Awake()
     {
         Instance = this;
@@ -70,7 +71,6 @@ public class GameManager : MonoBehaviour
 
     private static void CustomUpdate()
     {
-        //Needed because the game freezes in the first frame
         if (!firstFrame)
         {
             firstFrame = true;
@@ -112,28 +112,29 @@ public class GameManager : MonoBehaviour
         float width = config.width;
         float height = config.height;
 
-        for (int row = 0; row < rows; row++)
-        {
-            for (int col = 0; col < columns; col++)
-            {
-                Vector3 pos = new Vector3(
-                    startPoint.x + col * (width + spacing),
-                    startPoint.y - row * (height + spacing),
-                    0f
-                );
+        Vector3 currentPos = startPoint;
+        int bricksPlaced = 0;
 
-                BrickController brick = BrickPool.Instance.SpawnBrick();
-                brick.transform.position = pos;
-                brick.Activate();
+        for (int i = 0; i < rows * columns; i++)
+        {
+            if (currentPos.x + width > endPoint.x)
+            {
+                currentPos.x = startPoint.x;
+                currentPos.y -= height + spacing;
             }
+
+            BrickPool.Instance.SpawnBrick(currentPos);
+            currentPos.x += width + spacing;
+            bricksPlaced++;
         }
     }
-    
+
+
     public void ChangeGameStatus(GameState newState)
     {
         stateMachine.ChangeState(newState, this);
     }
-    
+
     public static void ResetGame()
     {
         EventManager.ResetGame();
@@ -141,7 +142,6 @@ public class GameManager : MonoBehaviour
         Instance.ballSpawned = false;
         Instance.ChangeGameStatus(new GameplayState());
     }
-    
 
 #if UNITY_EDITOR
     [UnityEditor.InitializeOnLoadMethod]
