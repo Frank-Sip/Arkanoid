@@ -57,6 +57,12 @@ public class BallController : MonoBehaviour
 
     public void DestroyBall()
     {
+        Collider collider = GetComponent<Collider>();
+        if (collider != null)
+        {
+            collider.enabled = false;
+        }
+
         BallManager.Unregister(this);
         BallPool.Instance.ReturnToPool(this);
     }
