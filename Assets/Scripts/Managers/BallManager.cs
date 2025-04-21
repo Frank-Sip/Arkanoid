@@ -1,12 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class BallManager
 {
     private static List<BallController> balls = new List<BallController>();
     private static List<BallController> activeBalls = new List<BallController>();
+    private static bool hasRespawned = false; // NUEVO
 
     public static void Register(BallController ball)
     {
@@ -26,10 +25,14 @@ public class BallManager
 
     public static void Unregister(BallController ball)
     {
-        activeBalls.Remove(ball);
-
-        if (activeBalls.Count <= 0)
+        if (activeBalls.Contains(ball))
         {
+            activeBalls.Remove(ball);
+        }
+
+        if (activeBalls.Count <= 0 && !hasRespawned)
+        {
+            hasRespawned = true;
             RespawnSingleBall();
         }
     }
@@ -42,11 +45,11 @@ public class BallManager
         BallController newBall = BallPool.Instance.SpawnBall(ballPos);
         newBall.SetWaitingOnPaddle();
     }
-    
+
     public static void SpawnMultipleBalls()
     {
         int numberOfBalls = 2;
-        
+
         for (int i = 0; i < numberOfBalls; i++)
         {
             Vector3 paddlePos = PaddlePhysics.bounds.center;
@@ -55,6 +58,11 @@ public class BallManager
             BallController newBall = BallPool.Instance.SpawnBall(ballPos);
             newBall.SetWaitingOnPaddle();
         }
+    }
+
+    public static void NotifyBallLaunched()
+    {
+        hasRespawned = false;
     }
 
     public static List<BallController> GetBalls() => balls;

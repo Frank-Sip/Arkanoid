@@ -12,6 +12,11 @@ public class GameplayState : GameState
 
     public override void Tick(GameManager gameManager)
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            GameManager.ResetGame();
+            gameManager.ChangeGameStatus(new GameplayState());
+        }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             gameManager.ChangeGameStatus(new PauseState());

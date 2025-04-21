@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BallController : MonoBehaviour
@@ -41,7 +39,8 @@ public class BallController : MonoBehaviour
             {
                 IsLaunched = true;
                 Direction = BallPhysics.GetInitialDirection();
-                BallManager.Register(this);
+                BallManager.SetActive(this);
+                BallManager.NotifyBallLaunched();
             }
 
             return;
@@ -54,11 +53,11 @@ public class BallController : MonoBehaviour
     {
         followPaddle = true;
         IsLaunched = false;
-        BallManager.GetActiveBalls().Remove(this);
     }
 
     public void DestroyBall()
     {
+        BallManager.Unregister(this);
         BallPool.Instance.ReturnToPool(this);
     }
 
