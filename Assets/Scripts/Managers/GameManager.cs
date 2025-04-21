@@ -145,9 +145,11 @@ public class GameManager : MonoBehaviour
         Instance.bricksSpawned = false;
         Instance.ballSpawned = false;
         
-        foreach (var brick in BrickManager.GetBricks())
+        List<BrickController> activeBricks = new List<BrickController>(BrickManager.GetActiveBricks());
+        
+        foreach (var brick in activeBricks)
         {
-            brick.gameObject.SetActive(false);
+            BrickPool.Instance.ReturnToPool(brick);
         }
         
         BrickManager.GetBricks().Clear();
@@ -157,6 +159,7 @@ public class GameManager : MonoBehaviour
         
         Instance.ChangeGameStatus(new GameplayState());
     }
+
 
 #if UNITY_EDITOR
     [UnityEditor.InitializeOnLoadMethod]
