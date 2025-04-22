@@ -55,7 +55,37 @@ public class BrickController : MonoBehaviour
             return;
         }
         
-        PowerUpManager.SpawnPowerUp(transform.position);
+        PowerUpController powerUp = PowerUpManager.SpawnPowerUp(transform.position);
+        
+        if (powerUp != null)
+        {
+            AssignRandomPowerUpType(powerUp);
+        }
+    }
+
+    private void AssignRandomPowerUpType(PowerUpController powerUp)
+    {
+
+        PowerUpSO powerUpSO = powerUp.GetComponent<PowerUpController>().powerUpSO;
+        if (powerUpSO == null)
+        {
+            Debug.LogError("No se pudo encontrar el PowerUpSO en el power-up");
+            return;
+        }
+        
+        int randomType = Random.Range(0, 2); 
+        
+
+        if (randomType == 0)
+        {
+            powerUpSO.powerUpType = PowerUpType.Multiball;
+            Debug.Log("Generado power-up: Multiball");
+        }
+        else
+        {
+            powerUpSO.powerUpType = PowerUpType.WidePaddle;
+            Debug.Log("Generado power-up: WidePaddle");
+        }
     }
 
     private void ResetBrick()

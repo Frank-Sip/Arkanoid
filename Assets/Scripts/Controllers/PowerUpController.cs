@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PowerUpController : MonoBehaviour
 {
-    [SerializeField] private PowerUpSO powerUpSO;
+    [SerializeField] public PowerUpSO powerUpSO;
     [SerializeField] private ScreenEdgesSO screenEdgesSO;
 
     private PowerUpPhysics physics;
@@ -56,9 +56,10 @@ public class PowerUpController : MonoBehaviour
             case PowerUpType.Multiball:
                 ActivateMultiball();
                 break;
-            case PowerUpType.ExtraLife:
-                break;
             case PowerUpType.WidePaddle:
+                ActivateWidePaddle();
+                break;
+            case PowerUpType.ExtraLife:
                 break;
         }
     }
@@ -78,6 +79,20 @@ public class PowerUpController : MonoBehaviour
         Debug.Log($"Activando multiball con {ballsToAdd} bolas nuevas");
         
         BallManager.SpawnAndLaunchMultipleBalls(ballsToAdd);
+    }
+
+    private void ActivateWidePaddle()
+    {
+        PaddleController paddleController = FindObjectOfType<PaddleController>();
+        if (paddleController != null)
+        {
+            paddleController.ActivateWidePaddle(1.5f, 5f);
+            Debug.Log("Power-up Wide Paddle activado");
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró el PaddleController para activar Wide Paddle");
+        }
     }
 
     private void ResetPowerUp()
