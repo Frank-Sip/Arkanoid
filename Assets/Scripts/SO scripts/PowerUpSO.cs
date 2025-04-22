@@ -7,4 +7,5 @@ public class PowerUpSO : ScriptableObject
 {
     public float speed = 5f;
     public float radius = 0.5f;
+    public PowerUpType powerUpType = PowerUpType.Multiball;
 }

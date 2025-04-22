@@ -7,7 +7,7 @@ public class BallController : MonoBehaviour
     private bool followPaddle = true;
 
     public Vector3 Direction { get; set; }
-    public bool IsLaunched { get; private set; } = false;
+    public bool IsLaunched { get; set; } = false;
 
     private BallPhysics physics = new BallPhysics();
     private Vector3 initialPosition;
@@ -64,13 +64,32 @@ public class BallController : MonoBehaviour
         }
 
         BallManager.Unregister(this);
-        BallPool.Instance.ReturnToPool(this);
+        
+        if (this == BallPool.Instance.GetInitialBall())
+        {
+            gameObject.SetActive(false);
+            Debug.Log("Bola inicial desactivada (no devuelta al pool)");
+        }
+        else
+        {
+            BallPool.Instance.ReturnToPool(this);
+        }
     }
 
     private void ResetBall()
     {
+        // Asegurarse de que esta bola no está en la lista de activas
+        BallManager.Unregister(this);
+        
+        // Reiniciar estado
         transform.position = initialPosition;
         SetWaitingOnPaddle();
+        
+        // Si no es la bola inicial, devolver al pool
+        if (this != BallPool.Instance.GetInitialBall())
+        {
+            BallPool.Instance.ReturnToPool(this);
+        }
     }
 
 #if UNITY_EDITOR
@@ -80,6 +99,17 @@ public class BallController : MonoBehaviour
 
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, ballSo.radius);
+        
+        // Mostrar información sobre cantidad de bolas
+        if (gameObject.activeInHierarchy && IsLaunched)
+        {
+            int totalActive = BallManager.GetActiveBalls().Count;
+            int maxBalls = BallManager.GetMaxBalls();
+            
+            // Dibujar un pequeño texto de depuración sobre la bola (solo en el editor)
+            UnityEditor.Handles.Label(transform.position + Vector3.up * 0.5f, 
+                                      $"Bolas: {totalActive}/{maxBalls}");
+        }
     }
 #endif
 }

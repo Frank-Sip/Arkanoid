@@ -83,7 +83,26 @@ public class GameManager : MonoBehaviour
         if (!initialBallSpawned)
         {
             initialBallSpawned = true;
-            BallPool.Instance.SpawnBall(Instance.initialBallPosition);
+            Debug.Log("Creando bola inicial por primera vez");
+            BallController initialBall = BallPool.Instance.SpawnBall(Instance.initialBallPosition);
+            initialBall.SetWaitingOnPaddle();
+            
+            initialBall.gameObject.SetActive(true);
+            initialBall.IsLaunched = false;
+        }
+        else
+        {
+            BallController initialBall = BallPool.Instance.GetInitialBall();
+            if (initialBall != null && !initialBall.gameObject.activeInHierarchy)
+            {
+                Debug.Log("Reactivando bola inicial que estaba inactiva");
+                initialBall.gameObject.SetActive(true);
+                initialBall.SetWaitingOnPaddle();
+                initialBall.transform.position = new Vector3(
+                    PaddlePhysics.bounds.center.x, 
+                    PaddlePhysics.bounds.center.y + 3f, 
+                    0f);
+            }
         }
 
         if (!initialBricksSpawned)
@@ -98,10 +117,12 @@ public class GameManager : MonoBehaviour
         }
 
         PaddlePhysics.Frame();
+        
+        PowerUpManager.Frame();
 
         foreach (var ball in BallManager.GetBalls())
         {
-            if (ball.gameObject.activeInHierarchy)
+            if (ball != null && ball.gameObject.activeInHierarchy)
                 ball.Frame();
         }
     }
@@ -146,14 +167,16 @@ public class GameManager : MonoBehaviour
         Instance.ballSpawned = false;
         
         List<BrickController> activeBricks = new List<BrickController>(BrickManager.GetActiveBricks());
-        
         foreach (var brick in activeBricks)
         {
             BrickPool.Instance.ReturnToPool(brick);
         }
-        
         BrickManager.GetBricks().Clear();
         BrickManager.GetActiveBricks().Clear();
+        
+        BallManager.ResetAll();
+        
+        PowerUpManager.ResetAll();
         
         Instance.SpawnBricksGrid();
         
