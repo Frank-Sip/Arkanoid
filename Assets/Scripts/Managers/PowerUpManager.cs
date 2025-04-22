@@ -4,6 +4,8 @@ using UnityEngine;
 public static class PowerUpManager
 {
     private static readonly List<PowerUpController> activePowerUps = new List<PowerUpController>();
+    private static int totalPowerUpsSpawned = 0; 
+    private static int maxPowerUpsPerGame = 3; 
 
     public static void Register(PowerUpController powerUp)
     {
@@ -24,6 +26,31 @@ public static class PowerUpManager
         }
     }
 
+    public static bool CanSpawnPowerUp()
+    {
+        return totalPowerUpsSpawned < maxPowerUpsPerGame;
+    }
+
+    public static PowerUpController SpawnPowerUp(Vector3 position)
+    {
+        if (totalPowerUpsSpawned >= maxPowerUpsPerGame)
+        {
+            Debug.Log($"Límite de power-ups alcanzado ({maxPowerUpsPerGame}). No se generarán más.");
+            return null;
+        }
+        
+        totalPowerUpsSpawned++;
+        
+        PowerUpController powerUp = PowerUpPool.Instance.SpawnPowerUp(position);
+        if (powerUp != null)
+        {
+            Register(powerUp);
+            Debug.Log($"Power-up generado ({totalPowerUpsSpawned}/{maxPowerUpsPerGame})");
+        }
+        
+        return powerUp;
+    }
+
     public static void ResetAll()
     {
         foreach (var powerUp in activePowerUps)
@@ -33,5 +60,11 @@ public static class PowerUpManager
         }
 
         activePowerUps.Clear();
+    }
+
+    public static void ResetPowerUpCount()
+    {
+        totalPowerUpsSpawned = 0;
+        Debug.Log("Contador de power-ups reseteado");
     }
 }

@@ -69,14 +69,11 @@ public class BallController : MonoBehaviour
 
     private void ResetBall()
     {
-        // Asegurarse de que esta bola no está en la lista de activas
         BallManager.Unregister(this);
         
-        // Reiniciar estado
         transform.position = initialPosition;
         SetWaitingOnPaddle();
         
-        // Devolver la bola al pool
         BallPool.Instance.ReturnToPool(this);
     }
 
@@ -88,13 +85,11 @@ public class BallController : MonoBehaviour
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, ballSo.radius);
         
-        // Mostrar información sobre cantidad de bolas
         if (gameObject.activeInHierarchy && IsLaunched)
         {
             int totalActive = BallManager.GetActiveBalls().Count;
             int maxBalls = BallManager.GetMaxBalls();
             
-            // Dibujar un pequeño texto de depuración sobre la bola (solo en el editor)
             UnityEditor.Handles.Label(transform.position + Vector3.up * 0.5f, 
                                       $"Bolas: {totalActive}/{maxBalls}");
         }

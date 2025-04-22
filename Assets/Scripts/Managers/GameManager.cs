@@ -161,6 +161,7 @@ public class GameManager : MonoBehaviour
         BallManager.ResetAll();
         
         PowerUpManager.ResetAll();
+        PowerUpManager.ResetPowerUpCount();
         
         Instance.SpawnBricksGrid();
         

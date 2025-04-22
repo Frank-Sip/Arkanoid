@@ -57,10 +57,8 @@ public class PowerUpController : MonoBehaviour
                 ActivateMultiball();
                 break;
             case PowerUpType.ExtraLife:
-                // Implementación futura
                 break;
             case PowerUpType.WidePaddle:
-                // Implementación futura
                 break;
         }
     }
@@ -76,11 +74,9 @@ public class PowerUpController : MonoBehaviour
             return;
         }
         
-        // Número de bolas a añadir (máx 3, pero respetando el límite)
         int ballsToAdd = Mathf.Min(3, maxBalls - currentBalls);
         Debug.Log($"Activando multiball con {ballsToAdd} bolas nuevas");
         
-        // Lanzar las bolas inmediatamente
         BallManager.SpawnAndLaunchMultipleBalls(ballsToAdd);
     }
 

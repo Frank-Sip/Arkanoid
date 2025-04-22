@@ -69,7 +69,7 @@ public class BallPhysics
         }
         else if (CheckBallToBallCollision(ref position, ref direction, radius, ballController))
         {
-            //Already handled, leave it empty
+
         }
         else if (position.y > screenConfig.up - radius)
         {
