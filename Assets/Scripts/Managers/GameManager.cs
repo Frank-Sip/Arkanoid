@@ -84,25 +84,9 @@ public class GameManager : MonoBehaviour
         {
             initialBallSpawned = true;
             Debug.Log("Creando bola inicial por primera vez");
-            BallController initialBall = BallPool.Instance.SpawnBall(Instance.initialBallPosition);
-            initialBall.SetWaitingOnPaddle();
-            
-            initialBall.gameObject.SetActive(true);
-            initialBall.IsLaunched = false;
-        }
-        else
-        {
-            BallController initialBall = BallPool.Instance.GetInitialBall();
-            if (initialBall != null && !initialBall.gameObject.activeInHierarchy)
-            {
-                Debug.Log("Reactivando bola inicial que estaba inactiva");
-                initialBall.gameObject.SetActive(true);
-                initialBall.SetWaitingOnPaddle();
-                initialBall.transform.position = new Vector3(
-                    PaddlePhysics.bounds.center.x, 
-                    PaddlePhysics.bounds.center.y + 3f, 
-                    0f);
-            }
+            BallController newBall = BallPool.Instance.SpawnBall(Instance.initialBallPosition);
+            newBall.SetWaitingOnPaddle();
+            newBall.gameObject.SetActive(true);
         }
 
         if (!initialBricksSpawned)

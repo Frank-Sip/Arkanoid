@@ -64,16 +64,7 @@ public class BallController : MonoBehaviour
         }
 
         BallManager.Unregister(this);
-        
-        if (this == BallPool.Instance.GetInitialBall())
-        {
-            gameObject.SetActive(false);
-            Debug.Log("Bola inicial desactivada (no devuelta al pool)");
-        }
-        else
-        {
-            BallPool.Instance.ReturnToPool(this);
-        }
+        BallPool.Instance.ReturnToPool(this);
     }
 
     private void ResetBall()
@@ -85,11 +76,8 @@ public class BallController : MonoBehaviour
         transform.position = initialPosition;
         SetWaitingOnPaddle();
         
-        // Si no es la bola inicial, devolver al pool
-        if (this != BallPool.Instance.GetInitialBall())
-        {
-            BallPool.Instance.ReturnToPool(this);
-        }
+        // Devolver la bola al pool
+        BallPool.Instance.ReturnToPool(this);
     }
 
 #if UNITY_EDITOR

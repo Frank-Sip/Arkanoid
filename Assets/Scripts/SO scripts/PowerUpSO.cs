@@ -2,6 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum PowerUpType
+{
+    Multiball,
+    ExtraLife,
+    WidePaddle
+}
+
 [CreateAssetMenu(fileName = "PowerUp", menuName = "ObjectConfig/PowerUp")]
 public class PowerUpSO : ScriptableObject
 {

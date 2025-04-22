@@ -2,12 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PowerUpType
-{
-    Multiball,
-    ExtraLife,
-    WidePaddle
-}
+
 
 public class PowerUpController : MonoBehaviour
 {
@@ -36,12 +31,21 @@ public class PowerUpController : MonoBehaviour
 
     public void CollideWithPaddle()
     {
+        StartCoroutine(DelayedActivation());
+    }
+
+    private IEnumerator DelayedActivation()
+    {
+        yield return null;
+        
         ActivatePowerUp();
+        
         DestroyPowerUp();
     }
 
     public void DestroyPowerUp()
     {
+        PowerUpManager.Unregister(this);
         PowerUpPool.Instance.ReturnToPool(this);
     }
 
@@ -69,10 +73,15 @@ public class PowerUpController : MonoBehaviour
         if (currentBalls >= maxBalls)
         {
             Debug.Log($"Máximo de bolas alcanzado ({maxBalls}). No se pueden crear más bolas.");
+            return;
         }
         
-        // Intenta lanzar 3 bolas inmediatamente, respetando el límite interno
-        BallManager.SpawnAndLaunchMultipleBalls(3);
+        // Número de bolas a añadir (máx 3, pero respetando el límite)
+        int ballsToAdd = Mathf.Min(3, maxBalls - currentBalls);
+        Debug.Log($"Activando multiball con {ballsToAdd} bolas nuevas");
+        
+        // Lanzar las bolas inmediatamente
+        BallManager.SpawnAndLaunchMultipleBalls(ballsToAdd);
     }
 
     private void ResetPowerUp()

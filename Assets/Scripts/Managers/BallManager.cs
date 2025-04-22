@@ -5,8 +5,9 @@ public class BallManager
 {
     private static List<BallController> balls = new List<BallController>();
     private static List<BallController> activeBalls = new List<BallController>();
-    private static bool hasRespawned = false; // NUEVO
+    private static bool hasRespawned = false;
     private static int maxBalls = 5; // Máximo número de pelotas permitidas
+    private static bool isMultiballActive = false; // Flag para controlar si estamos en modo multiball
 
     public static void Register(BallController ball)
     {
@@ -30,16 +31,19 @@ public class BallManager
         {
             activeBalls.Remove(ball);
             
-            if (ball == BallPool.Instance.GetInitialBall() && activeBalls.Count == 0 && !hasRespawned)
-            {
-                hasRespawned = true;
-                Debug.Log("Bola inicial perdida, respawneando");
-                RespawnSingleBall();
-            }
-            else if (activeBalls.Count == 0 && !hasRespawned)
+            // Sólo si no quedan bolas activas y no estamos en modo multiball, respawneamos
+            if (activeBalls.Count == 0 && !hasRespawned && !isMultiballActive)
             {
                 hasRespawned = true;
                 Debug.Log("Sin bolas activas, respawneando bola única");
+                RespawnSingleBall();
+            }
+            // Si estamos en modo multiball y se quedaron sin bolas, se reinicia el modo
+            else if (activeBalls.Count == 0 && isMultiballActive)
+            {
+                Debug.Log("Fin del modo multiball, respawneando bola única");
+                isMultiballActive = false;
+                hasRespawned = true;
                 RespawnSingleBall();
             }
         }
@@ -47,28 +51,14 @@ public class BallManager
 
     private static void RespawnSingleBall()
     {
-        BallController initialBall = BallPool.Instance.GetInitialBall();
+        // Usar cualquier bola del pool, no una específica "inicial"
+        Vector3 paddlePos = PaddlePhysics.bounds.center;
+        Vector3 ballPos = new Vector3(paddlePos.x, paddlePos.y + 3f, 0f);
         
-        if (initialBall != null)
-        {
-            initialBall.gameObject.SetActive(true);
-            initialBall.SetWaitingOnPaddle();
-            
-            Vector3 paddlePos = PaddlePhysics.bounds.center;
-            initialBall.transform.position = new Vector3(paddlePos.x, paddlePos.y + 3f, 0f);
-            
-            Debug.Log("Reposicionando bola inicial");
-        }
-        else
-        {
-            Vector3 paddlePos = PaddlePhysics.bounds.center;
-            Vector3 ballPos = new Vector3(paddlePos.x, paddlePos.y + 3f, 0f);
-            
-            BallController newBall = BallPool.Instance.SpawnBall(ballPos);
-            newBall.SetWaitingOnPaddle();
-            
-            Debug.Log("Creando nueva bola inicial");
-        }
+        BallController newBall = BallPool.Instance.SpawnBall(ballPos);
+        newBall.SetWaitingOnPaddle();
+        
+        Debug.Log("Creando nueva bola");
     }
 
     public static void SpawnMultipleBalls()
@@ -91,6 +81,9 @@ public class BallManager
 
     public static void SpawnAndLaunchMultipleBalls(int numberOfBalls = 2)
     {
+        // Activar el modo multiball
+        isMultiballActive = true;
+        
         // Calcular cuántas bolas podemos agregar respetando el límite
         int ballsToAdd = Mathf.Min(numberOfBalls, maxBalls - activeBalls.Count);
         
@@ -98,35 +91,38 @@ public class BallManager
         if (ballsToAdd <= 0)
             return;
 
+        // Obtener posición de la paleta
+        Vector3 paddlePos = PaddlePhysics.bounds.center;
+        Vector3 spawnBasePosition = new Vector3(paddlePos.x, paddlePos.y + 1f, 0f);
+        
+        // Definir un rango de ángulos más estrecho y centrado para evitar colisiones entre pelotas
+        // 70-110 grados, centralizado en 90 (directamente hacia arriba)
+        float angleStep = 40f / (ballsToAdd > 1 ? ballsToAdd - 1 : 1);  // 40 grados distribuidos entre las bolas
+        float startAngle = 70f;  // Comenzar desde 70 grados (más cerrado hacia arriba)
+        
+        Debug.Log($"Lanzando {ballsToAdd} bolas, ángulo inicial: {startAngle}, paso: {angleStep}");
+        
+        // Crear las pelotas con separación temporal para evitar colisiones
         for (int i = 0; i < ballsToAdd; i++)
         {
-            // Usar la posición de una bola activa como referencia si existe
-            Vector3 spawnPosition;
-            Vector3 direction;
+            // Calcular un pequeño desplazamiento aleatorio para cada bola
+            // Usar un desplazamiento más vertical para evitar colisiones iniciales
+            Vector3 spawnPosition = spawnBasePosition + new Vector3(Random.Range(-0.2f, 0.2f), 0.3f * i, 0f);
             
-            if (activeBalls.Count > 0 && activeBalls[0] != null)
-            {
-                // Crear bola cerca de una bola existente con un pequeño desplazamiento
-                BallController referenceBall = activeBalls[0];
-                spawnPosition = referenceBall.transform.position + new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f), 0f);
-                direction = referenceBall.Direction;
-                
-                // Rotamos ligeramente la dirección para que las bolas no vayan exactamente igual
-                float rotationAngle = Random.Range(-30f, 30f);
-                direction = Quaternion.Euler(0, 0, rotationAngle) * direction;
-            }
-            else
-            {
-                // Si no hay bolas activas, crear sobre la paleta
-                Vector3 paddlePos = PaddlePhysics.bounds.center;
-                spawnPosition = new Vector3(paddlePos.x, paddlePos.y + 1f, 0f);
-                direction = BallPhysics.GetInitialDirection();
-            }
+            // Calcular el ángulo para esta bola (entre 70 y 110 grados)
+            float angle = startAngle + (angleStep * i);
             
+            // Calcular la dirección usando el ángulo
+            float angleRadians = angle * Mathf.Deg2Rad;
+            Vector3 direction = new Vector3(Mathf.Cos(angleRadians), Mathf.Sin(angleRadians), 0);
+            
+            // Crear y configurar la nueva bola
             BallController newBall = BallPool.Instance.SpawnBall(spawnPosition);
-            newBall.Direction = direction;
+            newBall.Direction = direction.normalized;
             newBall.IsLaunched = true;
             SetActive(newBall);
+            
+            Debug.Log($"Bola {i} creada con ángulo {angle}, dirección: {direction}");
         }
         
         NotifyBallLaunched();
@@ -165,21 +161,17 @@ public class BallManager
         {
             if (ball != null && ball.gameObject.activeInHierarchy)
             {
-                if (ball == BallPool.Instance.GetInitialBall())
-                {
-                    // Para la bola inicial, solo reiniciarla
-                    ball.SetWaitingOnPaddle();
-                    ball.gameObject.SetActive(true);
-                }
-                else
-                {
-                    // Para las demás bolas, devolverlas al pool
-                    BallPool.Instance.ReturnToPool(ball);
-                }
+                // Devolver todas las bolas al pool
+                ball.gameObject.SetActive(false);
+                BallPool.Instance.ReturnToPool(ball);
             }
         }
         
-        // Resetear el flag
+        // Resetear los flags
         hasRespawned = false;
+        isMultiballActive = false;
+        
+        // Crear una nueva bola inicial
+        RespawnSingleBall();
     }
 }

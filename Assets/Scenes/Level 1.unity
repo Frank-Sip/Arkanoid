@@ -563,7 +563,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
       propertyPath: columns
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
       propertyPath: spacing
