@@ -5,7 +5,7 @@ public class BallManager
 {
     private static List<BallController> balls = new List<BallController>();
     private static List<BallController> activeBalls = new List<BallController>();
-    private static bool hasRespawned = false; // NUEVO
+    private static bool hasRespawned = false;
 
     public static void Register(BallController ball)
     {

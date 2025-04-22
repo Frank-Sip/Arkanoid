@@ -95,6 +95,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 0e40c74abac63e243bde2aee2e27f81d, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a08ad1c4465f68445940fe28e6cb6ca5, type: 2}
     - target: {fileID: 919132149155446097, guid: 0e40c74abac63e243bde2aee2e27f81d, type: 3}
       propertyPath: m_Name
       value: Confiscscated Wood Box
@@ -102,10 +106,32 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0e40c74abac63e243bde2aee2e27f81d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7211527154879266997}
   m_SourcePrefab: {fileID: 100100000, guid: 0e40c74abac63e243bde2aee2e27f81d, type: 3}
 --- !u!4 &5116235896570062131 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 0e40c74abac63e243bde2aee2e27f81d, type: 3}
   m_PrefabInstance: {fileID: 4650595594372661976}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5497582175540313993 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 0e40c74abac63e243bde2aee2e27f81d, type: 3}
+  m_PrefabInstance: {fileID: 4650595594372661976}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7211527154879266997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5497582175540313993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 766338645e37b5d46b7b81f6e4c700d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  atlasMaster: {fileID: 11400000, guid: d714b104c4cd41f4b9d434dacd1e05db, type: 2}
+  atlasType: 1
