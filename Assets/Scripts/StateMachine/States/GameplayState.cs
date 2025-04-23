@@ -8,6 +8,7 @@ public class GameplayState : GameState
     {
         Debug.Log("Entering GameplayState");
         Time.timeScale = 1f;
+        gameManager.GameStateLayout.SetActive(true);
     }
 
     public override void Tick(GameManager gameManager)
@@ -21,5 +22,6 @@ public class GameplayState : GameState
     public override void Exit(GameManager gameManager)
     {
         Debug.Log("Leaving GameplayState");
+        gameManager.GameStateLayout.SetActive(false);
     }
 }

@@ -8,11 +8,11 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - GameplayObect
   - Water
   - UI
-  - 
-  - 
+  - Buttons
+  - BackgroundMenu
   - 
   - 
   - 
@@ -40,4 +40,22 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: UI (Text)
+    uniqueID: 3305103453
+    locked: 0
+  - name: Buttons
+    uniqueID: 2524355115
+    locked: 0
+  - name: BackgroundMenu
+    uniqueID: 321434975
+    locked: 0
+  - name: BackgroundPause
+    uniqueID: 1779927399
+    locked: 0
+  - name: BackgroundGameplay
+    uniqueID: 1283376047
+    locked: 0
+  - name: Gameplay Object
+    uniqueID: 810165447
     locked: 0

@@ -29,6 +29,11 @@ public class GameManager : MonoBehaviour
     private static PlayerLoopSystem originalPlayerLoop;
     private static bool gameIsReloading = false;
 
+    [Header ("Layouts UI")]
+    public GameObject MainMenuLayout;
+    public GameObject PauseLayout;
+    public GameObject GameStateLayout;
+
     private struct CustomGameLogic { }
 
     private void Awake()
