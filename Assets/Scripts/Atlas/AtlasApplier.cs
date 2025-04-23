@@ -26,11 +26,14 @@ public class AtlasApplier : MonoBehaviour
             return;
         }
         
-        Material sharedMaterial = atlasMaster.sharedMaterial;
+        Material sharedMaterial = AtlasManager.GetSharedAtlasMaterial(atlasMaster);
 
         if (sharedMaterial != null)
         {
-            objectRenderer.sharedMaterial = sharedMaterial;
+            if (objectRenderer.sharedMaterial != sharedMaterial)
+            {
+                objectRenderer.sharedMaterial = sharedMaterial;
+            }
             
             Vector2 scale = new Vector2(1f / atlasTextureSize.x, 1f / atlasTextureSize.y);
             Vector2 offset = new Vector2(uvRect.x / atlasTextureSize.x, uvRect.y / atlasTextureSize.y);
@@ -40,7 +43,5 @@ public class AtlasApplier : MonoBehaviour
             block.SetVector("_MainTex_ST", new Vector4(scale.x, scale.y, offset.x, offset.y));
             objectRenderer.SetPropertyBlock(block);
         }
-        
     }
-
 }
