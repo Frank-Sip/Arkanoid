@@ -13,7 +13,7 @@ public class AtlasApplier : MonoBehaviour
         objectRenderer = GetComponent<Renderer>();
         ApplyAtlas();
     }
-    
+
     private void ApplyAtlas()
     {
         Rect uvRect = atlasMaster.GetUVRect(atlasType);
@@ -23,16 +23,16 @@ public class AtlasApplier : MonoBehaviour
             Debug.LogWarning("No UVs found for " + atlasType);
             return;
         }
-        
+
         Material sharedMaterial = atlasMaster.sharedMaterial;
 
         if (sharedMaterial != null)
         {
-            objectRenderer.material = sharedMaterial;
-            
+            objectRenderer.sharedMaterial = sharedMaterial;
+
             Vector2 scale = new Vector2(1f / 1280f, 1f / 720f);
             Vector2 offset = new Vector2(uvRect.x / 1280f, uvRect.y / 720f);
-            
+
             MaterialPropertyBlock block = new MaterialPropertyBlock();
             objectRenderer.GetPropertyBlock(block);
             block.SetVector("_MainTex_ST", new Vector4(scale.x, scale.y, offset.x, offset.y));
