@@ -83,7 +83,10 @@ public class GameManager : MonoBehaviour
         if (!initialBallSpawned)
         {
             initialBallSpawned = true;
-            BallPool.Instance.SpawnBall(Instance.initialBallPosition);
+            Debug.Log("Creando bola inicial por primera vez");
+            BallController newBall = BallPool.Instance.SpawnBall(Instance.initialBallPosition);
+            newBall.SetWaitingOnPaddle();
+            newBall.gameObject.SetActive(true);
         }
 
         if (!initialBricksSpawned)
@@ -98,13 +101,13 @@ public class GameManager : MonoBehaviour
         }
 
         PaddlePhysics.Frame();
+        
+        PowerUpManager.Frame();
 
         foreach (var ball in BallManager.GetBalls())
         {
-            if (ball.gameObject.activeInHierarchy)
-            {
+            if (ball != null && ball.gameObject.activeInHierarchy)
                 ball.Frame();
-            }
         }
     }
 
@@ -148,14 +151,17 @@ public class GameManager : MonoBehaviour
         Instance.ballSpawned = false;
         
         List<BrickController> activeBricks = new List<BrickController>(BrickManager.GetActiveBricks());
-        
         foreach (var brick in activeBricks)
         {
             BrickPool.Instance.ReturnToPool(brick);
         }
-        
         BrickManager.GetBricks().Clear();
         BrickManager.GetActiveBricks().Clear();
+        
+        BallManager.ResetAll();
+        
+        PowerUpManager.ResetAll();
+        PowerUpManager.ResetPowerUpCount();
         
         Instance.SpawnBricksGrid();
         

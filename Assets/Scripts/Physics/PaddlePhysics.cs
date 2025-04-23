@@ -75,4 +75,34 @@ public static class PaddlePhysics
 
         return true;
     }
+
+    public static void UpdateWidth(float newWidth)
+    {
+        if (paddle == null || visual == null) return;
+        
+        paddleConfig.width = newWidth;
+        
+        Mesh mesh = visual.GetComponent<MeshFilter>()?.sharedMesh;
+        if (mesh != null)
+        {
+            Bounds meshBounds = mesh.bounds;
+            float baseWidth = meshBounds.size.x;
+            float baseHeight = meshBounds.size.y;
+            
+            float scaleX = newWidth / baseWidth;
+            float scaleY = paddleConfig.height / baseHeight;
+            
+            visual.localScale = new Vector3(scaleX, scaleY, 1f);
+            
+            Vector3 centerOffset = Vector3.Scale(meshBounds.center, visual.localScale);
+            visual.localPosition = -centerOffset;
+        }
+        else
+        {
+            visual.localScale = new Vector3(newWidth, paddleConfig.height, 1f);
+        }
+        
+        bounds = new Rect(paddle.position.x - newWidth / 2f, paddle.position.y - paddleConfig.height / 2f, 
+                         newWidth, paddleConfig.height);
+    }
 }

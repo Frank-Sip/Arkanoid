@@ -46,18 +46,43 @@ public class PowerUpPhysics
         
         position += Vector3.down * speed * Time.deltaTime;
         
-        Vector3 direction = Vector3.zero;
-        if (PaddlePhysics.CheckCollision(position, radius, ref direction, out Vector3 correction))
+        if (position.y < screenConfig.down - radius)
         {
-            position += correction;
-            powerUpController.CollideWithPaddle();
+            Debug.Log("Power-up salió de pantalla, destruyendo...");
+            powerUpController.DestroyPowerUp();
+            return;
         }
         
-        else if (position.y < screenConfig.down)
+        Vector3 direction = Vector3.zero;
+        if (CheckPaddleCollision(position, radius))
         {
-            powerUpController.DestroyPowerUp();
+            Debug.Log("Power-up colisionó con paleta, activando...");
+            powerUpController.CollideWithPaddle();
+            return;
         }
 
         powerUp.position = position;
+    }
+    
+    private bool CheckPaddleCollision(Vector3 powerUpPosition, float powerUpRadius)
+    {
+        Rect paddleBounds = PaddlePhysics.bounds;
+        
+        Rect extendedBounds = new Rect(
+            paddleBounds.x - powerUpRadius * 0.5f,
+            paddleBounds.y - powerUpRadius * 0.5f,
+            paddleBounds.width + powerUpRadius,
+            paddleBounds.height + powerUpRadius
+        );
+        
+        if (powerUpPosition.x >= extendedBounds.xMin && 
+            powerUpPosition.x <= extendedBounds.xMax &&
+            powerUpPosition.y >= extendedBounds.yMin && 
+            powerUpPosition.y <= extendedBounds.yMax)
+        {
+            return true;
+        }
+        
+        return false;
     }
 }

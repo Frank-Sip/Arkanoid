@@ -7,7 +7,7 @@ public class BallController : MonoBehaviour
     private bool followPaddle = true;
 
     public Vector3 Direction { get; set; }
-    public bool IsLaunched { get; private set; } = false;
+    public bool IsLaunched { get; set; } = false;
 
     private BallPhysics physics = new BallPhysics();
     private Vector3 initialPosition;
@@ -69,8 +69,12 @@ public class BallController : MonoBehaviour
 
     private void ResetBall()
     {
+        BallManager.Unregister(this);
+        
         transform.position = initialPosition;
         SetWaitingOnPaddle();
+        
+        BallPool.Instance.ReturnToPool(this);
     }
 
 #if UNITY_EDITOR
@@ -80,6 +84,15 @@ public class BallController : MonoBehaviour
 
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, ballSo.radius);
+        
+        if (gameObject.activeInHierarchy && IsLaunched)
+        {
+            int totalActive = BallManager.GetActiveBalls().Count;
+            int maxBalls = BallManager.GetMaxBalls();
+            
+            UnityEditor.Handles.Label(transform.position + Vector3.up * 0.5f, 
+                                      $"Bolas: {totalActive}/{maxBalls}");
+        }
     }
 #endif
 }

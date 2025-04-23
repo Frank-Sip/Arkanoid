@@ -27,7 +27,7 @@ public class BallPool : MonoBehaviour
 
     public void ReturnToPool(BallController ball)
     {
-        BallManager.Unregister(ball);
+        ball.gameObject.SetActive(false);
         pool.Return(ball);
     }
 }
