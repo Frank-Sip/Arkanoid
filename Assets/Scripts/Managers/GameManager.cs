@@ -102,7 +102,9 @@ public class GameManager : MonoBehaviour
         foreach (var ball in BallManager.GetBalls())
         {
             if (ball.gameObject.activeInHierarchy)
+            {
                 ball.Frame();
+            }
         }
     }
 

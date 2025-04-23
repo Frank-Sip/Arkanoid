@@ -7,6 +7,9 @@ public class AtlasApplier : MonoBehaviour
     public AtlasType atlasType;
 
     private Renderer objectRenderer;
+    
+    [Header("Atlas Texture Size")]
+    public Vector2 atlasTextureSize = new Vector2(1280f, 720f);
 
     void Awake()
     {
@@ -20,27 +23,24 @@ public class AtlasApplier : MonoBehaviour
 
         if (uvRect.width == 0 || uvRect.height == 0)
         {
-            Debug.LogWarning("No UVs found for " + atlasType);
             return;
         }
-
+        
         Material sharedMaterial = atlasMaster.sharedMaterial;
 
         if (sharedMaterial != null)
         {
             objectRenderer.sharedMaterial = sharedMaterial;
-
-            Vector2 scale = new Vector2(1f / 1280f, 1f / 720f);
-            Vector2 offset = new Vector2(uvRect.x / 1280f, uvRect.y / 720f);
-
+            
+            Vector2 scale = new Vector2(1f / atlasTextureSize.x, 1f / atlasTextureSize.y);
+            Vector2 offset = new Vector2(uvRect.x / atlasTextureSize.x, uvRect.y / atlasTextureSize.y);
+            
             MaterialPropertyBlock block = new MaterialPropertyBlock();
             objectRenderer.GetPropertyBlock(block);
             block.SetVector("_MainTex_ST", new Vector4(scale.x, scale.y, offset.x, offset.y));
             objectRenderer.SetPropertyBlock(block);
         }
-        else
-        {
-            Debug.LogWarning("Shared material is missing in AtlasSO.");
-        }
+        
     }
+
 }
