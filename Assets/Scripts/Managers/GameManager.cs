@@ -144,7 +144,7 @@ public class GameManager : MonoBehaviour
         stateMachine.ChangeState(newState, this);
     }
 
-    public static void ResetGame()
+    public void ResetGame()
     {
         EventManager.ResetGame();
         Instance.bricksSpawned = false;

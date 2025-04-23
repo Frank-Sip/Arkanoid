@@ -138,4 +138,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   atlasMaster: {fileID: 11400000, guid: d714b104c4cd41f4b9d434dacd1e05db, type: 2}
-  atlasType: 7
+  atlasType: 10
+  atlasTextureSize: {x: 1280, y: 720}

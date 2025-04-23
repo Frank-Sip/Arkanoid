@@ -18,7 +18,7 @@ public static class BrickManager
 
         if (activeBricks.Count <= 0)
         {
-            GameManager.Instance.ChangeGameStatus(new VictoryState());
+            GameManager.Instance.ResetGame();
         }
     }
 
