@@ -5,7 +5,7 @@ public class BrickController : MonoBehaviour
 {
     [SerializeField] public BrickSO brickConfig;
     [SerializeField] private Transform visual;
-    [SerializeField] private float powerUpDropChance = 0.2f; 
+    [SerializeField] private float powerUpDropChance = 0.2f;
 
     public Rect bounds { get; private set; }
 
@@ -43,20 +43,20 @@ public class BrickController : MonoBehaviour
         {
             SpawnPowerUp();
         }
-        
+
         BrickManager.Unregister(this);
         BrickPool.Instance.ReturnToPool(this);
     }
-    
+
     private void SpawnPowerUp()
     {
         if (!PowerUpManager.CanSpawnPowerUp())
         {
             return;
         }
-        
+
         PowerUpController powerUp = PowerUpManager.SpawnPowerUp(transform.position);
-        
+
         if (powerUp != null)
         {
             AssignRandomPowerUpType(powerUp);
@@ -65,27 +65,43 @@ public class BrickController : MonoBehaviour
 
     private void AssignRandomPowerUpType(PowerUpController powerUp)
     {
-
         PowerUpSO powerUpSO = powerUp.GetComponent<PowerUpController>().powerUpSO;
         if (powerUpSO == null)
         {
             Debug.LogError("No se pudo encontrar el PowerUpSO en el power-up");
             return;
         }
-        
-        int randomType = Random.Range(0, 2); 
-        
+
+        Transform modelTransform = powerUp.transform.GetChild(0);
+
+        AtlasApplier atlasApplier = modelTransform.GetComponent<AtlasApplier>();
+        if (atlasApplier == null)
+        {
+            atlasApplier = modelTransform.GetComponentInChildren<AtlasApplier>();
+        }
+
+        if (atlasApplier == null)
+        {
+            Debug.LogError("No se pudo encontrar el AtlasApplier en el modelo del power-up");
+            return;
+        }
+
+        int randomType = Random.Range(0, 2);
 
         if (randomType == 0)
         {
             powerUpSO.powerUpType = PowerUpType.Multiball;
-            Debug.Log("Generado power-up: Multiball");
+            atlasApplier.atlasType = AtlasType.Blue;
+            Debug.Log("Generado power-up: Multiball (Azul)");
         }
         else
         {
             powerUpSO.powerUpType = PowerUpType.WidePaddle;
-            Debug.Log("Generado power-up: WidePaddle");
+            atlasApplier.atlasType = AtlasType.Green;
+            Debug.Log("Generado power-up: WidePaddle (Verde)");
         }
+
+        atlasApplier.ApplyAtlas();
     }
 
     private void ResetBrick()

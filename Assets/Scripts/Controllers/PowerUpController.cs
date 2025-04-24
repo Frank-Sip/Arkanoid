@@ -38,9 +38,9 @@ public class PowerUpController : MonoBehaviour
     private IEnumerator DelayedActivation()
     {
         yield return null;
-        
+
         ActivatePowerUp();
-        
+
         DestroyPowerUp();
     }
 
@@ -52,6 +52,21 @@ public class PowerUpController : MonoBehaviour
 
     private void ActivatePowerUp()
     {
+        Transform modelTransform = transform.GetChild(0);
+        AtlasApplier atlasApplier = modelTransform.GetComponentInChildren<AtlasApplier>();
+
+        if (atlasApplier != null)
+        {
+            if (atlasApplier.atlasType == AtlasType.Blue)
+            {
+                powerUpSO.powerUpType = PowerUpType.Multiball;
+            }
+            else if (atlasApplier.atlasType == AtlasType.Green)
+            {
+                powerUpSO.powerUpType = PowerUpType.WidePaddle;
+            }
+        }
+
         switch (powerUpSO.powerUpType)
         {
             case PowerUpType.Multiball:
@@ -69,16 +84,16 @@ public class PowerUpController : MonoBehaviour
     {
         int currentBalls = BallManager.GetActiveBalls().Count;
         int maxBalls = BallManager.GetMaxBalls();
-        
+
         if (currentBalls >= maxBalls)
         {
             Debug.Log($"Máximo de bolas alcanzado ({maxBalls}). No se pueden crear más bolas.");
             return;
         }
-        
+
         int ballsToAdd = Mathf.Min(3, maxBalls - currentBalls);
         Debug.Log($"Activando multiball con {ballsToAdd} bolas nuevas");
-        
+
         BallManager.SpawnAndLaunchMultipleBalls(ballsToAdd);
     }
 

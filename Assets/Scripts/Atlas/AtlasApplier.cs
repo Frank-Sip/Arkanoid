@@ -17,7 +17,7 @@ public class AtlasApplier : MonoBehaviour
         ApplyAtlas();
     }
 
-    private void ApplyAtlas()
+    public void ApplyAtlas()
     {
         Rect uvRect = atlasMaster.GetUVRect(atlasType);
 
