@@ -17,7 +17,16 @@ public class GameplayState : GameState
         {
             gameManager.ChangeGameStatus(new PauseState());
         }
+        
+        foreach (var ball in BallManager.GetBalls())
+        {
+            if (ball != null && ball.gameObject.activeInHierarchy)
+            {
+                ball.Frame();
+            }
+        }
     }
+
 
     public override void Exit(GameManager gameManager)
     {

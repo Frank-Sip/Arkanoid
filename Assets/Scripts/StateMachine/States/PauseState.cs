@@ -14,7 +14,10 @@ public class PauseState : GameState
 
     public override void Tick(GameManager gameManager)
     {
-
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            gameManager.consoleManager.ToggleConsole();
+        }
     }
 
     public override void Exit(GameManager gameManager)

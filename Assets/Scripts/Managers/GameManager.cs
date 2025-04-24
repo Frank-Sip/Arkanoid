@@ -22,7 +22,8 @@ public class GameManager : MonoBehaviour
 
     [Header("Audio Manager")]
     public AudioManager audioManager;
-
+    
+    [Header("Console Manager")]
     public ConsoleManager consoleManager;
     
     private StateMachine stateMachine = new StateMachine();
@@ -116,12 +117,6 @@ public class GameManager : MonoBehaviour
         PaddlePhysics.Frame();
         
         PowerUpManager.Frame();
-
-        foreach (var ball in BallManager.GetBalls())
-        {
-            if (ball != null && ball.gameObject.activeInHierarchy)
-                ball.Frame();
-        }
     }
 
     private void SpawnBricksGrid()
