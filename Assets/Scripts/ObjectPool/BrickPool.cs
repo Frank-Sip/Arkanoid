@@ -28,8 +28,8 @@ public class BrickPool : MonoBehaviour
     public void ReturnToPool(BrickController brick)
     {
         BrickManager.Unregister(brick);
+        brick.Reset();
         pool.Return(brick);
-        brick.gameObject.SetActive(false);
     }
 
     public BrickSO GetBrickSO()

@@ -5,6 +5,8 @@ using UnityEngine;
 public class StateMachine
 {
     private GameState currentState;
+    
+    public GameState CurrentState => currentState;
 
     public void ChangeState(GameState newState, GameManager gameManager)
     {

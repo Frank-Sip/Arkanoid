@@ -154,19 +154,30 @@ public class GameManager : MonoBehaviour
         stateMachine.ChangeState(newState, this);
     }
 
+    public bool IsInGameplayState()
+    {
+        return stateMachine.CurrentState is GameplayState;
+    }
+
     public void ResetGame()
     {
         EventManager.ResetGame();
         Instance.bricksSpawned = false;
         Instance.ballSpawned = false;
         
-        List<BrickController> activeBricks = new List<BrickController>(BrickManager.GetActiveBricks());
-        foreach (var brick in activeBricks)
+        List<BrickController> allBricks = new List<BrickController>(BrickManager.GetBricks());
+        foreach (var brick in allBricks)
         {
-            BrickPool.Instance.ReturnToPool(brick);
+            if (brick != null)
+            {
+                brick.Reset();
+                BrickPool.Instance.ReturnToPool(brick);
+            }
         }
+        
         BrickManager.GetBricks().Clear();
         BrickManager.GetActiveBricks().Clear();
+        BrickManager.ResetLevelCompletedFlag();
         
         BallManager.ResetAll();
         
@@ -174,10 +185,8 @@ public class GameManager : MonoBehaviour
         PowerUpManager.ResetPowerUpCount();
         
         Instance.SpawnBricksGrid();
-        
-        Instance.ChangeGameStatus(new GameplayState());
-    }
 
+    }
 
 #if UNITY_EDITOR
     [UnityEditor.InitializeOnLoadMethod]

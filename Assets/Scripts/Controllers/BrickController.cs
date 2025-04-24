@@ -11,9 +11,11 @@ public class BrickController : MonoBehaviour
 
     private Vector3 initialPosition;
     private bool isSubscribed = false;
+    private bool wasDestroyed = false;
 
     public void Activate()
     {
+        wasDestroyed = false;
         BrickPhysics.Initiate(transform, visual, brickConfig, this);
         gameObject.SetActive(true);
 
@@ -39,6 +41,11 @@ public class BrickController : MonoBehaviour
 
     public void OnDestroyBrick()
     {
+        if (wasDestroyed)
+            return;
+            
+        wasDestroyed = true;
+        
         if (Random.value < powerUpDropChance)
         {
             SpawnPowerUp();
@@ -46,6 +53,12 @@ public class BrickController : MonoBehaviour
 
         BrickManager.Unregister(this);
         BrickPool.Instance.ReturnToPool(this);
+    }
+
+    public void Reset()
+    {
+        wasDestroyed = false;
+        gameObject.SetActive(false);
     }
 
     private void SpawnPowerUp()
@@ -106,6 +119,7 @@ public class BrickController : MonoBehaviour
 
     private void ResetBrick()
     {
+        Reset();
         transform.position = initialPosition;
         Activate();
     }
