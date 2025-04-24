@@ -20,6 +20,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Vector2 startPoint = new Vector2(-7f, 4f);
     [SerializeField] private Vector2 endPoint = new Vector2(-7f, 4f);
 
+    [Header("Audio Manager")]
+    public AudioManager audioManager;
+    
     private StateMachine stateMachine = new StateMachine();
     private static bool firstFrame = false;
     private bool bricksSpawned = false;
@@ -35,6 +38,7 @@ public class GameManager : MonoBehaviour
     public GameObject GameStateLayout;
 
     private struct CustomGameLogic { }
+    public AudioManager AudioManager => audioManager;
 
     private void Awake()
     {
@@ -43,8 +47,9 @@ public class GameManager : MonoBehaviour
         firstFrame = false;
         bricksSpawned = false;
         ballSpawned = false;
-
+        
         MakePlayerLoop();
+        audioManager.Init();
         paddleController.Initiate();
     }
 

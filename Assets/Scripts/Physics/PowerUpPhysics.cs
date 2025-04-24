@@ -8,16 +8,18 @@ public class PowerUpPhysics
     private PowerUpSO powerUpConfig;
     private ScreenEdgesSO screenConfig;
     private PowerUpController powerUpController;
+    private AudioManager audioManager;
 
     private float radius => powerUpConfig.radius;
     private float speed => powerUpConfig.speed;
 
-    public void Initiate(Transform t, PowerUpSO powerUpSO, ScreenEdgesSO screenSO, PowerUpController controller)
+    public void Initiate(Transform t, PowerUpSO powerUpSO, ScreenEdgesSO screenSO, PowerUpController controller, AudioManager audioMgr)
     {
         powerUp = t;
         powerUpConfig = powerUpSO;
         screenConfig = screenSO;
         powerUpController = controller;
+        audioManager = audioMgr;
 
         ApplyScaleAndCenterMesh();
     }
@@ -48,7 +50,6 @@ public class PowerUpPhysics
         
         if (position.y < screenConfig.down - radius)
         {
-            Debug.Log("Power-up salió de pantalla, destruyendo...");
             powerUpController.DestroyPowerUp();
             return;
         }
@@ -56,8 +57,8 @@ public class PowerUpPhysics
         Vector3 direction = Vector3.zero;
         if (CheckPaddleCollision(position, radius))
         {
-            Debug.Log("Power-up colisionó con paleta, activando...");
             powerUpController.CollideWithPaddle();
+            audioManager.PlaySFX(3);
             return;
         }
 

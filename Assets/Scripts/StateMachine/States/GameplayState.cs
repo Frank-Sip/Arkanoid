@@ -6,9 +6,9 @@ public class GameplayState : GameState
 {
     public override void Enter(GameManager gameManager)
     {
-        Debug.Log("Entering GameplayState");
         Time.timeScale = 1f;
         gameManager.GameStateLayout.SetActive(true);
+        gameManager.AudioManager.PlayBGM(1);
     }
 
     public override void Tick(GameManager gameManager)
@@ -21,7 +21,6 @@ public class GameplayState : GameState
 
     public override void Exit(GameManager gameManager)
     {
-        Debug.Log("Leaving GameplayState");
         gameManager.GameStateLayout.SetActive(false);
     }
 }

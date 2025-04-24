@@ -8,16 +8,18 @@ public class BallPhysics
     private BallSO ballConfig;
     private ScreenEdgesSO screenConfig;
     private BallController ballController;
+    private AudioManager audioManager;
 
     private float radius => ballConfig.radius;
     private float speed => ballConfig.speed;
 
-    public void Initiate(Transform t, BallSO ballSO, ScreenEdgesSO screenSO, BallController controller)
+    public void Initiate(Transform t, BallSO ballSO, ScreenEdgesSO screenSO, BallController controller, AudioManager audio)
     {
         ball = t;
         ballConfig = ballSO;
         screenConfig = screenSO;
         ballController = controller;
+        audioManager = audio;
 
         ApplyScaleAndCenterMesh();
     }
@@ -57,28 +59,33 @@ public class BallPhysics
         if (PaddlePhysics.CheckCollision(position, radius, ref direction, out Vector3 correction))
         {
             position += correction;
+            audioManager.PlaySFX(0);
         }
         else if (position.x < screenConfig.left + radius || position.x > screenConfig.right - radius)
         {
             direction.x *= -1;
             position.x = Mathf.Clamp(position.x, screenConfig.left + radius, screenConfig.right - radius);
+            audioManager.PlaySFX(0);
         }
         else if (BrickPhysics.CheckCollision(position, radius, ref direction, out Vector3 brickCorrection))
         {
             position += brickCorrection;
+            audioManager.PlaySFX(1);
         }
         else if (CheckBallToBallCollision(ref position, ref direction, radius, ballController))
         {
-
+            //Already handled, leave it empty
         }
         else if (position.y > screenConfig.up - radius)
         {
             direction.y *= -1;
             position.y = screenConfig.up - radius;
+            audioManager.PlaySFX(0);
         }
         else if (position.y < screenConfig.down + radius)
         {
             ballController.DestroyBall();
+            audioManager.PlaySFX(2);
             return;
         }
 
@@ -111,7 +118,9 @@ public class BallPhysics
                 Vector3 correction = normal * (penetration / 2f);
                 position -= correction;
                 other.transform.position += correction;
-
+                
+                audioManager.PlaySFX(0);
+                
                 return true;
             }
         }

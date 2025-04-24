@@ -16,7 +16,8 @@ public class BallController : MonoBehaviour
     private void Awake()
     {
         BallManager.Register(this);
-        physics.Initiate(transform, ballSo, screenEdgesSO, this);
+        AudioManager audioMgr = FindObjectOfType<AudioManager>();
+        physics.Initiate(transform, ballSo, screenEdgesSO, this, audioMgr);
         Direction = BallPhysics.GetInitialDirection();
 
         initialPosition = transform.position;

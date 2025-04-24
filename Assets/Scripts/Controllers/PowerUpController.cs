@@ -15,7 +15,8 @@ public class PowerUpController : MonoBehaviour
     private void Awake()
     {
         physics = new PowerUpPhysics();
-        physics.Initiate(transform, powerUpSO, screenEdgesSO, this);
+        AudioManager audioMgr = FindObjectOfType<AudioManager>();
+        physics.Initiate(transform, powerUpSO, screenEdgesSO, this, audioMgr);
 
         if (!isSubscribed)
         {
