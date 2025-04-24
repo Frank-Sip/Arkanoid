@@ -91,7 +91,7 @@ public class PowerUpController : MonoBehaviour
             return;
         }
 
-        int ballsToAdd = Mathf.Min(3, maxBalls - currentBalls);
+        int ballsToAdd = Mathf.Min(2, maxBalls - currentBalls);
         Debug.Log($"Activando multiball con {ballsToAdd} bolas nuevas");
 
         BallManager.SpawnAndLaunchMultipleBalls(ballsToAdd);

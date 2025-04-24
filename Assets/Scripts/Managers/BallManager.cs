@@ -6,7 +6,7 @@ public class BallManager
     private static List<BallController> balls = new List<BallController>();
     private static List<BallController> activeBalls = new List<BallController>();
     private static bool hasRespawned = false;
-    private static int maxBalls = 5; 
+    private static int maxBalls = 3; 
     private static bool isMultiballActive = false; 
 
     public static void Register(BallController ball)
