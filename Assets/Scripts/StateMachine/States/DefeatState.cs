@@ -15,8 +15,6 @@ public class DefeatState : GameState
         if (Input.GetKeyDown(KeyCode.R))
         {
             Time.timeScale = 1f;
-            /*gameManager.ChangeGameStatus(new MainMenuState());
-            GameManager.ReloadGame();*/
             
         }
         else if (Input.GetKeyDown(KeyCode.Escape))

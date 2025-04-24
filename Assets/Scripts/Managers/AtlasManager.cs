@@ -9,7 +9,6 @@ public class AtlasManager : MonoBehaviour
 
     public static Material GetSharedAtlasMaterial(AtlasSO atlasSO)
     {
-        // Si el AtlasSO cambia o es la primera vez, actualiza el material
         if (_atlasSO != atlasSO || _sharedAtlasMaterial == null)
         {
             _atlasSO = atlasSO;
