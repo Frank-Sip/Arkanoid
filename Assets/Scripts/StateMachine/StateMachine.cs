@@ -19,7 +19,7 @@ public class StateMachine
         currentState.Enter(gameManager);
     }
 
-    public void Update(GameManager gameManager)
+    public void Tick(GameManager gameManager)
     {
         if (currentState != null)
         {

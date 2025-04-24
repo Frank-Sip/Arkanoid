@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour
 
     [Header("Audio Manager")]
     public AudioManager audioManager;
+
+    public ConsoleManager consoleManager;
     
     private StateMachine stateMachine = new StateMachine();
     private static bool firstFrame = false;
@@ -87,8 +89,9 @@ public class GameManager : MonoBehaviour
             Instance.stateMachine.ChangeState(new MainMenuState(), Instance);
             return;
         }
-
-        Instance.stateMachine.Update(Instance);
+        
+        Instance.consoleManager.Frame();
+        Instance.stateMachine.Tick(Instance);
 
         if (!initialBallSpawned)
         {

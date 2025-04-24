@@ -80,7 +80,7 @@ public class PowerUpController : MonoBehaviour
         }
     }
 
-    private void ActivateMultiball()
+    public void ActivateMultiball()
     {
         int currentBalls = BallManager.GetActiveBalls().Count;
         int maxBalls = BallManager.GetMaxBalls();
@@ -97,7 +97,7 @@ public class PowerUpController : MonoBehaviour
         BallManager.SpawnAndLaunchMultipleBalls(ballsToAdd);
     }
 
-    private void ActivateWidePaddle()
+    public void ActivateWidePaddle()
     {
         PaddleController paddleController = FindObjectOfType<PaddleController>();
         if (paddleController != null)
