@@ -47,6 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   brickConfig: {fileID: 11400000, guid: 2013bc294ead9e54a96ca28d658255cb, type: 2}
   visual: {fileID: 5116235896570062131}
+  powerUpDropChance: 0.2
 --- !u!1001 &4650595594372661976
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -134,5 +135,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   atlasMaster: {fileID: 11400000, guid: d714b104c4cd41f4b9d434dacd1e05db, type: 2}
-  atlasType: 9
+  atlasType: 2
   atlasTextureSize: {x: 1280, y: 720}

@@ -27,6 +27,8 @@ public class ButtonManager:MonoBehaviour
 
     public void OnResumeButtonClicked()
     {
+        GameManager.Instance.consoleManager.consoleUI.SetActive(false);
+        
         if (GameManager.Instance != null)
         {
             GameManager.Instance.ChangeGameStatus(new GameplayState());

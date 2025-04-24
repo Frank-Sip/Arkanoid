@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ConsoleManager : MonoBehaviour
 {
-    [SerializeField] private GameObject consoleUI;
+    public GameObject consoleUI;
     [SerializeField] private CommandInput commandInput;
 
     public void Frame()
