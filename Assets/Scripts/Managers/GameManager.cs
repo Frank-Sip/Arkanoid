@@ -165,8 +165,8 @@ public class GameManager : MonoBehaviour
         Instance.bricksSpawned = false;
         Instance.ballSpawned = false;
         
-        List<BrickController> allBricks = new List<BrickController>(BrickManager.GetBricks());
-        foreach (var brick in allBricks)
+        List<BrickController> activeBricks = new List<BrickController>(BrickManager.GetActiveBricks());
+        foreach (var brick in activeBricks)
         {
             if (brick != null)
             {
