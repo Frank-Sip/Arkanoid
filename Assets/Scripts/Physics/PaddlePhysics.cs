@@ -102,7 +102,6 @@ public static class PaddlePhysics
             visual.localScale = new Vector3(newWidth, paddleConfig.height, 1f);
         }
         
-        bounds = new Rect(paddle.position.x - newWidth / 2f, paddle.position.y - paddleConfig.height / 2f, 
-                         newWidth, paddleConfig.height);
+        bounds = new Rect(paddle.position.x - newWidth / 2f, paddle.position.y - paddleConfig.height / 2f, newWidth, paddleConfig.height);
     }
 }

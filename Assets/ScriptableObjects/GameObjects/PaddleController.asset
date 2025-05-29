@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06c069f3e5c7d2a479eb8678b3cb35ec, type: 3}
+  m_Name: PaddleController
+  m_EditorClassIdentifier: 
+  paddleSO: {fileID: 11400000, guid: 941be5f23f5629a419d900c02e5901c2, type: 2}
+  screenEdgesSO: {fileID: 11400000, guid: 631fcbc0c04543a478008a034eb623af, type: 2}
+  paddlePrefab: {fileID: 8969928951030191705, guid: e5f774b959507f148b9feb56fc1022e2, type: 3}

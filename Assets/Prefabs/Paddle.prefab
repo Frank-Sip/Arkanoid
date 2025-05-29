@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9103919070043877630}
-  - component: {fileID: 8733368430343388785}
   m_Layer: 0
   m_Name: Paddle
   m_TagString: Untagged
@@ -33,21 +32,6 @@ Transform:
   - {fileID: 8107353875452603094}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8733368430343388785
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8969928951030191705}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06c069f3e5c7d2a479eb8678b3cb35ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  paddleSO: {fileID: 11400000, guid: 941be5f23f5629a419d900c02e5901c2, type: 2}
-  screenEdgesSO: {fileID: 11400000, guid: 631fcbc0c04543a478008a034eb623af, type: 2}
-  visual: {fileID: 8107353875452603094}
 --- !u!1001 &8577565190743149885
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -136,3 +120,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   atlasMaster: {fileID: 11400000, guid: d714b104c4cd41f4b9d434dacd1e05db, type: 2}
   atlasType: 7
+  atlasTextureSize: {x: 1280, y: 720}

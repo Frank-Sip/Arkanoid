@@ -11,7 +11,10 @@ public class GameManager : MonoBehaviour
 
     [Header("GameObject Settings")]
     [SerializeField] private Vector3 initialBallPosition;
-    [SerializeField] private PaddleController paddleController;
+    
+    [Header("Paddle Settings")]
+    [SerializeField] private PaddleController paddleControllerSO;
+    [SerializeField] private Transform paddleParent;
 
     [Header("Brick Grid Settings")]
     [SerializeField] private int columns = 5;
@@ -53,7 +56,7 @@ public class GameManager : MonoBehaviour
         
         MakePlayerLoop();
         audioManager.Init();
-        paddleController.Initiate();
+        paddleControllerSO.Instantiate(paddleParent);
     }
 
     private void MakePlayerLoop()
@@ -113,8 +116,8 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
-
-        PaddlePhysics.Frame();
+        
+        Instance.paddleControllerSO.Frame(Time.deltaTime);
         
         PowerUpManager.Frame();
     }
@@ -160,6 +163,7 @@ public class GameManager : MonoBehaviour
     public void ResetGame()
     {
         EventManager.ResetGame();
+        Instance.paddleControllerSO.Reset();
         Instance.bricksSpawned = false;
         Instance.ballSpawned = false;
         
