@@ -1,36 +1,56 @@
-using System.Collections;
 using UnityEngine;
 
-public class BrickController : MonoBehaviour
+[CreateAssetMenu(fileName = "BrickController", menuName = "GameObject/BrickControllerSO")]
+public class BrickController : ScriptableObject
 {
     [SerializeField] public BrickSO brickConfig;
-    [SerializeField] private Transform visual;
+    [SerializeField] private GameObject brickPrefab;
     [SerializeField] private float powerUpDropChance = 0.2f;
 
     public Rect bounds { get; private set; }
+    [HideInInspector] public Transform target { get; private set; }
+    public bool isEnabled { get; private set; }
 
     private Vector3 initialPosition;
-    private bool isSubscribed = false;
     private bool wasDestroyed = false;
+
+    public void Init(Transform parent)
+    {
+        if (brickPrefab == null)
+        {
+            Debug.LogError("Brick prefab is not assigned!");
+            return;
+        }
+
+        if (target == null)
+        {
+            GameObject brickInstance = Instantiate(brickPrefab, parent);
+            target = brickInstance.transform;
+            target.gameObject.SetActive(false);
+        }
+
+        initialPosition = target.position;
+        isEnabled = true;
+        UpdateBounds();
+    }
 
     public void Activate()
     {
         wasDestroyed = false;
-        BrickPhysics.Initiate(transform, visual, brickConfig, this);
-        gameObject.SetActive(true);
+        isEnabled = true;
+        BrickPhysics.Initiate(target, target.GetChild(0), brickConfig, this);
+        target.gameObject.SetActive(true);
+    }
 
-        initialPosition = transform.position;
-
-        if (!isSubscribed)
-        {
-            EventManager.OnReset += ResetBrick;
-            isSubscribed = true;
-        }
+    public void Deactivate()
+    {
+        isEnabled = false;
+        target.gameObject.SetActive(false);
     }
 
     public void UpdateBounds()
     {
-        BrickPhysics.UpdateBounds(transform, brickConfig, out Rect updatedBounds);
+        BrickPhysics.UpdateBounds(target.transform, brickConfig, out Rect updatedBounds);
         bounds = updatedBounds;
     }
 
@@ -41,11 +61,11 @@ public class BrickController : MonoBehaviour
 
     public void OnDestroyBrick()
     {
-        if (wasDestroyed)
-            return;
-            
+        if (wasDestroyed) return;
+
         wasDestroyed = true;
-        
+        isEnabled = false;
+
         if (Random.value < powerUpDropChance)
         {
             SpawnPowerUp();
@@ -58,18 +78,16 @@ public class BrickController : MonoBehaviour
     public void Reset()
     {
         wasDestroyed = false;
-        gameObject.SetActive(false);
+        isEnabled = false;
+        target.gameObject.SetActive(false);
+        target.position = initialPosition;
     }
 
     private void SpawnPowerUp()
     {
-        if (!PowerUpManager.CanSpawnPowerUp())
-        {
-            return;
-        }
+        if (!PowerUpManager.CanSpawnPowerUp()) return;
 
-        PowerUpController powerUp = PowerUpManager.SpawnPowerUp(transform.position);
-
+        PowerUpController powerUp = PowerUpManager.SpawnPowerUp(target.position);
         if (powerUp != null)
         {
             AssignRandomPowerUpType(powerUp);
@@ -78,66 +96,16 @@ public class BrickController : MonoBehaviour
 
     private void AssignRandomPowerUpType(PowerUpController powerUp)
     {
-        PowerUpSO powerUpSO = powerUp.GetComponent<PowerUpController>().powerUpSO;
-        if (powerUpSO == null)
-        {
-            Debug.LogError("No se pudo encontrar el PowerUpSO en el power-up");
-            return;
-        }
+        PowerUpSO powerUpSO = powerUp.powerUpSO;
+        if (powerUpSO == null) return;
 
-        Transform modelTransform = powerUp.transform.GetChild(0);
-
-        AtlasApplier atlasApplier = modelTransform.GetComponent<AtlasApplier>();
-        if (atlasApplier == null)
-        {
-            atlasApplier = modelTransform.GetComponentInChildren<AtlasApplier>();
-        }
-
-        if (atlasApplier == null)
-        {
-            Debug.LogError("No se pudo encontrar el AtlasApplier en el modelo del power-up");
-            return;
-        }
+        Transform modelTransform = powerUp.target.transform.GetChild(0);
+        AtlasApplier atlasApplier = modelTransform.GetComponent<AtlasApplier>() ?? modelTransform.GetComponentInChildren<AtlasApplier>();
+        if (atlasApplier == null) return;
 
         int randomType = Random.Range(0, 2);
-
-        if (randomType == 0)
-        {
-            powerUpSO.powerUpType = PowerUpType.Multiball;
-            atlasApplier.atlasType = AtlasType.Blue;
-            Debug.Log("Generado power-up: Multiball (Azul)");
-        }
-        else
-        {
-            powerUpSO.powerUpType = PowerUpType.WidePaddle;
-            atlasApplier.atlasType = AtlasType.Green;
-            Debug.Log("Generado power-up: WidePaddle (Verde)");
-        }
-
+        powerUpSO.powerUpType = randomType == 0 ? PowerUpType.Multiball : PowerUpType.WidePaddle;
+        atlasApplier.atlasType = randomType == 0 ? AtlasType.Blue : AtlasType.Green;
         atlasApplier.ApplyAtlas();
     }
-
-    private void ResetBrick()
-    {
-        Reset();
-        transform.position = initialPosition;
-        Activate();
-    }
-
-#if UNITY_EDITOR
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(bounds.center, bounds.size);
-
-        if (visual != null)
-        {
-            Gizmos.color = Color.red;
-            Bounds meshBounds = visual.GetComponent<MeshFilter>()?.sharedMesh?.bounds ?? new Bounds(Vector3.zero, Vector3.one);
-            Vector3 size = Vector3.Scale(meshBounds.size, visual.lossyScale);
-            Vector3 center = visual.position + Vector3.Scale(meshBounds.center, visual.lossyScale);
-            Gizmos.DrawWireCube(center, size);
-        }
-    }
-#endif
 }

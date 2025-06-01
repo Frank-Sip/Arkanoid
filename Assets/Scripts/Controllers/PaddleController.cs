@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "PaddleController", menuName = "ObjectConfig/PaddleControllerSO")]
+[CreateAssetMenu(fileName = "PaddleController", menuName = "GameObject/PaddleControllerSO")]
 public class PaddleController : ScriptableObject
 {
     [SerializeField] private PaddleSO paddleSO;
@@ -15,7 +17,7 @@ public class PaddleController : ScriptableObject
     private bool isWidePaddle;
     private float powerUpTimer = -1f;
 
-    public void Instantiate(Transform parent)
+    public void Init(Transform parent)
     {
         GameObject paddleGO = Instantiate(paddlePrefab, parent);
         paddleTransform = paddleGO.transform;

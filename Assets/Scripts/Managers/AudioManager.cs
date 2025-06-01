@@ -1,26 +1,28 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AudioManager : MonoBehaviour
+public class AudioManager
 {
-    [Header("BGM")]
-    public AudioSource music;
-    public List<AudioClip> bgTracks;
+    private AudioSource music;
+    private AudioSource sfx;
+    private List<AudioClip> bgTracks;
+    private List<AudioSO> soundEffects;
 
-    [Header("SFX")]
-    public AudioSource sfx;
-    public List<AudioSO> soundEffects;
-
-    public void Init()
+    public AudioManager(List<AudioClip> bgTracks, List<AudioSO> soundEffects)
     {
-        if (music == null) music = GetComponent<AudioSource>();
-        if (sfx == null) sfx = gameObject.AddComponent<AudioSource>();
+        this.bgTracks = bgTracks;
+        this.soundEffects = soundEffects;
+    }
+
+    public void Init(AudioSource musicSource, AudioSource sfxSource)
+    {
+        this.music = musicSource;
+        this.sfx = sfxSource;
     }
 
     public void PlayBGM(int bgmIndex)
     {
-        if (bgmIndex < 0 || bgmIndex >= bgTracks.Count) return;
+        if (music == null || bgmIndex < 0 || bgmIndex >= bgTracks.Count) return;
 
         music.clip = bgTracks[bgmIndex];
         music.loop = true;
@@ -29,7 +31,7 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySFX(int sfxIndex)
     {
-        if (sfxIndex < 0 || sfxIndex >= soundEffects.Count) return;
+        if (sfx == null || sfxIndex < 0 || sfxIndex >= soundEffects.Count) return;
 
         soundEffects[sfxIndex].PlaySound(sfx);
     }

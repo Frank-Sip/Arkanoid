@@ -97,9 +97,9 @@ public class BallPhysics
     {
         foreach (var other in BallManager.GetBalls())
         {
-            if (other == null || other == self || !other.gameObject.activeSelf) continue;
+            if (other == null || other == self || !other.target.gameObject.activeSelf) continue;
 
-            Vector3 otherPos = other.transform.position;
+            Vector3 otherPos = other.target.transform.position;
             Vector3 delta = otherPos - position;
             float dist = delta.magnitude;
             float combinedRadius = radius * 2f;
@@ -117,7 +117,7 @@ public class BallPhysics
                 float penetration = combinedRadius - dist;
                 Vector3 correction = normal * (penetration / 2f);
                 position -= correction;
-                other.transform.position += correction;
+                other.target.transform.position += correction;
                 
                 audioManager.PlaySFX(0);
                 

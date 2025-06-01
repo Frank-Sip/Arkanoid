@@ -56,7 +56,7 @@ public static class PowerUpManager
         foreach (var powerUp in activePowerUps)
         {
             if (powerUp != null)
-                powerUp.gameObject.SetActive(false);
+                powerUp.target.gameObject.SetActive(false);
         }
 
         activePowerUps.Clear();

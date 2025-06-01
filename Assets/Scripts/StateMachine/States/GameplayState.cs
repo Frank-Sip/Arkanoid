@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +7,8 @@ public class GameplayState : GameState
     {
         Time.timeScale = 1f;
         gameManager.GameStateLayout.SetActive(true);
-        gameManager.AudioManager.PlayBGM(1);
+        var audioManager = ServiceProvider.GetService<AudioManager>();
+        audioManager.PlayBGM(1);
     }
 
     public override void Tick(GameManager gameManager)
@@ -16,17 +16,18 @@ public class GameplayState : GameState
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             gameManager.ChangeGameStatus(new PauseState());
+            return;
         }
         
-        foreach (var ball in BallManager.GetBalls())
+        var currentBalls = new List<BallController>(BallManager.GetBalls());
+        foreach (var ball in currentBalls)
         {
-            if (ball != null && ball.gameObject.activeInHierarchy)
+            if (ball != null && ball.target != null && ball.target.gameObject.activeInHierarchy)
             {
                 ball.Frame();
             }
         }
     }
-
 
     public override void Exit(GameManager gameManager)
     {

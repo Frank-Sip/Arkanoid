@@ -49,7 +49,7 @@ public static class BrickPhysics
 
         foreach (var brick in BrickManager.GetActiveBricks())
         {
-            if (brick == null || !brick.gameObject.activeInHierarchy || !brick.enabled)
+            if (brick == null || !brick.target.gameObject.activeInHierarchy || !brick.isEnabled)
                 continue;
 
             if (!brick.bounds.Overlaps(ballRect)) continue;

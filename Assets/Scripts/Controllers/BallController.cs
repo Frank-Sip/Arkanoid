@@ -1,31 +1,52 @@
 using UnityEngine;
 
-public class BallController : MonoBehaviour
+[CreateAssetMenu(fileName = "BallController", menuName = "GameObject/BallControllerSO")]
+public class BallController : ScriptableObject
 {
     [SerializeField] private BallSO ballSo;
     [SerializeField] private ScreenEdgesSO screenEdgesSO;
+    public GameObject ballPrefab;
+
+    [HideInInspector] public Transform target;
     private bool followPaddle = true;
+    private GameObject ballInstance;
 
     public Vector3 Direction { get; set; }
     public bool IsLaunched { get; set; } = false;
 
-    private BallPhysics physics = new BallPhysics();
+    private BallPhysics physics;
     private Vector3 initialPosition;
     private bool isSubscribed = false;
 
-    private void Awake()
+    public BallController Clone()
     {
-        BallManager.Register(this);
-        AudioManager audioMgr = FindObjectOfType<AudioManager>();
-        physics.Initiate(transform, ballSo, screenEdgesSO, this, audioMgr);
-        Direction = BallPhysics.GetInitialDirection();
+        var clone = Instantiate(this);
+        clone.physics = new BallPhysics();
+        clone.followPaddle = true;
+        clone.IsLaunched = false;
+        clone.ballInstance = null;
+        clone.target = null;
+        clone.isSubscribed = false;
+        return clone;
+    }
 
-        initialPosition = transform.position;
-
-        if (!isSubscribed)
+    public void Init(Transform parent = null)
+    {
+        if (target == null)
         {
-            EventManager.OnReset += ResetBall;
-            isSubscribed = true;
+            ballInstance = Instantiate(ballPrefab);
+            if (parent != null)
+            {
+                ballInstance.transform.SetParent(parent);
+            }
+            target = ballInstance.transform;
+            InitializePhysics();
+
+            if (!isSubscribed)
+            {
+                EventManager.OnReset += ResetBall;
+                isSubscribed = true;
+            }
         }
     }
 
@@ -34,7 +55,7 @@ public class BallController : MonoBehaviour
         if (!IsLaunched && followPaddle)
         {
             Vector3 paddlePos = PaddlePhysics.bounds.center;
-            transform.position = new Vector3(paddlePos.x, paddlePos.y + ballSo.radius * 3, 0f);
+            target.position = new Vector3(paddlePos.x, paddlePos.y + ballSo.radius * 3, 0f);
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
@@ -47,53 +68,73 @@ public class BallController : MonoBehaviour
             return;
         }
 
-        physics.Frame();
+        physics?.Frame();
+    }
+    
+    public void InitializePhysics()
+    {
+        physics = new BallPhysics();
+        AudioManager audioMgr = ServiceProvider.GetService<AudioManager>();
+        physics.Initiate(target, ballSo, screenEdgesSO, this, audioMgr);
+        Direction = BallPhysics.GetInitialDirection();
     }
 
     public void SetWaitingOnPaddle()
     {
         followPaddle = true;
         IsLaunched = false;
+    
+        if (target != null)
+        {
+            Vector3 paddlePos = PaddlePhysics.bounds.center;
+            target.position = new Vector3(paddlePos.x, paddlePos.y + ballSo.radius * 3, 0f);
+            Debug.Log($"Ball set to paddle position: {target.position}");
+        }
     }
 
     public void DestroyBall()
     {
-        Collider collider = GetComponent<Collider>();
-        if (collider != null)
+        if (target != null)
         {
-            collider.enabled = false;
-        }
-
-        BallManager.Unregister(this);
-        BallPool.Instance.ReturnToPool(this);
-    }
-
-    private void ResetBall()
-    {
-        BallManager.Unregister(this);
-        
-        transform.position = initialPosition;
-        SetWaitingOnPaddle();
-        
-        BallPool.Instance.ReturnToPool(this);
-    }
-
-#if UNITY_EDITOR
-    private void OnDrawGizmos()
-    {
-        if (ballSo == null) return;
-
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, ballSo.radius);
-        
-        if (gameObject.activeInHierarchy && IsLaunched)
-        {
-            int totalActive = BallManager.GetActiveBalls().Count;
-            int maxBalls = BallManager.GetMaxBalls();
+            var rigidbody = target.GetComponent<Rigidbody>();
+            if (rigidbody != null)
+            {
+                rigidbody.velocity = Vector3.zero;
+                rigidbody.angularVelocity = Vector3.zero;
+            }
             
-            UnityEditor.Handles.Label(transform.position + Vector3.up * 0.5f, 
-                                      $"Bolas: {totalActive}/{maxBalls}");
+            ResetState();
+            
+            target.localScale = Vector3.one;
+            BallManager.Unregister(this);
+            BallPool.Instance?.ReturnToPool(this);
+            
+            target = null;
         }
     }
-#endif
+    
+    public void ResetBall()
+    {
+        DestroyBall();
+    }
+
+    private void OnDestroy()
+    {
+        if (isSubscribed)
+        {
+            EventManager.OnReset -= ResetBall;
+        }
+    }
+    
+    public void ResetState()
+    {
+        followPaddle = true;
+        IsLaunched = false;
+        Direction = Vector3.zero;
+    
+        if (target != null)
+        {
+            target.localScale = Vector3.one;
+        }
+    }
 }

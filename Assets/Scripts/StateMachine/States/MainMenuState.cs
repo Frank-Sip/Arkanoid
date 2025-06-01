@@ -9,7 +9,8 @@ public class MainMenuState : GameState
     {
         Time.timeScale = 0f;
         gameManager.MainMenuLayout.SetActive(true);
-        gameManager.AudioManager.PlayBGM(0);
+        var audioManager = ServiceProvider.GetService<AudioManager>();
+        audioManager.PlayBGM(0);
     }
 
     public override void Tick(GameManager gameManager)

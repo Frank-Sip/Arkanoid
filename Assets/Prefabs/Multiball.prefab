@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7133128463654480984}
-  - component: {fileID: 2928710986898948920}
   m_Layer: 0
   m_Name: Multiball
   m_TagString: Untagged
@@ -33,20 +32,6 @@ Transform:
   - {fileID: 5845270618262194403}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2928710986898948920
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1007200905860631046}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f4592149d5afb440bd3e16b77f095d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  powerUpSO: {fileID: 11400000, guid: d570e6c437c72f44da773ae9134313f4, type: 2}
-  screenEdgesSO: {fileID: 11400000, guid: 631fcbc0c04543a478008a034eb623af, type: 2}
 --- !u!1001 &6238659578166685448
 PrefabInstance:
   m_ObjectHideFlags: 0

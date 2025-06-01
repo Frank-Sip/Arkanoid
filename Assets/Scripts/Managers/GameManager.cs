@@ -10,11 +10,21 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     [Header("GameObject Settings")]
-    [SerializeField] private Vector3 initialBallPosition;
-    
+    public Vector3 initialBallPosition;
+
     [Header("Paddle Settings")]
     [SerializeField] private PaddleController paddleControllerSO;
     [SerializeField] private Transform paddleParent;
+
+    [Header("Ball Settings")]
+    public BallController ballControllerSO;
+
+    [Header("Brick Settings")]
+    public BrickController brickControllerSO;
+    [SerializeField] private List<Transform> brickParents;
+
+    [Header("PowerUp Settings")]
+    public PowerUpController powerUpControllerSO;
 
     [Header("Brick Grid Settings")]
     [SerializeField] private int columns = 5;
@@ -23,12 +33,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Vector2 startPoint = new Vector2(-7f, 4f);
     [SerializeField] private Vector2 endPoint = new Vector2(-7f, 4f);
 
-    [Header("Audio Manager")]
-    public AudioManager audioManager;
-    
     [Header("Console Manager")]
     public ConsoleManager consoleManager;
-    
+
+    [Header("Audio Settings")]
+    [SerializeField] private List<AudioClip> bgTracks;
+    [SerializeField] private List<AudioSO> soundEffects;
+
     private StateMachine stateMachine = new StateMachine();
     private static bool firstFrame = false;
     private bool bricksSpawned = false;
@@ -38,25 +49,26 @@ public class GameManager : MonoBehaviour
     private static PlayerLoopSystem originalPlayerLoop;
     private static bool gameIsReloading = false;
 
-    [Header ("Layouts UI")]
+    [Header("Layouts UI")]
     public GameObject MainMenuLayout;
     public GameObject PauseLayout;
     public GameObject GameStateLayout;
 
     private struct CustomGameLogic { }
-    public AudioManager AudioManager => audioManager;
 
     private void Awake()
     {
         Instance = this;
-
+        InitAudioManager();
         firstFrame = false;
         bricksSpawned = false;
         ballSpawned = false;
-        
+        initialBallSpawned = false; // Reset this
         MakePlayerLoop();
-        audioManager.Init();
-        paddleControllerSO.Instantiate(paddleParent);
+
+        // Remove direct initialization of ballControllerSO
+        paddleControllerSO.Init(paddleParent);
+        brickControllerSO.Init(brickParents[0]);
     }
 
     private void MakePlayerLoop()
@@ -85,7 +97,7 @@ public class GameManager : MonoBehaviour
         PlayerLoop.SetPlayerLoop(loop);
     }
 
-    private static void CustomUpdate()
+    private void CustomUpdate()
     {
         if (!firstFrame)
         {
@@ -93,18 +105,9 @@ public class GameManager : MonoBehaviour
             Instance.stateMachine.ChangeState(new MainMenuState(), Instance);
             return;
         }
-        
+
         Instance.consoleManager.Frame();
         Instance.stateMachine.Tick(Instance);
-
-        if (!initialBallSpawned)
-        {
-            initialBallSpawned = true;
-            Debug.Log("Creando bola inicial por primera vez");
-            BallController newBall = BallPool.Instance.SpawnBall(Instance.initialBallPosition);
-            newBall.SetWaitingOnPaddle();
-            newBall.gameObject.SetActive(true);
-        }
 
         if (!initialBricksSpawned)
         {
@@ -116,38 +119,56 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
-        
+
         Instance.paddleControllerSO.Frame(Time.deltaTime);
-        
         PowerUpManager.Frame();
+    }
+
+    private void InitAudioManager()
+    {
+        var audioManager = new AudioManager(bgTracks, soundEffects);
+        var musicSource = gameObject.AddComponent<AudioSource>();
+        var sfxSource = gameObject.AddComponent<AudioSource>();
+        audioManager.Init(musicSource, sfxSource);
+
+        ServiceProvider.RegisterService(audioManager);
     }
 
     private void SpawnBricksGrid()
     {
-        BrickSO config = BrickPool.Instance.GetBrickSO();
+        if (brickParents == null || brickParents.Count == 0)
+        {
+            Debug.LogError("No brick parents assigned!");
+            return;
+        }
+
+        BrickSO config = brickControllerSO.brickConfig;
         float width = config.width;
         float height = config.height;
 
-        Vector3 currentPos = startPoint;
-        int bricksPlaced = 0;
-
-        for (int i = 0; i < rows * columns; i++)
+        foreach (var parent in brickParents)
         {
-            if (currentPos.x + width > endPoint.x)
+            Vector3 currentPos = startPoint;
+            int bricksPlaced = 0;
+
+            for (int i = 0; i < rows * columns; i++)
             {
-                currentPos.x = startPoint.x;
-                currentPos.y -= height + spacing;
+                if (currentPos.x + width > endPoint.x)
+                {
+                    currentPos.x = startPoint.x;
+                    currentPos.y -= height + spacing;
+                }
+
+                var brick = BrickPool.Instance.SpawnBrick(currentPos);
+                brick.target.transform.position = currentPos;
+                brick.target.SetParent(parent);
+
+                BrickManager.Register(brick);
+
+                currentPos.x += width + spacing;
+                bricksPlaced++;
             }
-
-            var brick = BrickPool.Instance.SpawnBrick(currentPos);
-            brick.transform.position = currentPos;
-            
-            BrickManager.Register(brick);
-
-            currentPos.x += width + spacing;
-            bricksPlaced++;
         }
-        
     }
 
     public void ChangeGameStatus(GameState newState)
@@ -166,7 +187,7 @@ public class GameManager : MonoBehaviour
         Instance.paddleControllerSO.Reset();
         Instance.bricksSpawned = false;
         Instance.ballSpawned = false;
-        
+
         List<BrickController> activeBricks = new List<BrickController>(BrickManager.GetActiveBricks());
         foreach (var brick in activeBricks)
         {
@@ -176,18 +197,17 @@ public class GameManager : MonoBehaviour
                 BrickPool.Instance.ReturnToPool(brick);
             }
         }
-        
+
         BrickManager.GetBricks().Clear();
         BrickManager.GetActiveBricks().Clear();
         BrickManager.ResetLevelCompletedFlag();
-        
+
         BallManager.ResetAll();
-        
+
         PowerUpManager.ResetAll();
         PowerUpManager.ResetPowerUpCount();
-        
-        Instance.SpawnBricksGrid();
 
+        Instance.SpawnBricksGrid();
     }
 
 #if UNITY_EDITOR

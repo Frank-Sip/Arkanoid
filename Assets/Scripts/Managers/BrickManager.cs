@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine;
 
 public static class BrickManager
 {
@@ -22,7 +21,6 @@ public static class BrickManager
             levelCompleted = true;
             GameManager.Instance.ResetGame();
             GameManager.Instance.ChangeGameStatus(new MainMenuState());
-            
         }
     }
 

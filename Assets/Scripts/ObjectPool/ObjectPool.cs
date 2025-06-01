@@ -1,53 +1,59 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPool<T> where T : MonoBehaviour
+public class ObjectPool<T> where T : ScriptableObject
 {
-    private readonly T prefab;
+    private readonly GameObject prefab;
+    private readonly T controller;
     private readonly Transform parent;
-    private readonly Stack<T> pool = new Stack<T>();
     private readonly int expandCount;
+    private readonly Func<T> createFunc;
 
-    public ObjectPool(T prefab, Transform parent, int initialCount = 2, int expandCount = 10)
+    private readonly Queue<(T Controller, GameObject Instance)> available = new();
+
+    public ObjectPool(GameObject prefab, T controller, Transform parent, int initialCount, int expandCount, Func<T> createFunc = null)
     {
         this.prefab = prefab;
+        this.controller = controller;
         this.parent = parent;
         this.expandCount = expandCount;
+        this.createFunc = createFunc ?? (() => UnityEngine.Object.Instantiate(controller));
 
-        for (int i = 0; i < initialCount; i++)
-        {
-            T obj = GameObject.Instantiate(prefab, parent);
-            obj.gameObject.SetActive(false);
-            pool.Push(obj);
-        }
+        Expand(initialCount);
     }
-    
-    private void ExpandPool(int count)
+
+    private void Expand(int count)
     {
         for (int i = 0; i < count; i++)
         {
-            T obj = GameObject.Instantiate(prefab, parent);
-            obj.gameObject.SetActive(false);
-            pool.Push(obj);
+            var instance = UnityEngine.Object.Instantiate(prefab, parent);
+            instance.SetActive(false);
+            var newController = createFunc();
+            available.Enqueue((newController, instance));
         }
     }
 
-    public T Get()
+    public (T Controller, GameObject Instance) Get()
     {
-        if (pool.Count <= 0)
+        if (available.Count == 0)
         {
-            ExpandPool(expandCount);
+            Expand(expandCount);
         }
 
-        T obj = pool.Pop();
-        obj.gameObject.SetActive(true);
-        return obj;
+        var (controller, instance) = available.Dequeue();
+        instance.SetActive(true);
+        return (controller, instance);
     }
-    
-    public void Return(T obj)
+
+    public void Return(T controller, GameObject instance)
     {
-        obj.gameObject.SetActive(false);
-        pool.Push(obj);
+        if (instance != null)
+        {
+            instance.transform.localScale = Vector3.one;
+            instance.SetActive(false);
+            instance.transform.SetParent(parent);
+            available.Enqueue((controller, instance));
+        }
     }
 }

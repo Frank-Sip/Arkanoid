@@ -1,72 +1,58 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-
-
-public class PowerUpController : MonoBehaviour
+[CreateAssetMenu(fileName = "PowerUpController", menuName = "GameObject/PowerUpController")]
+public class PowerUpController : ScriptableObject
 {
-    [SerializeField] public PowerUpSO powerUpSO;
+    public PowerUpSO powerUpSO;
     [SerializeField] private ScreenEdgesSO screenEdgesSO;
+    [SerializeField] private GameObject powerUpPrefab;
 
+    public Transform target { get; private set; }
+    private GameObject powerUpInstance;
     private PowerUpPhysics physics;
-    private bool isSubscribed = false;
 
-    private void Awake()
+    public void Init(Transform parent)
     {
-        physics = new PowerUpPhysics();
-        AudioManager audioMgr = FindObjectOfType<AudioManager>();
-        physics.Initiate(transform, powerUpSO, screenEdgesSO, this, audioMgr);
-
-        if (!isSubscribed)
+        if (powerUpPrefab == null)
         {
-            EventManager.OnReset += ResetPowerUp;
-            isSubscribed = true;
+            Debug.LogError("PowerUp prefab is not assigned!");
+            return;
         }
+
+        if (target == null)
+        {
+            powerUpInstance = Instantiate(powerUpPrefab, parent);
+            target = powerUpInstance.transform;
+            target.gameObject.SetActive(false);
+        }
+
+        physics = new PowerUpPhysics();
+        AudioManager audioMgr = ServiceProvider.GetService<AudioManager>();
+        physics.Initiate(target, powerUpSO, screenEdgesSO, this, audioMgr);
+    }
+
+    public void Activate(Vector3 position)
+    {
+        target.position = position;
+        target.gameObject.SetActive(true);
     }
 
     public void Frame()
     {
-        physics.Frame();
+        if (target.gameObject.activeSelf)
+        {
+            physics.Frame();
+        }
     }
 
     public void CollideWithPaddle()
     {
-        StartCoroutine(DelayedActivation());
-    }
-
-    private IEnumerator DelayedActivation()
-    {
-        yield return null;
-
         ActivatePowerUp();
-
         DestroyPowerUp();
-    }
-
-    public void DestroyPowerUp()
-    {
-        PowerUpManager.Unregister(this);
-        PowerUpPool.Instance.ReturnToPool(this);
     }
 
     private void ActivatePowerUp()
     {
-        Transform modelTransform = transform.GetChild(0);
-        AtlasApplier atlasApplier = modelTransform.GetComponentInChildren<AtlasApplier>();
-
-        if (atlasApplier != null)
-        {
-            if (atlasApplier.atlasType == AtlasType.Blue)
-            {
-                powerUpSO.powerUpType = PowerUpType.Multiball;
-            }
-            else if (atlasApplier.atlasType == AtlasType.Green)
-            {
-                powerUpSO.powerUpType = PowerUpType.WidePaddle;
-            }
-        }
-
         switch (powerUpSO.powerUpType)
         {
             case PowerUpType.Multiball:
@@ -75,44 +61,38 @@ public class PowerUpController : MonoBehaviour
             case PowerUpType.WidePaddle:
                 ActivateWidePaddle();
                 break;
-            case PowerUpType.ExtraLife:
-                break;
         }
     }
 
-    public void ActivateMultiball()
+    private void ActivateMultiball()
     {
         int currentBalls = BallManager.GetActiveBalls().Count;
         int maxBalls = BallManager.GetMaxBalls();
 
         if (currentBalls >= maxBalls)
         {
-            Debug.Log($"Máximo de bolas alcanzado ({maxBalls}). No se pueden crear más bolas.");
+            Debug.Log($"Max balls reached ({maxBalls}).");
             return;
         }
 
         int ballsToAdd = Mathf.Min(2, maxBalls - currentBalls);
-        Debug.Log($"Activando multiball con {ballsToAdd} bolas nuevas");
-
         BallManager.SpawnAndLaunchMultipleBalls(ballsToAdd);
     }
 
-    public void ActivateWidePaddle()
+    private void ActivateWidePaddle()
     {
-        PaddleController paddleController = FindObjectOfType<PaddleController>();
+        PaddleController paddleController = ServiceProvider.GetService<PaddleController>();
         if (paddleController != null)
         {
             paddleController.ActivateWidePaddle(1.5f, 5f);
-            Debug.Log("Power-up Wide Paddle activado");
-        }
-        else
-        {
-            Debug.LogWarning("No se encontró el PaddleController para activar Wide Paddle");
+            Debug.Log("Wide Paddle power-up activated.");
         }
     }
 
-    private void ResetPowerUp()
+    public void DestroyPowerUp()
     {
-        gameObject.SetActive(false);
+        target.gameObject.SetActive(false);
+        PowerUpManager.Unregister(this);
+        PowerUpPool.Instance.ReturnToPool(this);
     }
 }
