@@ -21,17 +21,10 @@ public class GameManager : MonoBehaviour
 
     [Header("Brick Settings")]
     public BrickController brickControllerSO;
-    [SerializeField] private List<Transform> brickParents;
+    [SerializeField] private List<Transform> brickPositions;
 
     [Header("PowerUp Settings")]
     public PowerUpController powerUpControllerSO;
-
-    [Header("Brick Grid Settings")]
-    [SerializeField] private int columns = 5;
-    [SerializeField] private int rows = 5;
-    [SerializeField] private float spacing = 0.3f;
-    [SerializeField] private Vector2 startPoint = new Vector2(-7f, 4f);
-    [SerializeField] private Vector2 endPoint = new Vector2(-7f, 4f);
 
     [Header("Console Manager")]
     public ConsoleManager consoleManager;
@@ -63,12 +56,11 @@ public class GameManager : MonoBehaviour
         firstFrame = false;
         bricksSpawned = false;
         ballSpawned = false;
-        initialBallSpawned = false; // Reset this
+        initialBallSpawned = false;
         MakePlayerLoop();
 
-        // Remove direct initialization of ballControllerSO
         paddleControllerSO.Init(paddleParent);
-        brickControllerSO.Init(brickParents[0]);
+        brickControllerSO.Init(null);
     }
 
     private void MakePlayerLoop()
@@ -112,7 +104,7 @@ public class GameManager : MonoBehaviour
         if (!initialBricksSpawned)
         {
             initialBricksSpawned = true;
-            Instance.SpawnBricksGrid();
+            Instance.SpawnBricksAtPositions();
         }
 
         if (gameIsReloading)
@@ -134,39 +126,24 @@ public class GameManager : MonoBehaviour
         ServiceProvider.RegisterService(audioManager);
     }
 
-    private void SpawnBricksGrid()
+    private void SpawnBricksAtPositions()
     {
-        if (brickParents == null || brickParents.Count == 0)
+        if (brickPositions == null || brickPositions.Count == 0)
         {
-            Debug.LogError("No brick parents assigned!");
+            Debug.LogError("No brick positions assigned!");
             return;
         }
 
-        BrickSO config = brickControllerSO.brickConfig;
-        float width = config.width;
-        float height = config.height;
-
-        foreach (var parent in brickParents)
+        foreach (Transform position in brickPositions)
         {
-            Vector3 currentPos = startPoint;
-            int bricksPlaced = 0;
+            if (position == null) continue;
 
-            for (int i = 0; i < rows * columns; i++)
+            var brick = BrickPool.Instance.SpawnBrick(position.position);
+            if (brick != null)
             {
-                if (currentPos.x + width > endPoint.x)
-                {
-                    currentPos.x = startPoint.x;
-                    currentPos.y -= height + spacing;
-                }
-
-                var brick = BrickPool.Instance.SpawnBrick(currentPos);
-                brick.target.transform.position = currentPos;
-                brick.target.SetParent(parent);
-
+                brick.target.SetParent(position);
+                brick.Activate();
                 BrickManager.Register(brick);
-
-                currentPos.x += width + spacing;
-                bricksPlaced++;
             }
         }
     }
@@ -200,14 +177,13 @@ public class GameManager : MonoBehaviour
 
         BrickManager.GetBricks().Clear();
         BrickManager.GetActiveBricks().Clear();
-        BrickManager.ResetLevelCompletedFlag();
 
         BallManager.ResetAll();
 
         PowerUpManager.ResetAll();
         PowerUpManager.ResetPowerUpCount();
 
-        Instance.SpawnBricksGrid();
+        Instance.SpawnBricksAtPositions();
     }
 
 #if UNITY_EDITOR

@@ -671,7 +671,7 @@ Transform:
   m_GameObject: {fileID: 526077647}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 8.96, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2074,7 +2074,7 @@ Transform:
   m_GameObject: {fileID: 1601480618}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 16.83, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2105,7 +2105,7 @@ Transform:
   m_GameObject: {fileID: 1613192696}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 4, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3075,28 +3075,32 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: d57cb5221f01be74081af08efa8fa725, type: 3}
     - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
       propertyPath: brickParents.Array.size
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
       propertyPath: soundEffects.Array.size
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
-      propertyPath: 'brickParents.Array.data[0]'
-      value: 
-      objectReference: {fileID: 1328101924}
+      propertyPath: brickPositions.Array.size
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
-      propertyPath: 'brickParents.Array.data[1]'
+      propertyPath: 'brickParents.Array.data[0]'
       value: 
       objectReference: {fileID: 933809238}
     - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
-      propertyPath: 'brickParents.Array.data[2]'
+      propertyPath: 'brickParents.Array.data[1]'
       value: 
       objectReference: {fileID: 1613192697}
     - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
-      propertyPath: 'brickParents.Array.data[3]'
+      propertyPath: 'brickParents.Array.data[2]'
       value: 
       objectReference: {fileID: 526077648}
+    - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
+      propertyPath: 'brickParents.Array.data[3]'
+      value: 
+      objectReference: {fileID: 1601480619}
     - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
       propertyPath: 'brickParents.Array.data[4]'
       value: 
@@ -3121,6 +3125,22 @@ PrefabInstance:
       propertyPath: 'soundEffects.Array.data[4]'
       value: 
       objectReference: {fileID: 11400000, guid: 24c55bcb7fef8374a9d5b85f0bdd47d9, type: 2}
+    - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
+      propertyPath: 'brickPositions.Array.data[0]'
+      value: 
+      objectReference: {fileID: 933809238}
+    - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
+      propertyPath: 'brickPositions.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1613192697}
+    - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
+      propertyPath: 'brickPositions.Array.data[2]'
+      value: 
+      objectReference: {fileID: 526077648}
+    - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
+      propertyPath: 'brickPositions.Array.data[3]'
+      value: 
+      objectReference: {fileID: 1601480619}
     - target: {fileID: 8385564896497120885, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
       propertyPath: m_Name
       value: GameManager
