@@ -1,27 +1,33 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "PowerUpController", menuName = "GameObject/PowerUpController")]
+[CreateAssetMenu(fileName = "PowerUpController", menuName = "GameObject/PowerUpControllerSO")]
 public class PowerUpController : ScriptableObject
 {
-    public PowerUpSO powerUpSO;
+    [SerializeField] public PowerUpSO powerUpSO;
+    [SerializeField] public GameObject powerUpPrefab;
     [SerializeField] private ScreenEdgesSO screenEdgesSO;
-    [SerializeField] private GameObject powerUpPrefab;
 
-    public Transform target { get; private set; }
-    private GameObject powerUpInstance;
+    [HideInInspector] public Transform target;
     private PowerUpPhysics physics;
+    private bool isEnabled = true;
 
-    public void Init(Transform parent)
+    public PowerUpController Clone()
     {
-        if (powerUpPrefab == null)
-        {
-            Debug.LogError("PowerUp prefab is not assigned!");
-            return;
-        }
+        var clone = Instantiate(this);
+        clone.target = null;
+        clone.isEnabled = true;
+        return clone;
+    }
 
+    public void Init(Transform parent = null)
+    {
         if (target == null)
         {
-            powerUpInstance = Instantiate(powerUpPrefab, parent);
+            GameObject powerUpInstance = Instantiate(powerUpPrefab);
+            if (parent != null)
+            {
+                powerUpInstance.transform.SetParent(parent);
+            }
             target = powerUpInstance.transform;
             target.gameObject.SetActive(false);
         }
@@ -31,15 +37,18 @@ public class PowerUpController : ScriptableObject
         physics.Initiate(target, powerUpSO, screenEdgesSO, this, audioMgr);
     }
 
-    public void Activate(Vector3 position)
+    public void Activate()
     {
-        target.position = position;
-        target.gameObject.SetActive(true);
+        if (target != null)
+        {
+            target.gameObject.SetActive(true);
+            isEnabled = true;
+        }
     }
 
     public void Frame()
     {
-        if (target.gameObject.activeSelf)
+        if (target != null && target.gameObject.activeSelf)
         {
             physics.Frame();
         }
@@ -85,7 +94,7 @@ public class PowerUpController : ScriptableObject
         if (paddleController != null)
         {
             paddleController.ActivateWidePaddle(1.5f, 5f);
-            Debug.Log("Wide Paddle power-up activated.");
+            Debug.Log("Wide Paddle power-up activated");
         }
     }
 
@@ -94,5 +103,15 @@ public class PowerUpController : ScriptableObject
         target.gameObject.SetActive(false);
         PowerUpManager.Unregister(this);
         PowerUpPool.Instance.ReturnToPool(this);
+    }
+
+    public void Reset()
+    {
+        if (target != null)
+        {
+            target.gameObject.SetActive(false);
+            target.localScale = Vector3.one;
+            isEnabled = true;
+        }
     }
 }

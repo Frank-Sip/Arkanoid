@@ -3,6 +3,7 @@ using UnityEngine;
 
 public static class PowerUpManager
 {
+    private static readonly List<PowerUpController> powerUps = new List<PowerUpController>();
     private static readonly List<PowerUpController> activePowerUps = new List<PowerUpController>();
     private static int totalPowerUpsSpawned = 0; 
     private static int maxPowerUpsPerGame = 3; 
@@ -49,6 +50,16 @@ public static class PowerUpManager
         }
         
         return powerUp;
+    }
+    
+    public static IReadOnlyList<PowerUpController> GetPowerUps()
+    {
+        return powerUps.AsReadOnly();
+    }
+    
+    public static IReadOnlyList<PowerUpController> GetActivePowerUps()
+    {
+        return activePowerUps.AsReadOnly();
     }
 
     public static void ResetAll()

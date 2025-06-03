@@ -1313,7 +1313,7 @@ GameObject:
   - component: {fileID: 809814121}
   - component: {fileID: 809814120}
   m_Layer: 0
-  m_Name: PowerUpPool
+  m_Name: PowerUpPoolManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1331,7 +1331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2694cc69fec9b7a49931976558b20ec4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialPowerUpCount: 0
+  initialPowerUpCount: 10
   poolContainer: {fileID: 1897331454}
 --- !u!4 &809814121
 Transform:
@@ -2179,7 +2179,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1328101924}
   m_Layer: 0
-  m_Name: BrickParent
+  m_Name: BrickParents
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

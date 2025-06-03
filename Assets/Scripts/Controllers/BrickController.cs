@@ -74,7 +74,7 @@ public class BrickController : ScriptableObject
         isEnabled = false;
         if (Random.value < powerUpDropChance)
         {
-            //SpawnPowerUp();
+            SpawnPowerUp();
         }
 
         BrickManager.Unregister(this);
