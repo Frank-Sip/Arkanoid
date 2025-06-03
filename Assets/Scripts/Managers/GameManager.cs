@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.LowLevel;
 using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -68,26 +69,85 @@ public class GameManager : MonoBehaviour
 
     private void InitializeServices()
     {
-        //Controllers
+        InitializeControllers();
+        InitializeAudio();
+        InitializePools();
+        InitializeButtonManager();
+    }
+
+    private void InitializeControllers()
+    {
         ServiceProvider.RegisterService<PaddleController>(paddleControllerSO);
         ServiceProvider.RegisterService<BallController>(ballControllerSO);
         ServiceProvider.RegisterService<BrickController>(brickControllerSO);
         ServiceProvider.RegisterService<PowerUpController>(powerUpControllerSO);
+    }
 
-        //AudioManager
+    private void InitializeAudio()
+    {
         var audioManager = new AudioManager(bgTracks, soundEffects);
         var musicSource = gameObject.AddComponent<AudioSource>();
         var sfxSource = gameObject.AddComponent<AudioSource>();
         audioManager.Init(musicSource, sfxSource);
         ServiceProvider.RegisterService(audioManager);
+    }
 
-        //Pools
+    private void InitializePools()
+    {
         var ballPool = new BallPool(ballPoolContainer, ballControllerSO);
         var brickPool = new BrickPool(brickPoolContainer, brickControllerSO);
         var powerUpPool = new PowerUpPool(powerUpPoolContainer, powerUpControllerSO);
         ServiceProvider.RegisterService(ballPool);
         ServiceProvider.RegisterService(brickPool);
         ServiceProvider.RegisterService(powerUpPool);
+    }
+
+    private void InitializeButtonManager()
+    {
+        var buttonManager = new ButtonManager();
+        ServiceProvider.RegisterService(buttonManager);
+        
+        if (MainMenuLayout != null)
+        {
+            var buttons = MainMenuLayout.GetComponentsInChildren<Button>();
+            foreach (var button in buttons)
+            {
+                switch (button.name)
+                {
+                    case "Play":
+                    case "PlayButton":
+                        buttonManager.RegisterButton("PlayButton", button);
+                        break;
+                    case "Quit":
+                    case "QuitButton":
+                        buttonManager.RegisterButton("QuitButton", button);
+                        break;
+                }
+            }
+        }
+
+        if (PauseLayout != null)
+        {
+            var buttons = PauseLayout.GetComponentsInChildren<Button>();
+            foreach (var button in buttons)
+            {
+                switch (button.name)
+                {
+                    case "Resume":
+                    case "ResumeButton":
+                        buttonManager.RegisterButton("ResumeButton", button);
+                        break;
+                    case "MainMenu":
+                    case "MainMenuButton":
+                        buttonManager.RegisterButton("MainMenuButton", button);
+                        break;
+                    case "Quit":
+                    case "QuitButton":
+                        buttonManager.RegisterButton("QuitButton", button);
+                        break;
+                }
+            }
+        }
     }
 
     private void MakePlayerLoop()
