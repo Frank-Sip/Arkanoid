@@ -133,17 +133,18 @@ public class GameManager : MonoBehaviour
             Debug.LogError("No brick positions assigned!");
             return;
         }
-
+    
         foreach (Transform position in brickPositions)
         {
             if (position == null) continue;
-
+    
             var brick = BrickPool.Instance.SpawnBrick(position.position);
             if (brick != null)
             {
-                brick.target.SetParent(position);
+                brick.target.position = position.position;
                 brick.Activate();
                 BrickManager.Register(brick);
+                Debug.Log($"Spawned brick from pool at position {position.position}");
             }
         }
     }

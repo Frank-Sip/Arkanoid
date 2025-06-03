@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9016dc4c8c7ed324098d2ff5044eace9, type: 3}
   m_Name: Paddle
   m_EditorClassIdentifier: 
-  speed: 20
+  speed: 50
   width: 10
   height: 0.5

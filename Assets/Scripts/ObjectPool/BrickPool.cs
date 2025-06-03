@@ -4,7 +4,7 @@ public class BrickPool : MonoBehaviour
 {
     [SerializeField] private int initialBrickCount = 50;
     [SerializeField] private Transform poolContainer;
-    private int expandBrickCount = 20;
+    private int expandBrickCount = 10;
 
     private ObjectPool<BrickController> pool;
     public static BrickPool Instance { get; private set; }
