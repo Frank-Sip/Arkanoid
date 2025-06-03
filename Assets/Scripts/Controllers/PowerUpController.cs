@@ -102,7 +102,7 @@ public class PowerUpController : ScriptableObject
     {
         target.gameObject.SetActive(false);
         PowerUpManager.Unregister(this);
-        PowerUpPool.Instance.ReturnToPool(this);
+        ServiceProvider.GetService<PowerUpPool>().ReturnToPool(this);
     }
 
     public void Reset()

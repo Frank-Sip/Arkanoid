@@ -78,7 +78,7 @@ public class BrickController : ScriptableObject
         }
 
         BrickManager.Unregister(this);
-        BrickPool.Instance.ReturnToPool(this);
+        ServiceProvider.GetService<BrickPool>().ReturnToPool(this);
     }
 
     public void Reset()

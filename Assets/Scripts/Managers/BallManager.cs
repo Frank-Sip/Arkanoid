@@ -63,7 +63,7 @@ public class BallManager
         Vector3 paddlePos = PaddlePhysics.bounds.center;
         Vector3 ballPos = new Vector3(paddlePos.x, paddlePos.y + 3f, 0f);
 
-        BallController newBall = BallPool.Instance.SpawnBall(ballPos);
+        BallController newBall = ServiceProvider.GetService<BallPool>().SpawnBall(ballPos);
         if (newBall != null)
         {
             newBall.SetWaitingOnPaddle();
@@ -87,7 +87,7 @@ public class BallManager
         {
             balls.Remove(ball);
             activeBalls.Remove(ball);
-            BallPool.Instance.ReturnToPool(ball);
+            ServiceProvider.GetService<BallPool>().ReturnToPool(ball);
         }
     }
     
@@ -104,7 +104,7 @@ public class BallManager
             Vector3 paddlePos = PaddlePhysics.bounds.center;
             Vector3 ballPos = new Vector3(paddlePos.x + Random.Range(-1f, 1f), paddlePos.y + 3f, 0f);
 
-            BallController newBall = BallPool.Instance.SpawnBall(ballPos);
+            BallController newBall = ServiceProvider.GetService<BallPool>().SpawnBall(ballPos);
             newBall.SetWaitingOnPaddle();
         }
     }
@@ -134,7 +134,7 @@ public class BallManager
             float angleRadians = angle * Mathf.Deg2Rad;
             Vector3 direction = new Vector3(Mathf.Cos(angleRadians), Mathf.Sin(angleRadians), 0);
 
-            BallController newBall = BallPool.Instance.SpawnBall(spawnPosition);
+            BallController newBall = ServiceProvider.GetService<BallPool>().SpawnBall(spawnPosition);
             newBall.Direction = direction.normalized;
             newBall.IsLaunched = true;
             SetActive(newBall);
@@ -185,7 +185,7 @@ public class BallManager
         balls.Clear();
         activeBalls.Clear();
         
-        BallPool.Instance.ClearPool();
+        ServiceProvider.GetService<BallPool>().ClearPool();
         
         hasRespawned = false;
         isMultiballActive = false;

@@ -1,25 +1,22 @@
 using UnityEngine;
 
-public class BallPool : MonoBehaviour
+public class BallPool
 {
-    [SerializeField] private int initialBallCount = 10;
-    [SerializeField] private Transform poolContainer;
-    private int expandBallCount = 5;
-
+    private Transform poolContainer;
+    private readonly int initialBallCount = 10;
+    private readonly int expandBallCount = 10;
     private ObjectPool<BallController> pool;
-    public static BallPool Instance { get; private set; }
+    private BallController ballControllerSO;
 
-    private void Awake()
+    public BallPool(Transform container, BallController ballControllerSO)
     {
-        Instance = this;
+        this.poolContainer = container;
+        this.ballControllerSO = ballControllerSO;
         InitializePool();
-        BallManager.RespawnSingleBall();
     }
 
     private void InitializePool()
     {
-        BallController ballControllerSO = GameManager.Instance.ballControllerSO;
-        
         if (pool == null)
         {
             pool = new ObjectPool<BallController>(
@@ -32,7 +29,7 @@ public class BallPool : MonoBehaviour
             );
         }
     }
-    
+
     public void ClearPool()
     {
         if (pool != null)
@@ -57,11 +54,11 @@ public class BallPool : MonoBehaviour
         }
 
         var (controller, instance) = pool.Get();
-        
+
         instance.transform.localScale = Vector3.one;
         instance.transform.position = position;
         instance.transform.SetParent(poolContainer);
-        
+
         controller.ResetState();
         controller.target = instance.transform;
         controller.InitializePhysics();
@@ -79,20 +76,20 @@ public class BallPool : MonoBehaviour
         if (instance != null)
         {
             instance.SetActive(false);
-            
+
             controller.ResetState();
             instance.transform.localScale = Vector3.one;
             instance.transform.SetParent(poolContainer);
-            
+
             var rigidbody = instance.GetComponent<Rigidbody>();
             if (rigidbody != null)
             {
                 rigidbody.velocity = Vector3.zero;
                 rigidbody.angularVelocity = Vector3.zero;
             }
-            
+
             controller.target = null;
-        
+
             pool.Return(controller, instance);
         }
     }

@@ -107,7 +107,7 @@ public class BallController : ScriptableObject
             
             target.localScale = Vector3.one;
             BallManager.Unregister(this);
-            BallPool.Instance?.ReturnToPool(this);
+            ServiceProvider.GetService<BallPool>().ReturnToPool(this);
             
             target = null;
         }

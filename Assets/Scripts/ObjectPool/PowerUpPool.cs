@@ -1,25 +1,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PowerUpPool : MonoBehaviour
+public class PowerUpPool
 {
-    [SerializeField] private int initialPowerUpCount = 10;
-    [SerializeField] private Transform poolContainer;
-    private int expandPowerUpCount = 5;
-
+    private Transform poolContainer;
+    private readonly int initialPowerUpCount = 10;
+    private readonly int expandPowerUpCount = 5;
     private ObjectPool<PowerUpController> pool;
-    public static PowerUpPool Instance { get; private set; }
+    private PowerUpController powerUpControllerSO;
 
-    private void Awake()
+    public PowerUpPool(Transform container, PowerUpController powerUpControllerSO)
     {
-        Instance = this;
+        this.poolContainer = container;
+        this.powerUpControllerSO = powerUpControllerSO;
         InitializePool();
     }
 
     private void InitializePool()
     {
-        PowerUpController powerUpControllerSO = GameManager.Instance.powerUpControllerSO;
-
         if (pool == null)
         {
             pool = new ObjectPool<PowerUpController>(

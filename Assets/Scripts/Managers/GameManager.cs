@@ -18,13 +18,16 @@ public class GameManager : MonoBehaviour
 
     [Header("Ball Settings")]
     public BallController ballControllerSO;
+    [SerializeField] private Transform ballPoolContainer;
 
     [Header("Brick Settings")]
     public BrickController brickControllerSO;
     [SerializeField] private List<Transform> brickPositions;
+    [SerializeField] private Transform brickPoolContainer;
 
     [Header("PowerUp Settings")]
     public PowerUpController powerUpControllerSO;
+    [SerializeField] private Transform powerUpPoolContainer;
 
     [Header("Console Manager")]
     public ConsoleManager consoleManager;
@@ -32,6 +35,11 @@ public class GameManager : MonoBehaviour
     [Header("Audio Settings")]
     [SerializeField] private List<AudioClip> bgTracks;
     [SerializeField] private List<AudioSO> soundEffects;
+
+    [Header("Layouts UI")]
+    public GameObject MainMenuLayout;
+    public GameObject PauseLayout;
+    public GameObject GameStateLayout;
 
     private StateMachine stateMachine = new StateMachine();
     private static bool firstFrame = false;
@@ -42,17 +50,12 @@ public class GameManager : MonoBehaviour
     private static PlayerLoopSystem originalPlayerLoop;
     private static bool gameIsReloading = false;
 
-    [Header("Layouts UI")]
-    public GameObject MainMenuLayout;
-    public GameObject PauseLayout;
-    public GameObject GameStateLayout;
-
     private struct CustomGameLogic { }
 
     private void Awake()
     {
         Instance = this;
-        InitAudioManager();
+        InitializeServices();
         firstFrame = false;
         bricksSpawned = false;
         ballSpawned = false;
@@ -61,6 +64,30 @@ public class GameManager : MonoBehaviour
 
         paddleControllerSO.Init(paddleParent);
         brickControllerSO.Init(null);
+    }
+
+    private void InitializeServices()
+    {
+        //Controllers
+        ServiceProvider.RegisterService<PaddleController>(paddleControllerSO);
+        ServiceProvider.RegisterService<BallController>(ballControllerSO);
+        ServiceProvider.RegisterService<BrickController>(brickControllerSO);
+        ServiceProvider.RegisterService<PowerUpController>(powerUpControllerSO);
+
+        //AudioManager
+        var audioManager = new AudioManager(bgTracks, soundEffects);
+        var musicSource = gameObject.AddComponent<AudioSource>();
+        var sfxSource = gameObject.AddComponent<AudioSource>();
+        audioManager.Init(musicSource, sfxSource);
+        ServiceProvider.RegisterService(audioManager);
+
+        //Pools
+        var ballPool = new BallPool(ballPoolContainer, ballControllerSO);
+        var brickPool = new BrickPool(brickPoolContainer, brickControllerSO);
+        var powerUpPool = new PowerUpPool(powerUpPoolContainer, powerUpControllerSO);
+        ServiceProvider.RegisterService(ballPool);
+        ServiceProvider.RegisterService(brickPool);
+        ServiceProvider.RegisterService(powerUpPool);
     }
 
     private void MakePlayerLoop()
@@ -106,6 +133,12 @@ public class GameManager : MonoBehaviour
             initialBricksSpawned = true;
             Instance.SpawnBricksAtPositions();
         }
+        
+        if (!initialBallSpawned && Instance.IsInGameplayState())
+        {
+            initialBallSpawned = true;
+            BallManager.RespawnSingleBall();
+        }
 
         if (gameIsReloading)
         {
@@ -116,16 +149,6 @@ public class GameManager : MonoBehaviour
         PowerUpManager.Frame();
     }
 
-    private void InitAudioManager()
-    {
-        var audioManager = new AudioManager(bgTracks, soundEffects);
-        var musicSource = gameObject.AddComponent<AudioSource>();
-        var sfxSource = gameObject.AddComponent<AudioSource>();
-        audioManager.Init(musicSource, sfxSource);
-
-        ServiceProvider.RegisterService(audioManager);
-    }
-
     private void SpawnBricksAtPositions()
     {
         if (brickPositions == null || brickPositions.Count == 0)
@@ -133,12 +156,13 @@ public class GameManager : MonoBehaviour
             Debug.LogError("No brick positions assigned!");
             return;
         }
-    
+
+        var brickPool = ServiceProvider.GetService<BrickPool>();
         foreach (Transform position in brickPositions)
         {
             if (position == null) continue;
-    
-            var brick = BrickPool.Instance.SpawnBrick(position.position);
+
+            var brick = brickPool.SpawnBrick(position.position);
             if (brick != null)
             {
                 brick.target.position = position.position;
@@ -166,13 +190,15 @@ public class GameManager : MonoBehaviour
         Instance.bricksSpawned = false;
         Instance.ballSpawned = false;
 
+        var brickPool = ServiceProvider.GetService<BrickPool>();
+
         List<BrickController> activeBricks = new List<BrickController>(BrickManager.GetActiveBricks());
         foreach (var brick in activeBricks)
         {
             if (brick != null)
             {
                 brick.Reset();
-                BrickPool.Instance.ReturnToPool(brick);
+                brickPool.ReturnToPool(brick);
             }
         }
 

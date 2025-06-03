@@ -1,24 +1,22 @@
 using UnityEngine;
 
-public class BrickPool : MonoBehaviour
+public class BrickPool
 {
-    [SerializeField] private int initialBrickCount = 50;
-    [SerializeField] private Transform poolContainer;
-    private int expandBrickCount = 10;
-
+    private Transform poolContainer;
+    private readonly int initialBrickCount = 50;
+    private readonly int expandBrickCount = 10;
     private ObjectPool<BrickController> pool;
-    public static BrickPool Instance { get; private set; }
+    private BrickController brickControllerSO;
 
-    private void Awake()
+    public BrickPool(Transform container, BrickController brickControllerSO)
     {
-        Instance = this;
+        this.poolContainer = container;
+        this.brickControllerSO = brickControllerSO;
         InitializePool();
     }
 
     private void InitializePool()
     {
-        BrickController brickControllerSO = GameManager.Instance.brickControllerSO;
-        
         if (pool == null)
         {
             pool = new ObjectPool<BrickController>(

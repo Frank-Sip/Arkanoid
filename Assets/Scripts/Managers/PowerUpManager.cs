@@ -42,7 +42,7 @@ public static class PowerUpManager
         
         totalPowerUpsSpawned++;
         
-        PowerUpController powerUp = PowerUpPool.Instance.SpawnPowerUp(position);
+        PowerUpController powerUp = ServiceProvider.GetService<PowerUpPool>().SpawnPowerUp(position);
         if (powerUp != null)
         {
             Register(powerUp);
