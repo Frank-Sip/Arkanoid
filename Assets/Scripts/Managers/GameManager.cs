@@ -42,6 +42,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TMP_InputField commandInputField;
     [SerializeField] private List<CommandSO> commands;
     public ConsoleManager consoleManager;
+    
+    [Header("UI Configuration")]
+    [SerializeField] private ButtonSO buttonSO;
 
     [Header("Layouts UI")]
     public GameObject MainMenuLayout;
@@ -112,7 +115,7 @@ public class GameManager : MonoBehaviour
         uiAtlasApplier.ApplyAtlasToLayout(MainMenuLayout);
         uiAtlasApplier.ApplyAtlasToLayout(PauseLayout);
         uiAtlasApplier.ApplyAtlasToLayout(GameStateLayout);
-        uiAtlasApplier.ApplyAtlasToLayout(commandInputField.gameObject.transform.parent.gameObject);
+        uiAtlasApplier.ApplyAtlasToLayout(consoleUI);
     }
 
     private void InitializeAudio()
@@ -137,50 +140,13 @@ public class GameManager : MonoBehaviour
     private void InitializeButtonManager()
     {
         var buttonManager = new ButtonManager();
+        buttonManager.Init(buttonSO);
         ServiceProvider.RegisterService(buttonManager);
-        
-        if (MainMenuLayout != null)
-        {
-            var buttons = MainMenuLayout.GetComponentsInChildren<Button>();
-            foreach (var button in buttons)
-            {
-                switch (button.name)
-                {
-                    case "Play":
-                    case "PlayButton":
-                        buttonManager.RegisterButton("PlayButton", button);
-                        break;
-                    case "Quit":
-                    case "QuitButton":
-                        buttonManager.RegisterButton("QuitButton", button);
-                        break;
-                }
-            }
-        }
-
-        if (PauseLayout != null)
-        {
-            var buttons = PauseLayout.GetComponentsInChildren<Button>();
-            foreach (var button in buttons)
-            {
-                switch (button.name)
-                {
-                    case "Resume":
-                    case "ResumeButton":
-                        buttonManager.RegisterButton("ResumeButton", button);
-                        break;
-                    case "MainMenu":
-                    case "MainMenuButton":
-                        buttonManager.RegisterButton("MainMenuButton", button);
-                        break;
-                    case "Quit":
-                    case "QuitButton":
-                        buttonManager.RegisterButton("QuitButton", button);
-                        break;
-                }
-            }
-        }
+    
+        ServiceProvider.GetService<ButtonManager>().RegisterButtonsInLayout(MainMenuLayout);
+        ServiceProvider.GetService<ButtonManager>().RegisterButtonsInLayout(PauseLayout);
     }
+    
 
     private void MakePlayerLoop()
     {
@@ -260,7 +226,6 @@ public class GameManager : MonoBehaviour
                 brick.target.position = position.position;
                 brick.Activate();
                 BrickManager.Register(brick);
-                Debug.Log($"Spawned brick from pool at position {position.position}");
             }
         }
     }

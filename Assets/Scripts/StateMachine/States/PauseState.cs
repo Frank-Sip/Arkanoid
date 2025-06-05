@@ -6,7 +6,6 @@ public class PauseState : GameState
 {
     public override void Enter(GameManager gameManager)
     {
-        Debug.Log("Press Esc to resume");
         Time.timeScale = 0f;
         gameManager.PauseLayout.SetActive(true);
 
@@ -16,13 +15,12 @@ public class PauseState : GameState
     {
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            gameManager.consoleManager.ToggleConsole();
+            ServiceProvider.GetService<ConsoleManager>().ToggleConsole();
         }
     }
 
     public override void Exit(GameManager gameManager)
     {
-        Debug.Log("Leaving Pause");
         gameManager.PauseLayout.SetActive(false);
     }
 }

@@ -16,7 +16,6 @@ public class BallManager
         if (!balls.Contains(ball))
         {
             balls.Add(ball);
-            Debug.Log($"Ball registered. Total balls: {balls.Count}");
         }
     }
 
@@ -27,7 +26,6 @@ public class BallManager
         if (!activeBalls.Contains(ball))
         {
             activeBalls.Add(ball);
-            Debug.Log($"Ball set active. Total active balls: {activeBalls.Count}");
         }
     }
 
@@ -68,7 +66,6 @@ public class BallManager
         {
             newBall.SetWaitingOnPaddle();
             Register(newBall);
-            Debug.Log("Nueva bola creada y registrada");
         }
     }
     

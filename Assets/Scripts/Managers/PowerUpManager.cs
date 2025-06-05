@@ -76,6 +76,5 @@ public static class PowerUpManager
     public static void ResetPowerUpCount()
     {
         totalPowerUpsSpawned = 0;
-        Debug.Log("Contador de power-ups reseteado");
     }
 }
