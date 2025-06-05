@@ -6,7 +6,8 @@ public class PowerUpController : ScriptableObject
     [SerializeField] public PowerUpSO powerUpSO;
     [SerializeField] public GameObject powerUpPrefab;
     [SerializeField] private ScreenEdgesSO screenEdgesSO;
-    [SerializeField] private AtlasApplier atlasApplier;
+    [SerializeField] private AtlasApplier multiballAtlas;
+    [SerializeField] private AtlasApplier widePaddleAtlas;
 
     [HideInInspector] public Transform target;
     private PowerUpPhysics physics;
@@ -37,16 +38,7 @@ public class PowerUpController : ScriptableObject
         AudioManager audioMgr = ServiceProvider.GetService<AudioManager>();
         physics.Initiate(target, powerUpSO, screenEdgesSO, this, audioMgr);
         
-        Transform visual = target.GetChild(0);
-        if (atlasApplier != null)
-        {
-            atlasApplier.ApplyAtlas(visual.gameObject);
-        }
-        
-        if (atlasApplier != null)
-        {
-            atlasApplier.ApplyAtlas(target.gameObject);
-        }
+        ApplyAtlasBasedOnType();
     }
 
     public void Activate()
@@ -54,6 +46,7 @@ public class PowerUpController : ScriptableObject
         if (target != null)
         {
             target.gameObject.SetActive(true);
+            ApplyAtlasBasedOnType();
             isEnabled = true;
         }
     }
@@ -106,6 +99,26 @@ public class PowerUpController : ScriptableObject
         if (paddleController != null)
         {
             paddleController.ActivateWidePaddle(1.5f, 5f);
+        }
+    }
+    
+    public void ApplyAtlasBasedOnType()
+    {
+        if (target == null) return;
+        
+        Transform visual = target.GetChild(0);
+        if (visual == null) return;
+
+        AtlasApplier atlasToUse = powerUpSO.powerUpType switch
+        {
+            PowerUpType.Multiball => multiballAtlas,
+            PowerUpType.WidePaddle => widePaddleAtlas,
+            _ => multiballAtlas
+        };
+
+        if (atlasToUse != null)
+        {
+            atlasToUse.ApplyAtlas(visual.gameObject);
         }
     }
 

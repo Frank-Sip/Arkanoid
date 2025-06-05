@@ -125,5 +125,6 @@ public class BrickController : ScriptableObject
 
         int randomType = Random.Range(0, 2);
         powerUpSO.powerUpType = randomType == 0 ? PowerUpType.Multiball : PowerUpType.WidePaddle;
+        powerUp.ApplyAtlasBasedOnType();
     }
 }

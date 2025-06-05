@@ -15,5 +15,6 @@ MonoBehaviour:
   powerUpSO: {fileID: 11400000, guid: d570e6c437c72f44da773ae9134313f4, type: 2}
   powerUpPrefab: {fileID: 1007200905860631046, guid: 5298fee04214af740b1faa22e1a24d71, type: 3}
   screenEdgesSO: {fileID: 11400000, guid: 631fcbc0c04543a478008a034eb623af, type: 2}
-  atlasApplier: {fileID: 11400000, guid: d569ccbdab2285144a427fea473028ab, type: 2}
+  multiballAtlas: {fileID: 11400000, guid: d569ccbdab2285144a427fea473028ab, type: 2}
+  widePaddleAtlas: {fileID: 11400000, guid: 1be3bbd3f355b0d4a9bdd4a0d1291dc5, type: 2}
   target: {fileID: 0}

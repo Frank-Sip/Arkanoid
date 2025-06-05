@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 766338645e37b5d46b7b81f6e4c700d9, type: 3}
-  m_Name: PowerUpAtlas
+  m_Name: MultiballsAtlas
   m_EditorClassIdentifier: 
   atlasMaster: {fileID: 11400000, guid: d714b104c4cd41f4b9d434dacd1e05db, type: 2}
-  atlasType: 6
+  atlasType: 10
   atlasTextureSize: {x: 1280, y: 720}
