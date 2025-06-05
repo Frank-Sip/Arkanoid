@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CommandManager : MonoBehaviour
+public class CommandManager
 {
-    public List<CommandSO> commands;
+    private List<CommandSO> commands;
     private Dictionary<string, ICommand> commandDictionary;
 
-    private void Awake()
+    public void Init(List<CommandSO> commandList)
     {
+        commands = commandList;
         commandDictionary = new Dictionary<string, ICommand>();
 
         foreach (var command in commands)
@@ -26,10 +27,6 @@ public class CommandManager : MonoBehaviour
         if (commandDictionary.TryGetValue(commandInput, out ICommand command))
         {
             command.Execute();
-        }
-        else
-        {
-            Debug.Log("Command does not exist: " + input);
         }
     }
 }

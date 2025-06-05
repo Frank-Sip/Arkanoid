@@ -1,10 +1,16 @@
 using UnityEngine;
 using TMPro;
 
-public class CommandInput : MonoBehaviour
+public class CommandInput
 {
-    public TMP_InputField inputField;
-    public CommandManager commandManager;
+    private TMP_InputField inputField;
+    private CommandManager commandManager;
+
+    public void Init(TMP_InputField input)
+    {
+        inputField = input;
+        commandManager = ServiceProvider.GetService<CommandManager>();
+    }
 
     public void Frame()
     {

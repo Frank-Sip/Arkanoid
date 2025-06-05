@@ -1,9 +1,15 @@
 using UnityEngine;
 
-public class ConsoleManager : MonoBehaviour
+public class ConsoleManager
 {
     public GameObject consoleUI;
-    [SerializeField] private CommandInput commandInput;
+    private CommandInput commandInput;
+
+    public void Init(GameObject console, CommandInput input)
+    {
+        consoleUI = console;
+        commandInput = input;
+    }
 
     public void Frame()
     {

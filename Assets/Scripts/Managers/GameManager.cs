@@ -5,6 +5,7 @@ using UnityEngine.LowLevel;
 using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -33,17 +34,20 @@ public class GameManager : MonoBehaviour
     public PowerUpController powerUpControllerSO;
     [SerializeField] private Transform powerUpPoolContainer;
 
-    [Header("Console Manager")]
-    public ConsoleManager consoleManager;
-
     [Header("Audio Settings")]
     [SerializeField] private List<AudioClip> bgTracks;
     [SerializeField] private List<AudioSO> soundEffects;
+    
+    [Header("Console Settings")]
+    [SerializeField] private TMP_InputField commandInputField;
+    [SerializeField] private List<CommandSO> commands;
+    public ConsoleManager consoleManager;
 
     [Header("Layouts UI")]
     public GameObject MainMenuLayout;
     public GameObject PauseLayout;
     public GameObject GameStateLayout;
+    [SerializeField] private GameObject consoleUI;
 
     private StateMachine stateMachine = new StateMachine();
     private static bool firstFrame = false;
@@ -77,7 +81,22 @@ public class GameManager : MonoBehaviour
         InitializePools();
         InitializeButtonManager();
         InitializeUIAtlas();
+        InitializeConsole();
+    }
+    
+    private void InitializeConsole()
+    {
+        var commandManager = new CommandManager();
+        commandManager.Init(commands);
+        ServiceProvider.RegisterService(commandManager);
 
+        var commandInput = new CommandInput();
+        commandInput.Init(commandInputField);
+        ServiceProvider.RegisterService(commandInput);
+
+        var consoleManager = new ConsoleManager();
+        consoleManager.Init(consoleUI, commandInput);
+        ServiceProvider.RegisterService(consoleManager);
     }
 
     private void InitializeControllers()
@@ -90,20 +109,10 @@ public class GameManager : MonoBehaviour
     
     private void InitializeUIAtlas()
     {
-        if (uiAtlasApplier == null) return;
-
-        void ApplyAtlasToLayout(GameObject layout)
-        {
-            if (layout == null) return;
-            foreach (var image in layout.GetComponentsInChildren<RawImage>())
-            {
-                uiAtlasApplier.ApplyAtlasToUIElement(image.gameObject);
-            }
-        }
-
-        ApplyAtlasToLayout(MainMenuLayout);
-        ApplyAtlasToLayout(PauseLayout);
-        ApplyAtlasToLayout(GameStateLayout);
+        uiAtlasApplier.ApplyAtlasToLayout(MainMenuLayout);
+        uiAtlasApplier.ApplyAtlasToLayout(PauseLayout);
+        uiAtlasApplier.ApplyAtlasToLayout(GameStateLayout);
+        uiAtlasApplier.ApplyAtlasToLayout(commandInputField.gameObject.transform.parent.gameObject);
     }
 
     private void InitializeAudio()
@@ -208,7 +217,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        Instance.consoleManager.Frame();
+        ServiceProvider.GetService<ConsoleManager>().Frame();
         Instance.stateMachine.Tick(Instance);
 
         if (!initialBricksSpawned)
