@@ -15,4 +15,5 @@ MonoBehaviour:
   brickConfig: {fileID: 11400000, guid: 2013bc294ead9e54a96ca28d658255cb, type: 2}
   brickPrefab: {fileID: 5469870417131497855, guid: 3f943a9f1c0a55542afa927dc8a59d13, type: 3}
   powerUpDropChance: 1
+  atlasApplier: {fileID: 11400000, guid: 19149a3767ceb5c498e8e47dd806b030, type: 2}
   target: {fileID: 0}

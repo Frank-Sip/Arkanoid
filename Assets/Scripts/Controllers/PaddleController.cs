@@ -9,6 +9,7 @@ public class PaddleController : ScriptableObject
     [SerializeField] private PaddleSO paddleSO;
     [SerializeField] private ScreenEdgesSO screenEdgesSO;
     [SerializeField] private GameObject paddlePrefab;
+    [SerializeField] private AtlasApplier atlasApplier;
 
     private Transform paddleTransform;
     private Transform visual;
@@ -26,6 +27,11 @@ public class PaddleController : ScriptableObject
         originalWidth = paddleSO.width;
 
         PaddlePhysics.Initiate(paddleTransform, visual, paddleSO, screenEdgesSO);
+        
+        if (atlasApplier != null)
+        {
+            atlasApplier.ApplyAtlas(visual.gameObject);
+        }
     }
 
     public void Frame(float deltaTime)

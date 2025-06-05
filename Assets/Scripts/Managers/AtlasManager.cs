@@ -2,19 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AtlasManager : MonoBehaviour
+public class AtlasManager
 {
-    private static Material _sharedAtlasMaterial;
-    private static AtlasSO _atlasSO;
+    private static readonly Dictionary<AtlasSO, Material> SharedMaterials = new();
 
     public static Material GetSharedAtlasMaterial(AtlasSO atlasSO)
     {
-        if (_atlasSO != atlasSO || _sharedAtlasMaterial == null)
+        if (!SharedMaterials.TryGetValue(atlasSO, out Material material))
         {
-            _atlasSO = atlasSO;
-            _sharedAtlasMaterial = atlasSO.sharedMaterial;
+            material = atlasSO.sharedMaterial;
+            SharedMaterials[atlasSO] = material;
         }
-        
-        return _sharedAtlasMaterial;
+        return material;
     }
 }

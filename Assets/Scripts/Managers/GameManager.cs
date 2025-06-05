@@ -12,6 +12,9 @@ public class GameManager : MonoBehaviour
 
     [Header("GameObject Settings")]
     public Vector3 initialBallPosition;
+    
+    [Header("Atlas Configuration")]
+    [SerializeField] private AtlasApplierUI uiAtlasApplier;
 
     [Header("Paddle Settings")]
     [SerializeField] private PaddleController paddleControllerSO;
@@ -73,6 +76,8 @@ public class GameManager : MonoBehaviour
         InitializeAudio();
         InitializePools();
         InitializeButtonManager();
+        InitializeUIAtlas();
+
     }
 
     private void InitializeControllers()
@@ -81,6 +86,24 @@ public class GameManager : MonoBehaviour
         ServiceProvider.RegisterService<BallController>(ballControllerSO);
         ServiceProvider.RegisterService<BrickController>(brickControllerSO);
         ServiceProvider.RegisterService<PowerUpController>(powerUpControllerSO);
+    }
+    
+    private void InitializeUIAtlas()
+    {
+        if (uiAtlasApplier == null) return;
+
+        void ApplyAtlasToLayout(GameObject layout)
+        {
+            if (layout == null) return;
+            foreach (var image in layout.GetComponentsInChildren<RawImage>())
+            {
+                uiAtlasApplier.ApplyAtlasToUIElement(image.gameObject);
+            }
+        }
+
+        ApplyAtlasToLayout(MainMenuLayout);
+        ApplyAtlasToLayout(PauseLayout);
+        ApplyAtlasToLayout(GameStateLayout);
     }
 
     private void InitializeAudio()

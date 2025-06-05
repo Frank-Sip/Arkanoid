@@ -130,7 +130,6 @@ GameObject:
   - component: {fileID: 105057849}
   - component: {fileID: 105057852}
   - component: {fileID: 105057851}
-  - component: {fileID: 105057850}
   m_Layer: 7
   m_Name: BackgroundGamePlay
   m_TagString: Untagged
@@ -157,21 +156,6 @@ RectTransform:
   m_AnchoredPosition: {x: 670.49, y: -378.29}
   m_SizeDelta: {x: 2059.76, y: 1175.29}
   m_Pivot: {x: 0.49999982, y: 0.50000006}
---- !u!114 &105057850
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 105057848}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea6e3e21adc68794fb176a05f80afc6f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  atlasMaster: {fileID: 11400000, guid: d714b104c4cd41f4b9d434dacd1e05db, type: 2}
-  atlasType: 4
-  atlasTextureSize: {x: 1280, y: 720}
 --- !u!114 &105057851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -485,7 +469,6 @@ GameObject:
   - component: {fileID: 514701844}
   - component: {fileID: 514701843}
   - component: {fileID: 514701842}
-  - component: {fileID: 514701841}
   m_Layer: 6
   m_Name: Quit
   m_TagString: Untagged
@@ -512,21 +495,6 @@ RectTransform:
   m_AnchoredPosition: {x: 683, y: -449}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &514701841
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 514701839}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea6e3e21adc68794fb176a05f80afc6f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  atlasMaster: {fileID: 11400000, guid: d714b104c4cd41f4b9d434dacd1e05db, type: 2}
-  atlasType: 12
-  atlasTextureSize: {x: 1280, y: 720}
 --- !u!114 &514701842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -864,7 +832,6 @@ GameObject:
   - component: {fileID: 691352281}
   - component: {fileID: 691352284}
   - component: {fileID: 691352283}
-  - component: {fileID: 691352282}
   m_Layer: 7
   m_Name: BackgroundPause
   m_TagString: Untagged
@@ -880,7 +847,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 691352280}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 4}
+  m_LocalPosition: {x: 0, y: 0, z: -70}
   m_LocalScale: {x: 1, y: 1, z: -1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -891,21 +858,6 @@ RectTransform:
   m_AnchoredPosition: {x: 947.15, y: -540.2}
   m_SizeDelta: {x: 2089.4, y: 1187.99}
   m_Pivot: {x: 0.49999982, y: 0.50000006}
---- !u!114 &691352282
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 691352280}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea6e3e21adc68794fb176a05f80afc6f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  atlasMaster: {fileID: 11400000, guid: d714b104c4cd41f4b9d434dacd1e05db, type: 2}
-  atlasType: 4
-  atlasTextureSize: {x: 1280, y: 720}
 --- !u!114 &691352283
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -983,7 +935,6 @@ GameObject:
   - component: {fileID: 700467153}
   - component: {fileID: 700467156}
   - component: {fileID: 700467155}
-  - component: {fileID: 700467154}
   m_Layer: 7
   m_Name: BackgroundMenu
   m_TagString: Untagged
@@ -1010,21 +961,6 @@ RectTransform:
   m_AnchoredPosition: {x: -8.7, y: 1.03}
   m_SizeDelta: {x: 1966.59, y: 1113.88}
   m_Pivot: {x: 0.49999982, y: 0.50000006}
---- !u!114 &700467154
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 700467152}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea6e3e21adc68794fb176a05f80afc6f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  atlasMaster: {fileID: 11400000, guid: d714b104c4cd41f4b9d434dacd1e05db, type: 2}
-  atlasType: 2
-  atlasTextureSize: {x: 1280, y: 720}
 --- !u!114 &700467155
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1316,9 +1252,8 @@ GameObject:
   - component: {fileID: 850501017}
   - component: {fileID: 850501020}
   - component: {fileID: 850501019}
-  - component: {fileID: 850501018}
   m_Layer: 5
-  m_Name: RawImage
+  m_Name: Arkanoid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1343,21 +1278,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0.00018311, y: 276.21}
   m_SizeDelta: {x: 403.62, y: 130.15}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &850501018
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 850501016}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea6e3e21adc68794fb176a05f80afc6f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  atlasMaster: {fileID: 11400000, guid: d714b104c4cd41f4b9d434dacd1e05db, type: 2}
-  atlasType: 15
-  atlasTextureSize: {x: 1280, y: 720}
 --- !u!114 &850501019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1683,7 +1603,6 @@ GameObject:
   - component: {fileID: 1163661120}
   - component: {fileID: 1163661119}
   - component: {fileID: 1163661118}
-  - component: {fileID: 1163661117}
   m_Layer: 5
   m_Name: Resume
   m_TagString: Untagged
@@ -1710,21 +1629,6 @@ RectTransform:
   m_AnchoredPosition: {x: 960, y: -475}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1163661117
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1163661115}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea6e3e21adc68794fb176a05f80afc6f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  atlasMaster: {fileID: 11400000, guid: d714b104c4cd41f4b9d434dacd1e05db, type: 2}
-  atlasType: 13
-  atlasTextureSize: {x: 1280, y: 720}
 --- !u!114 &1163661118
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1828,7 +1732,6 @@ GameObject:
   - component: {fileID: 1210925629}
   - component: {fileID: 1210925628}
   - component: {fileID: 1210925627}
-  - component: {fileID: 1210925626}
   m_Layer: 6
   m_Name: Play
   m_TagString: Untagged
@@ -1855,21 +1758,6 @@ RectTransform:
   m_AnchoredPosition: {x: 683, y: -319}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1210925626
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1210925624}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea6e3e21adc68794fb176a05f80afc6f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  atlasMaster: {fileID: 11400000, guid: d714b104c4cd41f4b9d434dacd1e05db, type: 2}
-  atlasType: 11
-  atlasTextureSize: {x: 1280, y: 720}
 --- !u!114 &1210925627
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2109,7 +1997,6 @@ GameObject:
   - component: {fileID: 1625590753}
   - component: {fileID: 1625590752}
   - component: {fileID: 1625590751}
-  - component: {fileID: 1625590750}
   m_Layer: 5
   m_Name: MainMenu
   m_TagString: Untagged
@@ -2136,21 +2023,6 @@ RectTransform:
   m_AnchoredPosition: {x: 960, y: -605}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1625590750
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1625590748}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea6e3e21adc68794fb176a05f80afc6f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  atlasMaster: {fileID: 11400000, guid: d714b104c4cd41f4b9d434dacd1e05db, type: 2}
-  atlasType: 14
-  atlasTextureSize: {x: 1280, y: 720}
 --- !u!114 &1625590751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2254,7 +2126,6 @@ GameObject:
   - component: {fileID: 1663967703}
   - component: {fileID: 1663967699}
   - component: {fileID: 1663967702}
-  - component: {fileID: 1663967701}
   m_Layer: 5
   m_Name: InputField (Legacy)
   m_TagString: Untagged
@@ -2352,21 +2223,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 358.12997}
   m_SizeDelta: {x: 1920, y: 363.77}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1663967701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1663967698}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea6e3e21adc68794fb176a05f80afc6f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  atlasMaster: {fileID: 11400000, guid: d714b104c4cd41f4b9d434dacd1e05db, type: 2}
-  atlasType: 2
-  atlasTextureSize: {x: 1280, y: 720}
 --- !u!114 &1663967702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3099,6 +2955,10 @@ PrefabInstance:
       propertyPath: consoleManager
       value: 
       objectReference: {fileID: 769920069}
+    - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
+      propertyPath: uiAtlasApplier
+      value: 
+      objectReference: {fileID: 11400000, guid: 9446aca95edbcd347a2fc006b29b00e5, type: 2}
     - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
       propertyPath: GameStateLayout
       value: 

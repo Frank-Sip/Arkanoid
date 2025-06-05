@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea6e3e21adc68794fb176a05f80afc6f, type: 3}
+  m_Name: AtlasUI
+  m_EditorClassIdentifier: 
+  atlasMaster: {fileID: 11400000, guid: d714b104c4cd41f4b9d434dacd1e05db, type: 2}
+  atlasTextureSize: {x: 1280, y: 720}
+  uiMappings:
+  - objectName: Play
+    atlasType: 11
+  - objectName: Quit
+    atlasType: 12
+  - objectName: Arkanoid
+    atlasType: 15
+  - objectName: Resume
+    atlasType: 13
+  - objectName: MainMenu
+    atlasType: 14
+  - objectName: BackgroundPause
+    atlasType: 4
+  - objectName: BackgroundMenu
+    atlasType: 3
+  - objectName: BackgroundGamePlay
+    atlasType: 3
+  - objectName: InputField (Legacy)
+    atlasType: 9

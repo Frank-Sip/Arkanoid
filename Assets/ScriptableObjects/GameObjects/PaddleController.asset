@@ -15,3 +15,4 @@ MonoBehaviour:
   paddleSO: {fileID: 11400000, guid: 941be5f23f5629a419d900c02e5901c2, type: 2}
   screenEdgesSO: {fileID: 11400000, guid: 631fcbc0c04543a478008a034eb623af, type: 2}
   paddlePrefab: {fileID: 8969928951030191705, guid: e5f774b959507f148b9feb56fc1022e2, type: 3}
+  atlasApplier: {fileID: 11400000, guid: da02469c05f4d30488b05d8b13c575df, type: 2}

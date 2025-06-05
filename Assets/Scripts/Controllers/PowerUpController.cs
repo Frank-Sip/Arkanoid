@@ -6,6 +6,7 @@ public class PowerUpController : ScriptableObject
     [SerializeField] public PowerUpSO powerUpSO;
     [SerializeField] public GameObject powerUpPrefab;
     [SerializeField] private ScreenEdgesSO screenEdgesSO;
+    [SerializeField] private AtlasApplier atlasApplier;
 
     [HideInInspector] public Transform target;
     private PowerUpPhysics physics;
@@ -35,6 +36,17 @@ public class PowerUpController : ScriptableObject
         physics = new PowerUpPhysics();
         AudioManager audioMgr = ServiceProvider.GetService<AudioManager>();
         physics.Initiate(target, powerUpSO, screenEdgesSO, this, audioMgr);
+        
+        Transform visual = target.GetChild(0);
+        if (atlasApplier != null)
+        {
+            atlasApplier.ApplyAtlas(visual.gameObject);
+        }
+        
+        if (atlasApplier != null)
+        {
+            atlasApplier.ApplyAtlas(target.gameObject);
+        }
     }
 
     public void Activate()

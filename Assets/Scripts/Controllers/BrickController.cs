@@ -6,6 +6,7 @@ public class BrickController : ScriptableObject
     [SerializeField] public BrickSO brickConfig;
     [SerializeField] public GameObject brickPrefab;
     [SerializeField] private float powerUpDropChance = 0.2f;
+    [SerializeField] private AtlasApplier atlasApplier;
 
     [HideInInspector] public Transform target;
     public Rect bounds { get; private set; }
@@ -38,6 +39,12 @@ public class BrickController : ScriptableObject
                 EventManager.OnReset += Reset;
                 isSubscribed = true;
             }
+        }
+        
+        Transform visual = target.GetChild(0);
+        if (atlasApplier != null)
+        {
+            atlasApplier.ApplyAtlas(visual.gameObject);
         }
     }
 
@@ -115,13 +122,7 @@ public class BrickController : ScriptableObject
         PowerUpSO powerUpSO = powerUp.powerUpSO;
         if (powerUpSO == null) return;
 
-        Transform modelTransform = powerUp.target.transform.GetChild(0);
-        AtlasApplier atlasApplier = modelTransform.GetComponent<AtlasApplier>() ?? modelTransform.GetComponentInChildren<AtlasApplier>();
-        if (atlasApplier == null) return;
-
         int randomType = Random.Range(0, 2);
         powerUpSO.powerUpType = randomType == 0 ? PowerUpType.Multiball : PowerUpType.WidePaddle;
-        atlasApplier.atlasType = randomType == 0 ? AtlasType.Blue : AtlasType.Green;
-        atlasApplier.ApplyAtlas();
     }
 }

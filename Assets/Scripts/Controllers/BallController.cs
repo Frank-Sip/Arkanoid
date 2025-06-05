@@ -5,6 +5,7 @@ public class BallController : ScriptableObject
 {
     [SerializeField] private BallSO ballSo;
     [SerializeField] private ScreenEdgesSO screenEdgesSO;
+    [SerializeField] private AtlasApplier atlasApplier;
     public GameObject ballPrefab;
 
     [HideInInspector] public Transform target;
@@ -27,6 +28,8 @@ public class BallController : ScriptableObject
         clone.ballInstance = null;
         clone.target = null;
         clone.isSubscribed = false;
+        clone.atlasApplier = this.atlasApplier;
+        clone.ballPrefab = this.ballPrefab;
         return clone;
     }
 
@@ -48,6 +51,8 @@ public class BallController : ScriptableObject
                 isSubscribed = true;
             }
         }
+        
+        ApplyAtlas();
     }
 
     public void Frame()
@@ -88,7 +93,7 @@ public class BallController : ScriptableObject
         {
             Vector3 paddlePos = PaddlePhysics.bounds.center;
             target.position = new Vector3(paddlePos.x, paddlePos.y + ballSo.radius * 3, 0f);
-            Debug.Log($"Ball set to paddle position: {target.position}");
+            ApplyAtlas();
         }
     }
 
@@ -110,6 +115,15 @@ public class BallController : ScriptableObject
             ServiceProvider.GetService<BallPool>().ReturnToPool(this);
             
             target = null;
+        }
+    }
+    
+    private void ApplyAtlas()
+    {
+        if (target != null && atlasApplier != null)
+        {
+            Transform visual = target.GetChild(0);
+            atlasApplier.ApplyAtlas(visual.gameObject);
         }
     }
     
@@ -135,6 +149,7 @@ public class BallController : ScriptableObject
         if (target != null)
         {
             target.localScale = Vector3.one;
+            ApplyAtlas();
         }
     }
 }

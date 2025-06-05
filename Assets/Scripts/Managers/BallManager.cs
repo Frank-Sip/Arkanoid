@@ -124,8 +124,6 @@ public class BallManager
         float angleStep = 40f / (ballsToAdd > 1 ? ballsToAdd - 1 : 1);
         float startAngle = 70f;
 
-        Debug.Log($"Lanzando {ballsToAdd} bolas, ángulo inicial: {startAngle}, paso: {angleStep}");
-
         for (int i = 0; i < ballsToAdd; i++)
         {
             Vector3 spawnPosition = spawnBasePosition + new Vector3(Random.Range(-0.2f, 0.2f), 0.3f * i, 0f);
@@ -135,11 +133,10 @@ public class BallManager
             Vector3 direction = new Vector3(Mathf.Cos(angleRadians), Mathf.Sin(angleRadians), 0);
 
             BallController newBall = ServiceProvider.GetService<BallPool>().SpawnBall(spawnPosition);
+            newBall.Init();
             newBall.Direction = direction.normalized;
             newBall.IsLaunched = true;
             SetActive(newBall);
-
-            Debug.Log($"Bola {i} creada con ángulo {angle}, dirección: {direction}");
         }
 
         NotifyBallLaunched();
