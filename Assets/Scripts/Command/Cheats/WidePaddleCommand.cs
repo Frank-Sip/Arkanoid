@@ -13,9 +13,5 @@ public class WidePaddleCommand : CommandSO
         {
             paddleController.ActivateWidePaddle(scaleMultiplier, duration);
         }
-        else
-        {
-            Debug.LogWarning("No se encontró el PaddleController para activar Wide Paddle");
-        }
     }
 }

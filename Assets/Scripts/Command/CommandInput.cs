@@ -1,9 +1,9 @@
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 public class CommandInput : MonoBehaviour
 {
-    public InputField inputField;
+    public TMP_InputField inputField;
     public CommandManager commandManager;
 
     public void Frame()
@@ -17,7 +17,6 @@ public class CommandInput : MonoBehaviour
     public void OnSubmit()
     {
         string input = inputField.text;
-        Debug.Log("Input received: " + input);
         commandManager.ExecuteCommand(input);
         inputField.text = "";
         inputField.Select();

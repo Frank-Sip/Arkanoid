@@ -26,10 +26,10 @@ MonoBehaviour:
   - objectName: MainMenu
     atlasType: 14
   - objectName: BackgroundPause
-    atlasType: 4
+    atlasType: 3
   - objectName: BackgroundMenu
     atlasType: 3
   - objectName: BackgroundGamePlay
     atlasType: 3
-  - objectName: InputField (Legacy)
+  - objectName: InputField
     atlasType: 9
