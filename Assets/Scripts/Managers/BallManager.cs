@@ -35,12 +35,10 @@ public class BallManager
 
         balls.Remove(ball);
         activeBalls.Remove(ball);
-        Debug.Log($"Ball unregistered. Remaining balls: {balls.Count}, Active balls: {activeBalls.Count}");
         
         if (activeBalls.Count == 0 && !hasRespawned)
         {
             hasRespawned = true;
-            Debug.Log("Sin bolas activas, respawneando bola única");
             RespawnSingleBall();
         }
     }
@@ -53,7 +51,6 @@ public class BallManager
         {
             if (ball != null && !ball.IsLaunched)
             {
-                Debug.Log("Ya existe una bola esperando en la paddle");
                 return;
             }
         }

@@ -86,6 +86,7 @@ public class BrickController : ScriptableObject
 
         BrickManager.Unregister(this);
         ServiceProvider.GetService<BrickPool>().ReturnToPool(this);
+        ServiceProvider.GetService<UIManager>().SetCounterValue("BrickCounter", BrickManager.GetActiveBricks().Count);
     }
 
     public void Reset()

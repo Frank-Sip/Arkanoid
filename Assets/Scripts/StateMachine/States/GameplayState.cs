@@ -9,6 +9,10 @@ public class GameplayState : GameState
         gameManager.GameStateLayout.SetActive(true);
         var audioManager = ServiceProvider.GetService<AudioManager>();
         audioManager.PlayBGM(1);
+        
+        gameManager.dynamicCanvas.SetActive(true);
+        var uiManager = ServiceProvider.GetService<UIManager>();
+        uiManager.SetCounterValue("BrickCounter", BrickManager.GetActiveBricks().Count);
     }
 
     public override void Tick(GameManager gameManager)
@@ -32,5 +36,6 @@ public class GameplayState : GameState
     public override void Exit(GameManager gameManager)
     {
         gameManager.GameStateLayout.SetActive(false);
+        gameManager.dynamicCanvas.SetActive(false);
     }
 }

@@ -36,7 +36,6 @@ public static class PowerUpManager
     {
         if (totalPowerUpsSpawned >= maxPowerUpsPerGame)
         {
-            Debug.Log($"Límite de power-ups alcanzado ({maxPowerUpsPerGame}). No se generarán más.");
             return null;
         }
         
@@ -46,7 +45,6 @@ public static class PowerUpManager
         if (powerUp != null)
         {
             Register(powerUp);
-            Debug.Log($"Power-up generado ({totalPowerUpsSpawned}/{maxPowerUpsPerGame})");
         }
         
         return powerUp;

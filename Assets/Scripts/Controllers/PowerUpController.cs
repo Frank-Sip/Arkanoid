@@ -106,7 +106,6 @@ public class PowerUpController : ScriptableObject
         if (paddleController != null)
         {
             paddleController.ActivateWidePaddle(1.5f, 5f);
-            Debug.Log("Wide Paddle power-up activated");
         }
     }
 

@@ -51,6 +51,10 @@ public class GameManager : MonoBehaviour
     public GameObject PauseLayout;
     public GameObject GameStateLayout;
     [SerializeField] private GameObject consoleUI;
+    public GameObject dynamicCanvas;
+    
+    [Header("Dynamic UI")]
+    [SerializeField] private GameCounter[] gameCounters;
 
     private StateMachine stateMachine = new StateMachine();
     private static bool firstFrame = false;
@@ -75,6 +79,14 @@ public class GameManager : MonoBehaviour
 
         paddleControllerSO.Init(paddleParent);
         brickControllerSO.Init(null);
+        InitializeUIManager();
+    }
+    
+    private void InitializeUIManager()
+    {
+        var uiManager = new UIManager();
+        uiManager.Init(dynamicCanvas, gameCounters);
+        ServiceProvider.RegisterService(uiManager);
     }
 
     private void InitializeServices()
@@ -266,7 +278,8 @@ public class GameManager : MonoBehaviour
 
         PowerUpManager.ResetAll();
         PowerUpManager.ResetPowerUpCount();
-
+        
+        ServiceProvider.GetService<UIManager>().ResetCounters();
         Instance.SpawnBricksAtPositions();
     }
 

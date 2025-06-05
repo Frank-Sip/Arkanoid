@@ -60,6 +60,7 @@ public class BallPhysics
         {
             position += correction;
             audioManager.PlaySFX(0);
+            ServiceProvider.GetService<UIManager>().IncrementCounter("PaddleHits");
         }
         else if (position.x < screenConfig.left + radius || position.x > screenConfig.right - radius)
         {
