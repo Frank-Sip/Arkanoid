@@ -5,8 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuState : GameState
 {
-    public override void Enter(GameManager gameManager)
+    public override async void Enter(GameManager gameManager)
     {
+        await AddressablesManager.LoadGroupAsync("UIMenu");
         Time.timeScale = 0f;
         gameManager.MainMenuLayout.SetActive(true);
         var audioManager = ServiceProvider.GetService<AudioManager>();
@@ -18,8 +19,9 @@ public class MainMenuState : GameState
 
     }
 
-    public override void Exit(GameManager gameManager)
+    public override async void Exit(GameManager gameManager)
     {
         gameManager.MainMenuLayout.SetActive(false);
+        await AddressablesManager.UnloadGroupAsync("UIMenu");
     }
 }

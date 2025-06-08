@@ -3,8 +3,9 @@ using UnityEngine;
 
 public class GameplayState : GameState
 {
-    public override void Enter(GameManager gameManager)
+    public override async void Enter(GameManager gameManager)
     {
+        await AddressablesManager.LoadGroupAsync("GameplayAssets");
         Time.timeScale = 1f;
         gameManager.GameStateLayout.SetActive(true);
         var audioManager = ServiceProvider.GetService<AudioManager>();
@@ -33,9 +34,10 @@ public class GameplayState : GameState
         }
     }
 
-    public override void Exit(GameManager gameManager)
+    public override async void Exit(GameManager gameManager)
     {
         gameManager.GameStateLayout.SetActive(false);
         gameManager.dynamicCanvas.SetActive(false);
+        await AddressablesManager.UnloadGroupAsync("GameplayAssets");
     }
 }

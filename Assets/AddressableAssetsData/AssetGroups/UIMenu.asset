@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: UIMenu
+  m_EditorClassIdentifier: 
+  m_GroupName: UIMenu
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 6e944a60b78d3284b9bf1d1203208a94
+  m_SerializeEntries:
+  - m_GUID: 1d27d9bf44b1a224ca3bdb3ffd34e23b
+    m_Address: Assets/Prefabs/Static Canvas.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 723cacd5f734e8648a55e15b01730932, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 2c6258772e0fb174bbd76c799a7cbb85, type: 2}
+    - {fileID: 11400000, guid: 0a32515faad191b43858c59f2e4ff1dc, type: 2}

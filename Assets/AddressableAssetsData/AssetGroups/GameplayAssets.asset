@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: GameplayAssets
+  m_EditorClassIdentifier: 
+  m_GroupName: GameplayAssets
+  m_Data:
+    m_SerializedData: []
+  m_GUID: effbe7cfdbe7f4048a90232965b72bb8
+  m_SerializeEntries:
+  - m_GUID: 5ff37692ee6ee744cbb8579e26d2474e
+    m_Address: Assets/Prefabs/BrickParents.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 34d7c54affb85fb49b7c1e18cb9fab1e
+    m_Address: Assets/Prefabs/Dynamic Canvas.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 723cacd5f734e8648a55e15b01730932, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: f2790b3c45677f445827fccf11a8d860, type: 2}
+    - {fileID: 11400000, guid: 5867de936a29f5e49ace67149adca2c6, type: 2}
