@@ -42,21 +42,22 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TMP_InputField commandInputField;
     [SerializeField] private List<CommandSO> commands;
     public ConsoleManager consoleManager;
-    
-    [Header("UI Configuration")]
+      [Header("UI Configuration")]
     [SerializeField] private ButtonSO buttonSO;
+    [SerializeField] private SettingsSO settingsSO;
 
     [Header("Layouts UI")]
     public GameObject MainMenuLayout;
     public GameObject PauseLayout;
+    public GameObject SettingsLayout;
     public GameObject GameStateLayout;
     [SerializeField] private GameObject consoleUI;
     public GameObject dynamicCanvas;
-    
-    [Header("Dynamic UI")]
+      [Header("Dynamic UI")]
     [SerializeField] private GameCounter[] gameCounters;
+    [SerializeField] private VolumeDisplay volumeDisplay;
 
-    private StateMachine stateMachine = new StateMachine();
+    public StateMachine stateMachine = new StateMachine();
     private static bool firstFrame = false;
     private bool bricksSpawned = false;
     private bool ballSpawned = false;
@@ -80,21 +81,24 @@ public class GameManager : MonoBehaviour
         paddleControllerSO.Init(paddleParent);
         brickControllerSO.Init(null);
         InitializeUIManager();
-    }
-    
-    private void InitializeUIManager()
+    }    private void InitializeUIManager()
     {
         var uiManager = new UIManager();
         uiManager.Init(dynamicCanvas, gameCounters);
+        
+        if (volumeDisplay != null)
+        {
+            uiManager.RegisterVolumeDisplay(volumeDisplay);
+        }
+        
         ServiceProvider.RegisterService(uiManager);
-    }
-
-    private void InitializeServices()
+    }private void InitializeServices()
     {
         InitializeControllers();
         InitializeAudio();
         InitializePools();
         InitializeButtonManager();
+        InitializeSettings();
         InitializeUIAtlas();
         InitializeConsole();
     }
@@ -121,11 +125,11 @@ public class GameManager : MonoBehaviour
         ServiceProvider.RegisterService<BrickController>(brickControllerSO);
         ServiceProvider.RegisterService<PowerUpController>(powerUpControllerSO);
     }
-    
-    private void InitializeUIAtlas()
+      private void InitializeUIAtlas()
     {
         uiAtlasApplier.ApplyAtlasToLayout(MainMenuLayout);
         uiAtlasApplier.ApplyAtlasToLayout(PauseLayout);
+        uiAtlasApplier.ApplyAtlasToLayout(SettingsLayout);
         uiAtlasApplier.ApplyAtlasToLayout(GameStateLayout);
         uiAtlasApplier.ApplyAtlasToLayout(consoleUI);
     }
@@ -143,8 +147,7 @@ public class GameManager : MonoBehaviour
     {
         var ballPool = new BallPool(ballPoolContainer, ballControllerSO);
         var brickPool = new BrickPool(brickPoolContainer, brickControllerSO);
-        var powerUpPool = new PowerUpPool(powerUpPoolContainer, powerUpControllerSO);
-        ServiceProvider.RegisterService(ballPool);
+        var powerUpPool = new PowerUpPool(powerUpPoolContainer, powerUpControllerSO);        ServiceProvider.RegisterService(ballPool);
         ServiceProvider.RegisterService(brickPool);
         ServiceProvider.RegisterService(powerUpPool);
     }
@@ -153,12 +156,18 @@ public class GameManager : MonoBehaviour
     {
         var buttonManager = new ButtonManager();
         buttonManager.Init(buttonSO);
+        buttonManager.RegisterButtonsInLayout(MainMenuLayout);
+        buttonManager.RegisterButtonsInLayout(PauseLayout);
+        buttonManager.RegisterButtonsInLayout(SettingsLayout);
         ServiceProvider.RegisterService(buttonManager);
-    
-        ServiceProvider.GetService<ButtonManager>().RegisterButtonsInLayout(MainMenuLayout);
-        ServiceProvider.GetService<ButtonManager>().RegisterButtonsInLayout(PauseLayout);
     }
-    
+
+    private void InitializeSettings()
+    {
+        var settingsManager = new SettingsManager(settingsSO);
+        settingsManager.Init();
+        ServiceProvider.RegisterService(settingsManager);
+    }
 
     private void MakePlayerLoop()
     {

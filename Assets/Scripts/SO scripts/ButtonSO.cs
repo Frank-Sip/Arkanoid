@@ -8,14 +8,16 @@ public class ButtonSO : ScriptableObject
     {
         public string buttonName;
         public ButtonActionType actionType;
-    }
-
-    public enum ButtonActionType
+    }    public enum ButtonActionType
     {
         Play,
         Resume,
         MainMenu,
-        Quit
+        Quit,
+        Settings,
+        IncreaseMasterVolume,
+        DecreaseMasterVolume,
+        BackToMenu
     }
 
     [Header("Button Mappings")]

@@ -8,8 +8,7 @@ MonoBehaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af02ec50d671a6e4689156bd5b79e264, type: 3}
+  m_EditorHideFlags: 0  m_Script: {fileID: 11500000, guid: af02ec50d671a6e4689156bd5b79e264, type: 3}
   m_Name: ButtonActionConfig
   m_EditorClassIdentifier: 
   buttonMappings:
@@ -21,3 +20,11 @@ MonoBehaviour:
     actionType: 1
   - buttonName: MainMenu
     actionType: 2
+  - buttonName: Settings
+    actionType: 4
+  - buttonName: IncreaseVolume
+    actionType: 5
+  - buttonName: DecreaseVolume
+    actionType: 6
+  - buttonName: Back
+    actionType: 7

@@ -7,6 +7,7 @@ public class UIManager
 {
     private Canvas dynamicCanvas;
     private Dictionary<string, GameCounter> counters = new Dictionary<string, GameCounter>();
+    private Dictionary<string, VolumeDisplay> volumeDisplays = new Dictionary<string, VolumeDisplay>();
 
     public void Init(GameObject canvas, GameCounter[] gameCounters)
     {
@@ -46,6 +47,20 @@ public class UIManager
         {
             counter.Reset();
             counter.UpdateValue(0);
+        }
+    }
+
+    public void RegisterVolumeDisplay(VolumeDisplay volumeDisplay)
+    {
+        if (!string.IsNullOrEmpty(volumeDisplay.id))
+        {
+            volumeDisplays[volumeDisplay.id] = volumeDisplay;
+        }
+    }    public void UpdateVolumeDisplay(string id, float value)
+    {
+        if (volumeDisplays.TryGetValue(id, out VolumeDisplay display))
+        {
+            display.UpdateValue(value);
         }
     }
 }
