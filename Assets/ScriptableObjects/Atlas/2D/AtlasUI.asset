@@ -33,3 +33,11 @@ MonoBehaviour:
     atlasType: 3
   - objectName: InputField
     atlasType: 9
+  - objectName: Settings
+    atlasType: 9
+  - objectName: IncreaseVolume
+    atlasType: 9
+  - objectName: DecreaseVolume
+    atlasType: 9
+  - objectName: Back
+    atlasType: 14
