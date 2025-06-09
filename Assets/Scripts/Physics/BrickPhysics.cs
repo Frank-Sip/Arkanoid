@@ -71,7 +71,7 @@ public static class BrickPhysics
             direction = Vector3.Reflect(direction, normal);
             correction = normal * (radius - contactVector.magnitude);
 
-            brick.OnDestroyBrick();
+            brick.TakeDamage();
             return true;
         }
 

@@ -77,15 +77,7 @@ public class GameManager : MonoBehaviour
         MakePlayerLoop();
 
         paddleControllerSO.Init(paddleParent);
-        brickControllerSO.Init(null);
-        InitializeUIManager();
-    }
-    
-    private void InitializeUIManager()
-    {
-        var uiManager = new UIManager();
-        uiManager.Init(dynamicCanvas, gameCounters);
-        ServiceProvider.RegisterService(uiManager);
+        BrickManager.SpawnBricksAtPositions();
     }
 
     private void InitializeServices()
@@ -93,9 +85,17 @@ public class GameManager : MonoBehaviour
         InitializeControllers();
         InitializeAudio();
         InitializePools();
+        InitializeUIManager();
         InitializeButtonManager();
         InitializeUIAtlas();
         InitializeConsole();
+    }
+    
+    private void InitializeUIManager()
+    {
+        var uiManager = new UIManager();
+        uiManager.Init(dynamicCanvas, gameCounters);
+        ServiceProvider.RegisterService(uiManager);
     }
     
     private void InitializeConsole()
@@ -200,7 +200,6 @@ public class GameManager : MonoBehaviour
         if (!initialBricksSpawned)
         {
             initialBricksSpawned = true;
-            BrickManager.SpawnBricksAtPositions();
         }
         
         if (!initialBallSpawned && Instance.IsInGameplayState())
@@ -234,9 +233,11 @@ public class GameManager : MonoBehaviour
         Instance.paddleControllerSO.Reset();
         Instance.bricksSpawned = false;
         Instance.ballSpawned = false;
+        initialBricksSpawned = false;
+        initialBallSpawned = false;
 
         var brickPool = ServiceProvider.GetService<BrickPool>();
-
+        
         List<BrickController> activeBricks = new List<BrickController>(BrickManager.GetActiveBricks());
         foreach (var brick in activeBricks)
         {
@@ -251,11 +252,10 @@ public class GameManager : MonoBehaviour
         BrickManager.GetActiveBricks().Clear();
 
         BallManager.ResetAll();
-
         PowerUpManager.ResetAll();
         PowerUpManager.ResetPowerUpCount();
-
         ServiceProvider.GetService<UIManager>().ResetCounters();
+        
         BrickManager.SpawnBricksAtPositions();
     }
 

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "BrickController", menuName = "GameObject/BrickControllerSO")]
 public class BrickController : ScriptableObject
@@ -6,45 +7,24 @@ public class BrickController : ScriptableObject
     [SerializeField] public BrickSO brickConfig;
     [SerializeField] public GameObject brickPrefab;
     [SerializeField] private float powerUpDropChance = 0.2f;
-    [SerializeField] private AtlasApplier atlasApplier;
+    [SerializeField] private List<BrickTypeConfig> brickTypes;
 
     [HideInInspector] public Transform target;
+    [HideInInspector] public BrickType currentType;
+    
     public Rect bounds { get; private set; }
     public bool isEnabled { get; private set; } = true;
     private bool isSubscribed = false;
-
-    public BrickController Clone()
-    {
-        var clone = Instantiate(this);
-        clone.target = null;
-        clone.isEnabled = true;
-        clone.isSubscribed = false;
-        return clone;
-    }
 
     public void Init(Transform parent = null)
     {
         if (target == null)
         {
-            GameObject brickInstance = Instantiate(brickPrefab);
-            if (parent != null)
-            {
-                brickInstance.transform.SetParent(parent);
-            }
-            target = brickInstance.transform;
-            target.gameObject.SetActive(false);
-
             if (!isSubscribed)
             {
                 EventManager.OnReset += Reset;
                 isSubscribed = true;
             }
-        }
-        
-        Transform visual = target.GetChild(0);
-        if (atlasApplier != null)
-        {
-            atlasApplier.ApplyAtlas(visual.gameObject);
         }
     }
 
@@ -76,6 +56,61 @@ public class BrickController : ScriptableObject
         SetBounds(updatedBounds);
     }
 
+    public void TakeDamage()
+    {
+        BrickType nextType = GetNextLowerType(currentType);
+        
+        if (nextType == BrickType.None)
+        {
+            OnDestroyBrick();
+            return;
+        }
+
+        SetBrickType(nextType);
+    }
+
+    public BrickController Clone()
+    {
+        var clone = Instantiate(this);
+        clone.target = null;
+        clone.isEnabled = true;
+        clone.isSubscribed = false;
+        return clone;
+    }
+    
+    private BrickType GetNextLowerType(BrickType currentType)
+    {
+        switch (currentType)
+        {
+            case BrickType.Tough:
+                return BrickType.Strong;
+            case BrickType.Strong:
+                return BrickType.Normal;
+            case BrickType.Normal:
+                return BrickType.Weak;
+            case BrickType.Weak:
+            default:
+                return BrickType.None;
+        }
+    }
+    
+    public void SetBrickType(BrickType type)
+    {
+        currentType = type;
+        var typeConfig = brickTypes.Find(x => x.type == type);
+        if (typeConfig != null)
+        {
+            if (target != null)
+            {
+                Transform visual = target.GetChild(0);
+                if (visual != null)
+                {
+                    typeConfig.atlas.ApplyAtlas(visual.gameObject);
+                }
+            }
+        }
+    }
+
     public void OnDestroyBrick()
     {
         isEnabled = false;
@@ -95,7 +130,8 @@ public class BrickController : ScriptableObject
         {
             target.gameObject.SetActive(false);
             target.localScale = Vector3.one;
-            isEnabled = true;
+            isEnabled = false;
+            currentType = BrickType.None;
         }
     }
 

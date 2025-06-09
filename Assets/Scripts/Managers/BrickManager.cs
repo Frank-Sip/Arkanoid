@@ -23,23 +23,32 @@ public static class BrickManager
     
     public static void SpawnBricksAtPositions()
     {
-        // Buscar el objeto padre con el tag "BrickPositions"
-        GameObject brickParent = GameObject.FindWithTag("Weak");
+        SpawnBricksOfType(BrickType.Weak);
+        SpawnBricksOfType(BrickType.Normal);
+        SpawnBricksOfType(BrickType.Strong);
+        SpawnBricksOfType(BrickType.Tough);
+    }
+    
+    private static void SpawnBricksOfType(BrickType type)
+    {
+        string tag = type.ToString();
+        GameObject brickParent = GameObject.FindWithTag(tag);
+        if (brickParent == null) return;
 
         var brickPool = ServiceProvider.GetService<BrickPool>();
         Transform parentTransform = brickParent.transform;
 
-        // Recorrer todos los hijos y crear bricks en sus posiciones
         for (int i = 0; i < parentTransform.childCount; i++)
         {
             Transform childPosition = parentTransform.GetChild(i);
             var brick = brickPool.SpawnBrick(childPosition.position);
-        
+
             if (brick != null)
             {
                 brick.target.position = childPosition.position;
+                brick.SetBrickType(type);
                 brick.Activate();
-                BrickManager.Register(brick);
+                Register(brick);
             }
         }
     }

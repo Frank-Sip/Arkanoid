@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Weak
+  - Normal
+  - Strong
+  - Tough
   layers:
   - Default
   - TransparentFX

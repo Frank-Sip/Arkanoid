@@ -64,6 +64,7 @@ public class BrickPool
             instance.SetActive(false);
             instance.transform.localScale = Vector3.one;
             instance.transform.SetParent(poolContainer);
+            controller.Reset();
             controller.target = null;
             pool.Return(controller, instance);
         }
