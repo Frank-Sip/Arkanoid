@@ -27,7 +27,6 @@ public class GameManager : MonoBehaviour
 
     [Header("Brick Settings")]
     public BrickController brickControllerSO;
-    [SerializeField] private List<Transform> brickPositions;
     [SerializeField] private Transform brickPoolContainer;
 
     [Header("PowerUp Settings")]
@@ -201,7 +200,7 @@ public class GameManager : MonoBehaviour
         if (!initialBricksSpawned)
         {
             initialBricksSpawned = true;
-            Instance.SpawnBricksAtPositions();
+            BrickManager.SpawnBricksAtPositions();
         }
         
         if (!initialBallSpawned && Instance.IsInGameplayState())
@@ -217,29 +216,6 @@ public class GameManager : MonoBehaviour
 
         Instance.paddleControllerSO.Frame(Time.deltaTime);
         PowerUpManager.Frame();
-    }
-
-    private void SpawnBricksAtPositions()
-    {
-        if (brickPositions == null || brickPositions.Count == 0)
-        {
-            Debug.LogError("No brick positions assigned!");
-            return;
-        }
-
-        var brickPool = ServiceProvider.GetService<BrickPool>();
-        foreach (Transform position in brickPositions)
-        {
-            if (position == null) continue;
-
-            var brick = brickPool.SpawnBrick(position.position);
-            if (brick != null)
-            {
-                brick.target.position = position.position;
-                brick.Activate();
-                BrickManager.Register(brick);
-            }
-        }
     }
 
     public void ChangeGameStatus(GameState newState)
@@ -278,9 +254,9 @@ public class GameManager : MonoBehaviour
 
         PowerUpManager.ResetAll();
         PowerUpManager.ResetPowerUpCount();
-        
+
         ServiceProvider.GetService<UIManager>().ResetCounters();
-        Instance.SpawnBricksAtPositions();
+        BrickManager.SpawnBricksAtPositions();
     }
 
 #if UNITY_EDITOR

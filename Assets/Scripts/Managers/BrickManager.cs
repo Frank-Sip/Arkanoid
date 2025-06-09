@@ -1,3 +1,4 @@
+using UnityEngine;
 using System.Collections.Generic;
 
 public static class BrickManager
@@ -18,6 +19,29 @@ public static class BrickManager
     {
         activeBricks.Remove(brick);
         CheckGameCondition();
+    }
+    
+    public static void SpawnBricksAtPositions()
+    {
+        // Buscar el objeto padre con el tag "BrickPositions"
+        GameObject brickParent = GameObject.FindWithTag("Weak");
+
+        var brickPool = ServiceProvider.GetService<BrickPool>();
+        Transform parentTransform = brickParent.transform;
+
+        // Recorrer todos los hijos y crear bricks en sus posiciones
+        for (int i = 0; i < parentTransform.childCount; i++)
+        {
+            Transform childPosition = parentTransform.GetChild(i);
+            var brick = brickPool.SpawnBrick(childPosition.position);
+        
+            if (brick != null)
+            {
+                brick.target.position = childPosition.position;
+                brick.Activate();
+                BrickManager.Register(brick);
+            }
+        }
     }
 
     private static void CheckGameCondition()
