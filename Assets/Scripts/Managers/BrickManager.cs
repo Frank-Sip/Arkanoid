@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public static class BrickManager
 {
+    public static event System.Action OnAllBricksDestroyed;
+
     private static readonly List<BrickController> bricks = new List<BrickController>();
     private static readonly List<BrickController> activeBricks = new List<BrickController>();
 
@@ -20,7 +22,7 @@ public static class BrickManager
         activeBricks.Remove(brick);
         CheckGameCondition();
     }
-    
+
     public static void SpawnBricksAtPositions()
     {
         SpawnBricksOfType(BrickType.Weak);
@@ -28,7 +30,7 @@ public static class BrickManager
         SpawnBricksOfType(BrickType.Strong);
         SpawnBricksOfType(BrickType.Tough);
     }
-    
+
     private static void SpawnBricksOfType(BrickType type)
     {
         string tag = type.ToString();
@@ -57,8 +59,7 @@ public static class BrickManager
     {
         if (activeBricks.Count <= 0 && GameManager.Instance.IsInGameplayState())
         {
-            GameManager.Instance.ResetGame();
-            GameManager.Instance.ChangeGameStatus(new MainMenuState());
+            OnAllBricksDestroyed?.Invoke();
         }
     }
 

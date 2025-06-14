@@ -33,6 +33,9 @@ public class GameManager : MonoBehaviour
     public PowerUpController powerUpControllerSO;
     [SerializeField] private Transform powerUpPoolContainer;
 
+    [Header("Level Settings")] [SerializeField]
+    private int totalLevels = 10;
+
     [Header("Audio Settings")]
     [SerializeField] private List<AudioClip> bgTracks;
     [SerializeField] private List<AudioSO> soundEffects;
@@ -77,7 +80,6 @@ public class GameManager : MonoBehaviour
         MakePlayerLoop();
 
         paddleControllerSO.Init(paddleParent);
-        BrickManager.SpawnBricksAtPositions();
     }
 
     private void InitializeServices()
@@ -88,6 +90,7 @@ public class GameManager : MonoBehaviour
         InitializeUIManager();
         InitializeButtonManager();
         InitializeUIAtlas();
+        InitializeLevelSystem();
         InitializeConsole();
     }
     
@@ -111,6 +114,17 @@ public class GameManager : MonoBehaviour
         var consoleManager = new ConsoleManager();
         consoleManager.Init(consoleUI, commandInput);
         ServiceProvider.RegisterService(consoleManager);
+    }
+    
+    private void InitializeLevelSystem()
+    {
+        var addressableManager = new AddressableManager();
+        addressableManager.Init();
+        ServiceProvider.RegisterService(addressableManager);
+        
+        var levelManager = new LevelManager();
+        levelManager.Init(addressableManager, totalLevels);
+        ServiceProvider.RegisterService(levelManager);
     }
 
     private void InitializeControllers()
@@ -255,8 +269,6 @@ public class GameManager : MonoBehaviour
         PowerUpManager.ResetAll();
         PowerUpManager.ResetPowerUpCount();
         ServiceProvider.GetService<UIManager>().ResetCounters();
-        
-        BrickManager.SpawnBricksAtPositions();
     }
 
 #if UNITY_EDITOR

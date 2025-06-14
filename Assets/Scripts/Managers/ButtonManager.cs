@@ -60,6 +60,7 @@ public class ButtonManager
     {
         if (GameManager.Instance != null)
         {
+            ServiceProvider.GetService<LevelManager>().StartGame();
             GameManager.Instance.ChangeGameStatus(new GameplayState());
         }
     }
