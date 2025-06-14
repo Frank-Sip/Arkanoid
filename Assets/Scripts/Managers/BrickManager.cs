@@ -51,18 +51,39 @@ public static class BrickManager
                 Register(brick);
             }
         }
-    }
-
-    private static void CheckGameCondition()
+    }    private static void CheckGameCondition()
     {
         if (activeBricks.Count <= 0 && GameManager.Instance.IsInGameplayState())
         {
-            GameManager.Instance.ResetGame();
-            GameManager.Instance.ChangeGameStatus(new MainMenuState());
+            // Level completed - notify LevelManager
+            LevelManager.OnLevelCompleted();
         }
     }
 
     public static List<BrickController> GetBricks() => bricks;
 
-    public static List<BrickController> GetActiveBricks() => activeBricks;
+    public static List<BrickController> GetActiveBricks() => activeBricks;    public static void ClearAllBricks()
+    {
+        var brickPool = ServiceProvider.GetService<BrickPool>();
+        
+        // Return all bricks to pool
+        for (int i = bricks.Count - 1; i >= 0; i--)
+        {
+            var brick = bricks[i];
+            if (brick != null)
+            {
+                brick.Reset();
+                brickPool.ReturnToPool(brick);
+            }
+        }
+        
+        // Clear the lists
+        bricks.Clear();
+        activeBricks.Clear();
+    }
+
+    public static int GetActiveBrickCount()
+    {
+        return activeBricks.Count;
+    }
 }

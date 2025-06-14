@@ -37,6 +37,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<AudioClip> bgTracks;
     [SerializeField] private List<AudioSO> soundEffects;
     
+    [Header("Level Settings")]
+    [SerializeField] private List<string> levelAddressables = new List<string>();
+    
     [Header("Console Settings")]
     [SerializeField] private TMP_InputField commandInputField;
     [SerializeField] private List<CommandSO> commands;
@@ -64,9 +67,7 @@ public class GameManager : MonoBehaviour
     private static PlayerLoopSystem originalPlayerLoop;
     private static bool gameIsReloading = false;
 
-    private struct CustomGameLogic { }
-
-    private void Awake()
+    private struct CustomGameLogic { }    private void Awake()
     {
         Instance = this;
         InitializeServices();
@@ -77,7 +78,7 @@ public class GameManager : MonoBehaviour
         MakePlayerLoop();
 
         paddleControllerSO.Init(paddleParent);
-        BrickManager.SpawnBricksAtPositions();
+        // BrickManager.SpawnBricksAtPositions(); // Now handled by LevelManager
     }
 
     private void InitializeServices()
@@ -89,6 +90,7 @@ public class GameManager : MonoBehaviour
         InitializeButtonManager();
         InitializeUIAtlas();
         InitializeConsole();
+        InitializeLevelManager();
     }
     
     private void InitializeUIManager()
@@ -157,7 +159,16 @@ public class GameManager : MonoBehaviour
         ServiceProvider.GetService<ButtonManager>().RegisterButtonsInLayout(MainMenuLayout);
         ServiceProvider.GetService<ButtonManager>().RegisterButtonsInLayout(PauseLayout);
     }
-    
+      private void InitializeLevelManager()
+    {
+        // If no addressables are configured, use empty list to trigger direct brick spawning
+        if (levelAddressables.Count == 0)
+        {
+            levelAddressables.Add(""); // Empty string to trigger direct spawning
+        }
+        
+        LevelManager.Initialize(levelAddressables);
+    }
 
     private void MakePlayerLoop()
     {
@@ -227,6 +238,26 @@ public class GameManager : MonoBehaviour
         return stateMachine.CurrentState is GameplayState;
     }
 
+    public int GetCurrentLevel()
+    {
+        return LevelManager.CurrentLevel;
+    }
+
+    public int GetCurrentRound()
+    {
+        return LevelManager.CurrentRound;
+    }
+
+    public string GetCurrentLevelName()
+    {
+        return LevelManager.GetCurrentLevelName();
+    }
+
+    public int GetActiveBrickCount()
+    {
+        return BrickManager.GetActiveBrickCount();
+    }
+
     public void ResetGame()
     {
         EventManager.ResetGame();
@@ -257,6 +288,19 @@ public class GameManager : MonoBehaviour
         ServiceProvider.GetService<UIManager>().ResetCounters();
         
         BrickManager.SpawnBricksAtPositions();
+    }
+
+    private void OnDestroy()
+    {
+        // Cleanup when GameManager is destroyed
+        LevelManager.Cleanup();
+        AddressablesManager.UnloadAllGroups();
+        
+        // Restore original player loop
+        if (originalPlayerLoop.subSystemList != null)
+        {
+            PlayerLoop.SetPlayerLoop(originalPlayerLoop);
+        }
     }
 
 #if UNITY_EDITOR
