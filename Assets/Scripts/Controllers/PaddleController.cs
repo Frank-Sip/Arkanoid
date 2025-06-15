@@ -6,10 +6,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PaddleController", menuName = "GameObject/PaddleControllerSO")]
 public class PaddleController : ScriptableObject
 {
+    public int initialLives = 3;
+    
     [SerializeField] private PaddleSO paddleSO;
     [SerializeField] private ScreenEdgesSO screenEdgesSO;
     [SerializeField] private GameObject paddlePrefab;
     [SerializeField] private AtlasApplier atlasApplier;
+    private int currentLives;
 
     private Transform paddleTransform;
     private Transform visual;
@@ -25,6 +28,7 @@ public class PaddleController : ScriptableObject
         visual = paddleTransform.GetChild(0);
         initialPosition = paddleTransform.position;
         originalWidth = paddleSO.width;
+        currentLives = initialLives;
 
         PaddlePhysics.Initiate(paddleTransform, visual, paddleSO, screenEdgesSO);
         
@@ -32,6 +36,8 @@ public class PaddleController : ScriptableObject
         {
             atlasApplier.ApplyAtlas(visual.gameObject);
         }
+        
+        ServiceProvider.GetService<UIManager>().SetCounterValue("LivesCounter", currentLives);
     }
 
     public void Frame(float deltaTime)
@@ -59,6 +65,25 @@ public class PaddleController : ScriptableObject
         {
             StopWidePaddlePowerUp();
         }
+        
+        currentLives = initialLives;
+        ServiceProvider.GetService<UIManager>().SetCounterValue("LivesLeft", currentLives);
+    }
+    
+    public void LoseLife()
+    {
+        currentLives--;
+        ServiceProvider.GetService<UIManager>().SetCounterValue("LivesLeft", currentLives);
+        
+        if (currentLives <= 0)
+        {
+            GameManager.Instance.ChangeGameStatus(new DefeatState());
+        }
+    }
+    
+    public int GetCurrentLives()
+    {
+        return currentLives;
     }
 
     public void ActivateWidePaddle(float widthMultiplier = 1.5f, float duration = 5f)

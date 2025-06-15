@@ -59,8 +59,7 @@ public class LevelManager
         {
             if (instance != null)
             {
-                instance.SetActive(false);
-                deactivatedLevels.Add(instance);
+                GameObject.Destroy(instance);
             }
         }
         currentLevelInstances.Clear();
@@ -78,7 +77,7 @@ public class LevelManager
             return;
         }
 
-        if (currentLevel == 6)
+        if (currentLevel == 2)
         {
             addressableManager.UnloadPackage("LevelPack1");
         }

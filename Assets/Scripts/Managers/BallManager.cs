@@ -6,13 +6,12 @@ public class BallManager
     private static readonly List<BallController> balls = new List<BallController>();
     private static readonly List<BallController> activeBalls = new List<BallController>();
     private static bool hasRespawned = false;
-    private static int maxBalls = 3;
     private static bool isMultiballActive = false;
 
     public static void Register(BallController ball)
     {
         if (ball == null) return;
-        
+
         if (!balls.Contains(ball))
         {
             balls.Add(ball);
@@ -22,7 +21,7 @@ public class BallManager
     public static void SetActive(BallController ball)
     {
         if (ball == null) return;
-        
+
         if (!activeBalls.Contains(ball))
         {
             activeBalls.Add(ball);
@@ -38,15 +37,24 @@ public class BallManager
         
         if (activeBalls.Count == 0 && !hasRespawned)
         {
-            hasRespawned = true;
-            RespawnSingleBall();
+            PaddleController paddleController = ServiceProvider.GetService<PaddleController>();
+            if (paddleController != null)
+            {
+                paddleController.LoseLife();
+                
+                if (paddleController.GetCurrentLives() > 0)
+                {
+                    hasRespawned = true;
+                    RespawnSingleBall();
+                }
+            }
         }
     }
 
     public static void RespawnSingleBall()
     {
         CleanupInactiveBalls();
-        
+
         foreach (var ball in balls)
         {
             if (ball != null && !ball.IsLaunched)
@@ -65,7 +73,7 @@ public class BallManager
             Register(newBall);
         }
     }
-    
+
     private static void CleanupInactiveBalls()
     {
         List<BallController> ballsToRemove = new List<BallController>();
@@ -84,16 +92,12 @@ public class BallManager
             ServiceProvider.GetService<BallPool>().ReturnToPool(ball);
         }
     }
-    
+
     public static void SpawnMultipleBalls()
     {
         int numberOfBalls = 2;
-        int ballsToAdd = Mathf.Min(numberOfBalls, maxBalls - activeBalls.Count);
-
-        if (ballsToAdd <= 0)
-            return;
-
-        for (int i = 0; i < ballsToAdd; i++)
+        
+        for (int i = 0; i < numberOfBalls; i++)
         {
             Vector3 paddlePos = PaddlePhysics.bounds.center;
             Vector3 ballPos = new Vector3(paddlePos.x + Random.Range(-1f, 1f), paddlePos.y + 3f, 0f);
@@ -107,18 +111,13 @@ public class BallManager
     {
         isMultiballActive = true;
 
-        int ballsToAdd = Mathf.Min(numberOfBalls, maxBalls - activeBalls.Count);
-
-        if (ballsToAdd <= 0)
-            return;
-
         Vector3 paddlePos = PaddlePhysics.bounds.center;
         Vector3 spawnBasePosition = new Vector3(paddlePos.x, paddlePos.y + 1f, 0f);
 
-        float angleStep = 40f / (ballsToAdd > 1 ? ballsToAdd - 1 : 1);
+        float angleStep = 40f / (numberOfBalls > 1 ? numberOfBalls - 1 : 1);
         float startAngle = 70f;
 
-        for (int i = 0; i < ballsToAdd; i++)
+        for (int i = 0; i < numberOfBalls; i++)
         {
             Vector3 spawnPosition = spawnBasePosition + new Vector3(Random.Range(-0.2f, 0.2f), 0.3f * i, 0f);
 
@@ -151,20 +150,10 @@ public class BallManager
         return activeBalls.AsReadOnly();
     }
 
-    public static int GetMaxBalls()
-    {
-        return maxBalls;
-    }
-
-    public static void SetMaxBalls(int max)
-    {
-        maxBalls = Mathf.Max(1, max);
-    }
-
     public static void ResetAll()
     {
         Physics.autoSimulation = false;
-        
+
         foreach (var ball in balls)
         {
             if (ball != null && ball.target != null)
@@ -172,17 +161,17 @@ public class BallManager
                 ball.target.gameObject.SetActive(false);
             }
         }
-        
+
         balls.Clear();
         activeBalls.Clear();
-        
+
         ServiceProvider.GetService<BallPool>().ClearPool();
-        
+
         hasRespawned = false;
         isMultiballActive = false;
-        
+
         Physics.autoSimulation = true;
-        
+
         RespawnSingleBall();
     }
 }

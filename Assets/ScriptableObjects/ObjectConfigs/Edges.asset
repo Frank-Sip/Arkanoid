@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a02ecfbe8b6dc0488ce1120538c5a1a, type: 3}
   m_Name: Edges
   m_EditorClassIdentifier: 
-  left: -25
-  right: 25
-  up: 15
+  left: -23.1
+  right: 8.7
+  up: 14
   down: -13

@@ -9,13 +9,14 @@ public class AddressableManager
     private Dictionary<int, string> levelKeyMap = new Dictionary<int, string>();
     private Dictionary<int, string> levelToPackMap = new Dictionary<int, string>();
     private Dictionary<string, AsyncOperationHandle> loadedPackHandles = new Dictionary<string, AsyncOperationHandle>();
-
+    private int totalLevels = 10;
+    
     public void Init()
     {
-        for (int i = 1; i <= 10; i++)
+        for (int i = 1; i <= totalLevels; i++)
         {
             levelKeyMap[i] = $"Level{i}";
-            levelToPackMap[i] = i <= 5 ? "LevelPack1" : "LevelPack2";
+            levelToPackMap[i] = i <= 1 ? "LevelPack1" : "LevelPack2";
         }
     }
 
@@ -32,7 +33,6 @@ public class AddressableManager
 
         if (!loadedPackHandles.ContainsKey(packKey))
         {
-            // Cargar el grupo/paquete completo
             var packHandle = Addressables.LoadAssetsAsync<UnityEngine.Object>(packKey, null);
             loadedPackHandles[packKey] = packHandle;
 
@@ -50,7 +50,6 @@ public class AddressableManager
         }
         else
         {
-            // El paquete ya est� cargado
             LoadLevelData(levelKey, onComplete, onError);
         }
     }
@@ -75,10 +74,8 @@ public class AddressableManager
     {
         if (loadedPackHandles.ContainsKey(packKey))
         {
-            // Liberar correctamente usando el handle
             Addressables.Release(loadedPackHandles[packKey]);
             loadedPackHandles.Remove(packKey);
-            Debug.Log($"Pack {packKey} unloaded");
         }
     }
 
@@ -89,7 +86,6 @@ public class AddressableManager
             Addressables.Release(kvp.Value);
         }
         loadedPackHandles.Clear();
-        Debug.Log("All packs unloaded");
     }
 
     public bool IsPackLoaded(string packKey)

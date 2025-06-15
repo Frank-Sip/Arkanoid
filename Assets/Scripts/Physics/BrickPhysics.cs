@@ -4,6 +4,8 @@ using UnityEngine;
 
 public static class BrickPhysics
 {
+    private static Dictionary<int, int> lastDamageFrameByBrick = new Dictionary<int, int>();
+    
     public static void Initiate(Transform brickTransform, Transform visual, BrickSO config, BrickController controller)
     {
         Mesh mesh = visual.GetComponent<MeshFilter>()?.sharedMesh;
@@ -47,6 +49,11 @@ public static class BrickPhysics
         Rect ballRect = new Rect(ballPos.x - radius, ballPos.y - radius, radius * 2, radius * 2);
         correction = Vector3.zero;
 
+        BrickController closestBrick = null;
+        float minDistance = float.MaxValue;
+        Vector2 closestPoint = Vector2.zero;
+        Vector2 closestNormal = Vector2.zero;
+
         foreach (var brick in BrickManager.GetActiveBricks())
         {
             if (brick == null || !brick.target.gameObject.activeInHierarchy || !brick.isEnabled)
@@ -63,18 +70,49 @@ public static class BrickPhysics
 
             float dx = Mathf.Clamp(delta.x, -bx, bx);
             float dy = Mathf.Clamp(delta.y, -by, by);
-            Vector2 closest = brickCenter + new Vector2(dx, dy);            Vector2 contactVector = ballCenter - closest;
-            Vector2 normal = contactVector.normalized;
+            Vector2 closest = brickCenter + new Vector2(dx, dy);
 
-            Vector3 direction3D = new Vector3(direction.x, direction.y, 0f);
-            Vector3 normal3D = new Vector3(normal.x, normal.y, 0f);
-            direction3D = Vector3.Reflect(direction3D, normal3D);
-            direction = new Vector3(direction3D.x, direction3D.y, 0f);
+            Vector2 contactVector = ballCenter - closest;
+            float distance = contactVector.magnitude;
+
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closestBrick = brick;
+                closestPoint = closest;
+                closestNormal = contactVector.normalized;
+            }
+        }
+
+        if (closestBrick != null)
+        {
+            int brickId = closestBrick.GetInstanceID();
             
-            Vector3 correctionVector = normal * (radius - contactVector.magnitude);
-            correction = new Vector3(correctionVector.x, correctionVector.y, 0f);
+            if (lastDamageFrameByBrick.TryGetValue(brickId, out int lastFrame) && 
+                lastFrame == Time.frameCount)
+            {
+                Vector3 correctionVector = closestNormal * (radius - minDistance);
+                correction = new Vector3(correctionVector.x, correctionVector.y, 0f) * 1.5f;
+                
+                Vector3 direction3D = new Vector3(direction.x, direction.y, 0f);
+                Vector3 normal3D = new Vector3(closestNormal.x, closestNormal.y, 0f);
+                direction3D = Vector3.Reflect(direction3D, normal3D);
+                direction = new Vector3(direction3D.x, direction3D.y, 0f);
+                
+                return true;
+            }
+            
+            lastDamageFrameByBrick[brickId] = Time.frameCount;
+            
+            Vector3 directionVector = new Vector3(direction.x, direction.y, 0f);
+            Vector3 normalVector = new Vector3(closestNormal.x, closestNormal.y, 0f);
+            directionVector = Vector3.Reflect(directionVector, normalVector);
+            direction = new Vector3(directionVector.x, directionVector.y, 0f);
+            
+            Vector3 correctionVec = closestNormal * (radius - minDistance);
+            correction = new Vector3(correctionVec.x, correctionVec.y, 0f) * 1.5f;
 
-            brick.TakeDamage();
+            closestBrick.TakeDamage();
             return true;
         }
 
@@ -88,7 +126,7 @@ public static class BrickPhysics
         if (mesh == null) return;
 
         Gizmos.color = Color.cyan;
-        
+
         Matrix4x4 localToWorld = visual.localToWorldMatrix;
         Gizmos.matrix = localToWorld;
         Gizmos.DrawWireCube(mesh.bounds.center, mesh.bounds.size);

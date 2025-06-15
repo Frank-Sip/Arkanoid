@@ -52,21 +52,24 @@ public class BallPhysics
         Vector3 position = ball.position;
         Vector3 direction = ballController.Direction;
 
-        position += direction.normalized * speed * Time.deltaTime;        if (PaddlePhysics.CheckCollision(position, radius, ref direction, out Vector3 correction))
+        position += direction.normalized * speed * Time.deltaTime;        
+        if (PaddlePhysics.CheckCollision(position, radius, ref direction, out Vector3 correction))
         {
             position += correction;
             position = new Vector3(position.x, position.y, 0f);
             direction = new Vector3(direction.x, direction.y, 0f);
             audioManager.PlaySFX(0);
             ServiceProvider.GetService<UIManager>().IncrementCounter("PaddleHits");
-        }else if (position.x < screenConfig.left + radius || position.x > screenConfig.right - radius)
+        }
+        else if (position.x < screenConfig.left + radius || position.x > screenConfig.right - radius)
         {
             direction.x *= -1;
             direction = new Vector3(direction.x, direction.y, 0f);
             position.x = Mathf.Clamp(position.x, screenConfig.left + radius, screenConfig.right - radius);
             position = new Vector3(position.x, position.y, 0f);
             audioManager.PlaySFX(0);
-        }        else if (BrickPhysics.CheckCollision(position, radius, ref direction, out Vector3 brickCorrection))
+        }
+        else if (BrickPhysics.CheckCollision(position, radius, ref direction, out Vector3 brickCorrection))
         {
             position += brickCorrection;
             position = new Vector3(position.x, position.y, 0f);
@@ -75,8 +78,9 @@ public class BallPhysics
         }
         else if (CheckBallToBallCollision(ref position, ref direction, radius, ballController))
         {
-            
-        }        else if (position.y > screenConfig.up - radius)
+
+        }
+        else if (position.y > screenConfig.up - radius)
         {
             direction.y *= -1;
             direction = new Vector3(direction.x, direction.y, 0f);

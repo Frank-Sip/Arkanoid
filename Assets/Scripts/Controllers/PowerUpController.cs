@@ -80,17 +80,7 @@ public class PowerUpController : ScriptableObject
 
     private void ActivateMultiball()
     {
-        int currentBalls = BallManager.GetActiveBalls().Count;
-        int maxBalls = BallManager.GetMaxBalls();
-
-        if (currentBalls >= maxBalls)
-        {
-            Debug.Log($"Max balls reached ({maxBalls}).");
-            return;
-        }
-
-        int ballsToAdd = Mathf.Min(2, maxBalls - currentBalls);
-        BallManager.SpawnAndLaunchMultipleBalls(ballsToAdd);
+        BallManager.SpawnAndLaunchMultipleBalls(2);
     }
 
     private void ActivateWidePaddle()

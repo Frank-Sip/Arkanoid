@@ -33,3 +33,5 @@ MonoBehaviour:
     atlasType: 3
   - objectName: InputField
     atlasType: 9
+  - objectName: Wall
+    atlasType: 7

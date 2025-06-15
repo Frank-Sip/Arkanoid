@@ -8,7 +8,7 @@ public class GameplayState : GameState
         Time.timeScale = 1f;
         gameManager.GameStateLayout.SetActive(true);
         var audioManager = ServiceProvider.GetService<AudioManager>();
-        audioManager.PlayBGM(1);
+        //audioManager.PlayBGM(1);
         
         gameManager.dynamicCanvas.SetActive(true);
         var uiManager = ServiceProvider.GetService<UIManager>();
