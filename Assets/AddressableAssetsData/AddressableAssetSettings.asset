@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 121c65fa73f13bf4394450a3311775a8
   m_currentHash:
     serializedVersion: 2
-    Hash: cac985164c73b861ae0258eab30ef3f6
+    Hash: c730001a77ef4d3d0af87209ec377f16
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_BundleLocalCatalog: 0
@@ -92,6 +92,8 @@ MonoBehaviour:
     - default
     - LevelPack1
     - LevelPack2
+    - Level1
+    - Level2
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 366ceba750765264897e98eea45f06a6, type: 2}
