@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 970f96268266cd44192974e6aa41a87f, type: 3}
-  m_Name: Level 2
+  m_Name: Level2
   m_EditorClassIdentifier: 
-  levelName: LevelPack1
+  levelName: Level2
   levelNumber: 2
   levelPrefabs:
   - {fileID: 2647650267844983534, guid: 4e19ba0cf4887814e89011d11bea173e, type: 3}

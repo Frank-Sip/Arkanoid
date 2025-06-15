@@ -8,7 +8,7 @@ public class AddressableManager
 {
     private Dictionary<int, string> levelKeyMap = new Dictionary<int, string>();
     private Dictionary<int, string> levelToPackMap = new Dictionary<int, string>();
-    private HashSet<string> loadedPacks = new HashSet<string>();
+    private Dictionary<string, AsyncOperationHandle> loadedPackHandles = new Dictionary<string, AsyncOperationHandle>();
 
     public void Init()
     {
@@ -19,43 +19,86 @@ public class AddressableManager
         }
     }
 
-    public void LoadLevelAsync(int levelNumber, System.Action<LevelData> onComplete)
+    public void LoadLevelAsync(int levelNumber, System.Action<LevelData> onComplete, System.Action<string> onError = null)
     {
+        if (!levelKeyMap.ContainsKey(levelNumber))
+        {
+            onError?.Invoke($"Level {levelNumber} not found in configuration");
+            return;
+        }
+
         string levelKey = levelKeyMap[levelNumber];
         string packKey = levelToPackMap[levelNumber];
-        
-        if (!loadedPacks.Contains(packKey))
+
+        if (!loadedPackHandles.ContainsKey(packKey))
         {
-            Addressables.LoadAssetsAsync<UnityEngine.Object>(packKey, null).Completed += handle => {
+            // Cargar el grupo/paquete completo
+            var packHandle = Addressables.LoadAssetsAsync<UnityEngine.Object>(packKey, null);
+            loadedPackHandles[packKey] = packHandle;
+
+            packHandle.Completed += handle => {
                 if (handle.Status == AsyncOperationStatus.Succeeded)
                 {
-                    loadedPacks.Add(packKey);
-                    LoadLevelData(levelKey, onComplete);
+                    Debug.Log($"Pack {packKey} loaded successfully with {handle.Result.Count} assets");
+                    LoadLevelData(levelKey, onComplete, onError);
+                }
+                else
+                {
+                    onError?.Invoke($"Failed to load pack {packKey}: {handle.OperationException?.Message}");
                 }
             };
         }
         else
         {
-            LoadLevelData(levelKey, onComplete);
+            // El paquete ya est� cargado
+            LoadLevelData(levelKey, onComplete, onError);
         }
     }
 
-    private void LoadLevelData(string levelKey, System.Action<LevelData> onComplete)
+    private void LoadLevelData(string levelKey, System.Action<LevelData> onComplete, System.Action<string> onError)
     {
-        Addressables.LoadAssetAsync<LevelData>(levelKey).Completed += handle => {
+        var levelHandle = Addressables.LoadAssetAsync<LevelData>(levelKey);
+
+        levelHandle.Completed += handle => {
             if (handle.Status == AsyncOperationStatus.Succeeded)
             {
                 onComplete?.Invoke(handle.Result);
+            }
+            else
+            {
+                onError?.Invoke($"Failed to load level {levelKey}: {handle.OperationException?.Message}");
             }
         };
     }
 
     public void UnloadPackage(string packKey)
     {
-        if (loadedPacks.Contains(packKey))
+        if (loadedPackHandles.ContainsKey(packKey))
         {
-            Addressables.Release(packKey);
-            loadedPacks.Remove(packKey);
+            // Liberar correctamente usando el handle
+            Addressables.Release(loadedPackHandles[packKey]);
+            loadedPackHandles.Remove(packKey);
+            Debug.Log($"Pack {packKey} unloaded");
         }
+    }
+
+    public void UnloadAllPackages()
+    {
+        foreach (var kvp in loadedPackHandles)
+        {
+            Addressables.Release(kvp.Value);
+        }
+        loadedPackHandles.Clear();
+        Debug.Log("All packs unloaded");
+    }
+
+    public bool IsPackLoaded(string packKey)
+    {
+        return loadedPackHandles.ContainsKey(packKey);
+    }
+
+    public void Dispose()
+    {
+        UnloadAllPackages();
     }
 }

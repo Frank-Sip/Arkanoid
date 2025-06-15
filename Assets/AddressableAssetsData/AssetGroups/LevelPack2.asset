@@ -20,7 +20,8 @@ MonoBehaviour:
   - m_GUID: 5b09c24faaa82ad408c153184503d144
     m_Address: Assets/ScriptableObjects/Levels/Level 2.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - LevelPack2
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: bd0a7609fd9d75b4ca0b9062353e4901, type: 2}
