@@ -63,13 +63,16 @@ public static class BrickPhysics
 
             float dx = Mathf.Clamp(delta.x, -bx, bx);
             float dy = Mathf.Clamp(delta.y, -by, by);
-            Vector2 closest = brickCenter + new Vector2(dx, dy);
-
-            Vector2 contactVector = ballCenter - closest;
+            Vector2 closest = brickCenter + new Vector2(dx, dy);            Vector2 contactVector = ballCenter - closest;
             Vector2 normal = contactVector.normalized;
 
-            direction = Vector3.Reflect(direction, normal);
-            correction = normal * (radius - contactVector.magnitude);
+            Vector3 direction3D = new Vector3(direction.x, direction.y, 0f);
+            Vector3 normal3D = new Vector3(normal.x, normal.y, 0f);
+            direction3D = Vector3.Reflect(direction3D, normal3D);
+            direction = new Vector3(direction3D.x, direction3D.y, 0f);
+            
+            Vector3 correctionVector = normal * (radius - contactVector.magnitude);
+            correction = new Vector3(correctionVector.x, correctionVector.y, 0f);
 
             brick.TakeDamage();
             return true;

@@ -38,9 +38,7 @@ public class BallPhysics
             Vector3 offset = meshRenderer.localBounds.center;
             ball.localPosition -= offset * scaleFactor;
         }
-    }
-
-    public static Vector3 GetInitialDirection()
+    }    public static Vector3 GetInitialDirection()
     {
         float x = Random.Range(-0.5f, 0.5f);  
         float y = Mathf.Sqrt(1f - x * x);
@@ -54,33 +52,36 @@ public class BallPhysics
         Vector3 position = ball.position;
         Vector3 direction = ballController.Direction;
 
-        position += direction.normalized * speed * Time.deltaTime;
-
-        if (PaddlePhysics.CheckCollision(position, radius, ref direction, out Vector3 correction))
+        position += direction.normalized * speed * Time.deltaTime;        if (PaddlePhysics.CheckCollision(position, radius, ref direction, out Vector3 correction))
         {
             position += correction;
+            position = new Vector3(position.x, position.y, 0f);
+            direction = new Vector3(direction.x, direction.y, 0f);
             audioManager.PlaySFX(0);
             ServiceProvider.GetService<UIManager>().IncrementCounter("PaddleHits");
-        }
-        else if (position.x < screenConfig.left + radius || position.x > screenConfig.right - radius)
+        }else if (position.x < screenConfig.left + radius || position.x > screenConfig.right - radius)
         {
             direction.x *= -1;
+            direction = new Vector3(direction.x, direction.y, 0f);
             position.x = Mathf.Clamp(position.x, screenConfig.left + radius, screenConfig.right - radius);
+            position = new Vector3(position.x, position.y, 0f);
             audioManager.PlaySFX(0);
-        }
-        else if (BrickPhysics.CheckCollision(position, radius, ref direction, out Vector3 brickCorrection))
+        }        else if (BrickPhysics.CheckCollision(position, radius, ref direction, out Vector3 brickCorrection))
         {
             position += brickCorrection;
+            position = new Vector3(position.x, position.y, 0f);
+            direction = new Vector3(direction.x, direction.y, 0f);
             audioManager.PlaySFX(1);
         }
         else if (CheckBallToBallCollision(ref position, ref direction, radius, ballController))
         {
             
-        }
-        else if (position.y > screenConfig.up - radius)
+        }        else if (position.y > screenConfig.up - radius)
         {
             direction.y *= -1;
+            direction = new Vector3(direction.x, direction.y, 0f);
             position.y = screenConfig.up - radius;
+            position = new Vector3(position.x, position.y, 0f);
             audioManager.PlaySFX(0);
         }
         else if (position.y < screenConfig.down + radius)
@@ -88,10 +89,8 @@ public class BallPhysics
             ballController.DestroyBall();
             audioManager.PlaySFX(2);
             return;
-        }
-
-        ball.position = position;
-        ballController.Direction = direction;
+        }        ball.position = new Vector3(position.x, position.y, 0f);
+        ballController.Direction = new Vector3(direction.x, direction.y, 0f);
     }
 
     private bool CheckBallToBallCollision(ref Vector3 position, ref Vector3 direction, float radius, BallController self)
@@ -103,22 +102,28 @@ public class BallPhysics
             Vector3 otherPos = other.target.transform.position;
             Vector3 delta = otherPos - position;
             float dist = delta.magnitude;
-            float combinedRadius = radius * 2f;
-
-            if (dist < combinedRadius && dist > 0.0001f)
+            float combinedRadius = radius * 2f;            if (dist < combinedRadius && dist > 0.0001f)
             {
                 Vector3 normal = delta.normalized;
+                normal = new Vector3(normal.x, normal.y, 0f).normalized;
 
                 Vector3 thisDir = direction;
                 Vector3 otherDir = other.Direction;
 
                 direction = Vector3.Reflect(thisDir, normal);
                 other.Direction = Vector3.Reflect(otherDir, -normal);
+                
+                direction = new Vector3(direction.x, direction.y, 0f);
+                other.Direction = new Vector3(other.Direction.x, other.Direction.y, 0f);
 
                 float penetration = combinedRadius - dist;
                 Vector3 correction = normal * (penetration / 2f);
+                correction = new Vector3(correction.x, correction.y, 0f);
                 position -= correction;
-                other.target.transform.position += correction;
+                position = new Vector3(position.x, position.y, 0f);
+                
+                Vector3 otherCorrectedPos = other.target.transform.position + correction;
+                other.target.transform.position = new Vector3(otherCorrectedPos.x, otherCorrectedPos.y, 0f);
                 
                 audioManager.PlaySFX(0);
                 
