@@ -1858,7 +1858,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
       propertyPath: commands.Array.size
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
       propertyPath: powerUpControllerSO
@@ -1896,6 +1896,18 @@ PrefabInstance:
       propertyPath: 'commands.Array.data[1]'
       value: 
       objectReference: {fileID: 11400000, guid: 3f1e02295bc53d842b5e035c326f49a9, type: 2}
+    - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
+      propertyPath: 'commands.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 252a74a94010c0e4d813134aa82f4900, type: 2}
+    - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
+      propertyPath: 'commands.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: d6ab6226fe3496949b81bef4be3de0d7, type: 2}
+    - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
+      propertyPath: 'commands.Array.data[4]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 5a4904ff6cba938478d5b1300bd31c2f, type: 2}
     - target: {fileID: 5163404302034182085, guid: bb2ccc16fe3915e4ea0b6cad57f05330, type: 3}
       propertyPath: brickParents.Array.size
       value: 4

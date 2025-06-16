@@ -9,10 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e167fbf1ae3aea7419b268e7ce717309, type: 3}
-  m_Name: SpeedUp
+  m_Script: {fileID: 11500000, guid: 10417767ca654a44da376909f659a202, type: 3}
+  m_Name: SuperExtraLife
   m_EditorClassIdentifier: 
-  speed: 10
-  radius: 0.3
-  powerUpType: 3
-  atlas: {fileID: 11400000, guid: 27cab5fbedbc7f948b15a79866881fe9, type: 2}
+  commandName: superextralife
+  livesToAdd: 9999

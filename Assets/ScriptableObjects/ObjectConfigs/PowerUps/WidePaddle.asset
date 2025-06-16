@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   radius: 0.3
-  powerUpType: 2
+  powerUpType: 1
   atlas: {fileID: 11400000, guid: 1be3bbd3f355b0d4a9bdd4a0d1291dc5, type: 2}
