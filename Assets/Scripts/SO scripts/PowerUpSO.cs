@@ -5,8 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PowerUp", menuName = "ObjectConfig/PowerUp")]
 public class PowerUpSO : ScriptableObject
 {
-    public float speed = 5f;
-    public float radius = 0.5f;
+    public float speed = 10f;
+    public float radius = 0.3f;
     public PowerUpType powerUpType = PowerUpType.Multiball;
     public AtlasApplier atlas;
 }

@@ -1,6 +1,7 @@
 ﻿public enum PowerUpType
 {
     Multiball,
+    WidePaddle,
     ExtraLife,
-    WidePaddle
+    SpeedUp
 }

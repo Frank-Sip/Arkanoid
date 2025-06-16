@@ -4,14 +4,15 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PowerUpController", menuName = "GameObject/PowerUpControllerSO")]
 public class PowerUpController : ScriptableObject
 {
-    [SerializeField] public List<PowerUpSO> powerUpConfigs;
     [SerializeField] public GameObject powerUpPrefab;
     [SerializeField] private ScreenEdgesSO screenEdgesSO;
+    [SerializeField] public List<PowerUpSO> powerUpConfigs;
 
     [HideInInspector] public Transform target;
     [HideInInspector] public PowerUpSO currentPowerUp;
     private PowerUpPhysics physics;
     private bool isEnabled = true;
+    private int extraLife = 1;
 
     public PowerUpController Clone()
     {
@@ -78,6 +79,9 @@ public class PowerUpController : ScriptableObject
             case PowerUpType.ExtraLife:
                 ActivateExtraLife();
                 break;
+            case PowerUpType.SpeedUp:
+                ActivateSpeedUp();
+                break;
         }
     }
 
@@ -100,7 +104,16 @@ public class PowerUpController : ScriptableObject
         PaddleController paddleController = ServiceProvider.GetService<PaddleController>();
         if (paddleController != null)
         {
-            //paddleController.AddLife();
+            paddleController.AddLife(extraLife);
+        }
+    }
+    
+    private void ActivateSpeedUp()
+    {
+        PaddleController paddleController = ServiceProvider.GetService<PaddleController>();
+        if (paddleController != null)
+        {
+            paddleController.ActivateSpeedBoost(1.5f, 5f);
         }
     }
 

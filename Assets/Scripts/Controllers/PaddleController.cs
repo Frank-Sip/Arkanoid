@@ -7,12 +7,13 @@ using UnityEngine;
 public class PaddleController : ScriptableObject
 {
     public int initialLives = 3;
+    private int defaultInitialLives = 3;
+    private int currentLives;
     
     [SerializeField] private PaddleSO paddleSO;
     [SerializeField] private ScreenEdgesSO screenEdgesSO;
     [SerializeField] private GameObject paddlePrefab;
     [SerializeField] private AtlasApplier atlasApplier;
-    private int currentLives;
 
     private Transform paddleTransform;
     private Transform visual;
@@ -20,6 +21,10 @@ public class PaddleController : ScriptableObject
     private float originalWidth;
     private bool isWidePaddle;
     private float powerUpTimer = -1f;
+    
+    private float originalSpeed;
+    private bool isSpeedBoosted;
+    private float speedBoostTimer = -1f;
 
     public void Init(Transform parent)
     {
@@ -28,6 +33,9 @@ public class PaddleController : ScriptableObject
         visual = paddleTransform.GetChild(0);
         initialPosition = paddleTransform.position;
         originalWidth = paddleSO.width;
+        originalSpeed = paddleSO.speed;
+        
+        defaultInitialLives = initialLives;
         currentLives = initialLives;
 
         PaddlePhysics.Initiate(paddleTransform, visual, paddleSO, screenEdgesSO);
@@ -37,7 +45,7 @@ public class PaddleController : ScriptableObject
             atlasApplier.ApplyAtlas(visual.gameObject);
         }
         
-        ServiceProvider.GetService<UIManager>().SetCounterValue("LivesCounter", currentLives);
+        ServiceProvider.GetService<UIManager>().SetCounterValue("LivesLeft", currentLives);
     }
 
     public void Frame(float deltaTime)
@@ -52,6 +60,21 @@ public class PaddleController : ScriptableObject
                 StopWidePaddlePowerUp();
             }
         }
+        
+        if (speedBoostTimer > 0f)
+        {
+            speedBoostTimer -= deltaTime;
+            if (speedBoostTimer <= 0f)
+            {
+                StopSpeedBoostPowerUp();
+            }
+        }
+    }
+
+    public void AddLife(int value)
+    {
+        currentLives += value;
+        ServiceProvider.GetService<UIManager>().SetCounterValue("LivesLeft", currentLives);
     }
 
     public void Reset()
@@ -66,6 +89,12 @@ public class PaddleController : ScriptableObject
             StopWidePaddlePowerUp();
         }
         
+        if (isSpeedBoosted)
+        {
+            StopSpeedBoostPowerUp();
+        }
+        
+        initialLives = defaultInitialLives;
         currentLives = initialLives;
         ServiceProvider.GetService<UIManager>().SetCounterValue("LivesLeft", currentLives);
     }
@@ -101,5 +130,20 @@ public class PaddleController : ScriptableObject
         PaddlePhysics.UpdateWidth(originalWidth);
         isWidePaddle = false;
         powerUpTimer = -1f;
+    }
+    
+    public void ActivateSpeedBoost(float speedMultiplier = 1.5f, float duration = 5f)
+    {
+        float newSpeed = originalSpeed * speedMultiplier;
+        paddleSO.speed = newSpeed;
+        isSpeedBoosted = true;
+        speedBoostTimer = duration;
+    }
+
+    public void StopSpeedBoostPowerUp()
+    {
+        paddleSO.speed = originalSpeed;
+        isSpeedBoosted = false;
+        speedBoostTimer = -1f;
     }
 }
