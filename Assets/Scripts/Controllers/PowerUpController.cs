@@ -1,15 +1,15 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "PowerUpController", menuName = "GameObject/PowerUpControllerSO")]
 public class PowerUpController : ScriptableObject
 {
-    [SerializeField] public PowerUpSO powerUpSO;
+    [SerializeField] public List<PowerUpSO> powerUpConfigs;
     [SerializeField] public GameObject powerUpPrefab;
     [SerializeField] private ScreenEdgesSO screenEdgesSO;
-    [SerializeField] private AtlasApplier multiballAtlas;
-    [SerializeField] private AtlasApplier widePaddleAtlas;
 
     [HideInInspector] public Transform target;
+    [HideInInspector] public PowerUpSO currentPowerUp;
     private PowerUpPhysics physics;
     private bool isEnabled = true;
 
@@ -36,9 +36,7 @@ public class PowerUpController : ScriptableObject
 
         physics = new PowerUpPhysics();
         AudioManager audioMgr = ServiceProvider.GetService<AudioManager>();
-        physics.Initiate(target, powerUpSO, screenEdgesSO, this, audioMgr);
-        
-        ApplyAtlasBasedOnType();
+        physics.Initiate(target, currentPowerUp, screenEdgesSO, this, audioMgr);
     }
 
     public void Activate()
@@ -67,13 +65,18 @@ public class PowerUpController : ScriptableObject
 
     private void ActivatePowerUp()
     {
-        switch (powerUpSO.powerUpType)
+        if (currentPowerUp == null) return;
+
+        switch (currentPowerUp.powerUpType)
         {
             case PowerUpType.Multiball:
                 ActivateMultiball();
                 break;
             case PowerUpType.WidePaddle:
                 ActivateWidePaddle();
+                break;
+            case PowerUpType.ExtraLife:
+                ActivateExtraLife();
                 break;
         }
     }
@@ -91,24 +94,26 @@ public class PowerUpController : ScriptableObject
             paddleController.ActivateWidePaddle(1.5f, 5f);
         }
     }
-    
+
+    private void ActivateExtraLife()
+    {
+        PaddleController paddleController = ServiceProvider.GetService<PaddleController>();
+        if (paddleController != null)
+        {
+            //paddleController.AddLife();
+        }
+    }
+
     public void ApplyAtlasBasedOnType()
     {
-        if (target == null) return;
-        
+        if (target == null || currentPowerUp == null) return;
+
         Transform visual = target.GetChild(0);
         if (visual == null) return;
 
-        AtlasApplier atlasToUse = powerUpSO.powerUpType switch
+        if (currentPowerUp.atlas != null)
         {
-            PowerUpType.Multiball => multiballAtlas,
-            PowerUpType.WidePaddle => widePaddleAtlas,
-            _ => multiballAtlas
-        };
-
-        if (atlasToUse != null)
-        {
-            atlasToUse.ApplyAtlas(visual.gameObject);
+            currentPowerUp.atlas.ApplyAtlas(visual.gameObject);
         }
     }
 

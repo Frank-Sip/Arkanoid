@@ -35,3 +35,7 @@ MonoBehaviour:
     atlasType: 9
   - objectName: Wall
     atlasType: 7
+  - objectName: BackgroundVictory
+    atlasType: 9
+  - objectName: BackgroundDefeat
+    atlasType: 1

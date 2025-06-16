@@ -1,11 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ButtonManager
 {
-    private Dictionary<string, Button> _registeredButtons = new Dictionary<string, Button>();
     private ButtonSO config;
     
     public void Init(ButtonSO config)
@@ -13,13 +11,10 @@ public class ButtonManager
         this.config = config;
     }
 
+    // Connect a button without using a dictionary
     public void RegisterButton(string buttonName, Button button)
     {
-        if (!_registeredButtons.ContainsKey(buttonName))
-        {
-            _registeredButtons.Add(buttonName, button);
-            ConnectButton(buttonName, button);
-        }
+        ConnectButton(buttonName, button);
     }
 
     private void ConnectButton(string buttonName, Button button)
@@ -27,6 +22,11 @@ public class ButtonManager
         var mapping = System.Array.Find(config.buttonMappings, m => m.buttonName == buttonName);
         if (mapping != null)
         {
+            Debug.Log($"Connecting button: {buttonName} with action: {mapping.actionType}");
+            
+            // Remove any existing listeners to prevent duplicates
+            button.onClick.RemoveAllListeners();
+            
             switch (mapping.actionType)
             {
                 case ButtonSO.ButtonActionType.Play:
@@ -49,13 +49,16 @@ public class ButtonManager
     {
         if (layout == null) return;
 
-        var buttons = layout.GetComponentsInChildren<Button>();
+        Debug.Log($"Registering buttons in layout: {layout.name}");
+        var buttons = layout.GetComponentsInChildren<Button>(true); // Include inactive buttons
         foreach (var button in buttons)
         {
+            Debug.Log($"Found button: {button.name}");
             RegisterButton(button.name, button);
         }
     }
 
+    // Button handler methods remain the same
     public void OnPlayButtonClicked()
     {
         if (GameManager.Instance != null)

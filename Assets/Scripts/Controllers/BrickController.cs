@@ -148,19 +148,11 @@ public class BrickController : ScriptableObject
         if (!PowerUpManager.CanSpawnPowerUp()) return;
 
         PowerUpController powerUp = PowerUpManager.SpawnPowerUp(target.position);
-        if (powerUp != null)
+        if (powerUp != null && powerUp.powerUpConfigs.Count > 0)
         {
-            AssignRandomPowerUpType(powerUp);
+            int randomIndex = Random.Range(0, powerUp.powerUpConfigs.Count);
+            powerUp.currentPowerUp = powerUp.powerUpConfigs[randomIndex];
+            powerUp.ApplyAtlasBasedOnType();
         }
-    }
-
-    private void AssignRandomPowerUpType(PowerUpController powerUp)
-    {
-        PowerUpSO powerUpSO = powerUp.powerUpSO;
-        if (powerUpSO == null) return;
-
-        int randomType = Random.Range(0, 2);
-        powerUpSO.powerUpType = randomType == 0 ? PowerUpType.Multiball : PowerUpType.WidePaddle;
-        powerUp.ApplyAtlasBasedOnType();
     }
 }

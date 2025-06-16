@@ -6,6 +6,7 @@ using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class GameManager : MonoBehaviour
 
     [Header("GameObject Settings")]
     public Vector3 initialBallPosition;
-    
+
     [Header("Atlas Configuration")]
     [SerializeField] private AtlasApplierUI uiAtlasApplier;
 
@@ -39,12 +40,12 @@ public class GameManager : MonoBehaviour
     [Header("Audio Settings")]
     [SerializeField] private List<AudioClip> bgTracks;
     [SerializeField] private List<AudioSO> soundEffects;
-    
+
     [Header("Console Settings")]
     [SerializeField] private TMP_InputField commandInputField;
     [SerializeField] private List<CommandSO> commands;
     public ConsoleManager consoleManager;
-    
+
     [Header("UI Configuration")]
     [SerializeField] private ButtonSO buttonSO;
 
@@ -52,9 +53,11 @@ public class GameManager : MonoBehaviour
     public GameObject MainMenuLayout;
     public GameObject PauseLayout;
     public GameObject GameStateLayout;
+    public GameObject VictoryLayout;
+    public GameObject DefeatLayout;
     [SerializeField] private GameObject consoleUI;
     public GameObject dynamicCanvas;
-    
+
     [Header("Dynamic UI")]
     [SerializeField] private GameCounter[] gameCounters;
 
@@ -92,15 +95,32 @@ public class GameManager : MonoBehaviour
         InitializeUIAtlas();
         InitializeLevelSystem();
         InitializeConsole();
+        ConfigureEventSystem();
     }
-    
+
+    private void ConfigureEventSystem()
+    {
+        // Find the event system in your scene
+        var eventSystem = FindObjectOfType<EventSystem>();
+        if (eventSystem != null)
+        {
+            // Get or add the Standalone Input Module
+            var inputModule = eventSystem.GetComponent<StandaloneInputModule>();
+            if (inputModule == null)
+                inputModule = eventSystem.gameObject.AddComponent<StandaloneInputModule>();
+
+            // Configure it to work when timeScale is 0
+            inputModule.forceModuleActive = true;
+        }
+    }
+
     private void InitializeUIManager()
     {
         var uiManager = new UIManager();
         uiManager.Init(dynamicCanvas, gameCounters);
         ServiceProvider.RegisterService(uiManager);
     }
-    
+
     private void InitializeConsole()
     {
         var commandManager = new CommandManager();
@@ -115,13 +135,13 @@ public class GameManager : MonoBehaviour
         consoleManager.Init(consoleUI, commandInput);
         ServiceProvider.RegisterService(consoleManager);
     }
-    
+
     private void InitializeLevelSystem()
     {
         var addressableManager = new AddressableManager();
         addressableManager.Init();
         ServiceProvider.RegisterService(addressableManager);
-        
+
         var levelManager = new LevelManager();
         levelManager.Init(addressableManager, totalLevels);
         ServiceProvider.RegisterService(levelManager);
@@ -134,12 +154,14 @@ public class GameManager : MonoBehaviour
         ServiceProvider.RegisterService<BrickController>(brickControllerSO);
         ServiceProvider.RegisterService<PowerUpController>(powerUpControllerSO);
     }
-    
+
     private void InitializeUIAtlas()
     {
         uiAtlasApplier.ApplyAtlasToLayout(MainMenuLayout);
-        uiAtlasApplier.ApplyAtlasToLayout(PauseLayout);
         uiAtlasApplier.ApplyAtlasToLayout(GameStateLayout);
+        uiAtlasApplier.ApplyAtlasToLayout(PauseLayout);
+        uiAtlasApplier.ApplyAtlasToLayout(VictoryLayout);
+        uiAtlasApplier.ApplyAtlasToLayout(DefeatLayout);
         uiAtlasApplier.ApplyAtlasToLayout(consoleUI);
     }
 
@@ -167,11 +189,12 @@ public class GameManager : MonoBehaviour
         var buttonManager = new ButtonManager();
         buttonManager.Init(buttonSO);
         ServiceProvider.RegisterService(buttonManager);
-    
+
         ServiceProvider.GetService<ButtonManager>().RegisterButtonsInLayout(MainMenuLayout);
         ServiceProvider.GetService<ButtonManager>().RegisterButtonsInLayout(PauseLayout);
+        ServiceProvider.GetService<ButtonManager>().RegisterButtonsInLayout(VictoryLayout);
+        ServiceProvider.GetService<ButtonManager>().RegisterButtonsInLayout(DefeatLayout);
     }
-    
 
     private void MakePlayerLoop()
     {
@@ -215,7 +238,7 @@ public class GameManager : MonoBehaviour
         {
             initialBricksSpawned = true;
         }
-        
+
         if (!initialBallSpawned && Instance.IsInGameplayState())
         {
             initialBallSpawned = true;
@@ -251,7 +274,7 @@ public class GameManager : MonoBehaviour
         initialBallSpawned = false;
 
         var brickPool = ServiceProvider.GetService<BrickPool>();
-        
+
         List<BrickController> activeBricks = new List<BrickController>(BrickManager.GetActiveBricks());
         foreach (var brick in activeBricks)
         {

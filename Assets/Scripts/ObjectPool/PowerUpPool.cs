@@ -45,6 +45,13 @@ public class PowerUpPool
         instance.transform.SetParent(poolContainer);
 
         controller.target = instance.transform;
+        
+        if (controller.currentPowerUp == null && controller.powerUpConfigs.Count > 0)
+        {
+            int randomIndex = Random.Range(0, controller.powerUpConfigs.Count);
+            controller.currentPowerUp = controller.powerUpConfigs[randomIndex];
+        }
+        
         controller.Init();
         controller.Activate();
 
