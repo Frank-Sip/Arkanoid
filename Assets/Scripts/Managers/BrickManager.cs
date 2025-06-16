@@ -29,6 +29,8 @@ public static class BrickManager
         SpawnBricksOfType(BrickType.Normal);
         SpawnBricksOfType(BrickType.Strong);
         SpawnBricksOfType(BrickType.Tough);
+        
+        UpdateBrickCounter();
     }
 
     private static void SpawnBricksOfType(BrickType type)
@@ -53,6 +55,11 @@ public static class BrickManager
                 Register(brick);
             }
         }
+    }
+    
+    public static void UpdateBrickCounter()
+    {
+        ServiceProvider.GetService<UIManager>().SetCounterValue("BrickCounter", activeBricks.Count);
     }
 
     private static void CheckGameCondition()

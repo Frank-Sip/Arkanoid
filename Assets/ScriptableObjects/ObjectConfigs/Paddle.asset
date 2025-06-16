@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Paddle
   m_EditorClassIdentifier: 
   speed: 50
-  width: 10.5
-  height: 0.5
+  width: 7
+  height: 0.3

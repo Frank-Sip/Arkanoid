@@ -18,7 +18,6 @@ public class UIManager
             if (!string.IsNullOrEmpty(counter.id))
             {
                 counters[counter.id] = counter;
-                counter.UpdateValue(0);
             }
         }
         dynamicCanvas.gameObject.SetActive(false);
@@ -45,7 +44,9 @@ public class UIManager
         foreach (var counter in counters.Values)
         {
             counter.Reset();
-            counter.UpdateValue(0);
         }
+        
+        SetCounterValue("LivesLeft", ServiceProvider.GetService<PaddleController>().GetCurrentLives());
+        SetCounterValue("BrickCounter", BrickManager.GetActiveBricks().Count);
     }
 }
