@@ -55,15 +55,20 @@ public class PaddleController : ScriptableObject
         if (powerUpTimer > 0f)
         {
             powerUpTimer -= deltaTime;
+            
+            ServiceProvider.GetService<UIManager>().SetCounterValue("WidePaddleTimer", Mathf.CeilToInt(powerUpTimer));
+            
             if (powerUpTimer <= 0f)
             {
                 StopWidePaddlePowerUp();
             }
         }
-        
+
         if (speedBoostTimer > 0f)
         {
             speedBoostTimer -= deltaTime;
+            ServiceProvider.GetService<UIManager>().SetCounterValue("SpeedUpTimer", Mathf.CeilToInt(speedBoostTimer));
+            
             if (speedBoostTimer <= 0f)
             {
                 StopSpeedBoostPowerUp();
@@ -97,6 +102,8 @@ public class PaddleController : ScriptableObject
         initialLives = defaultInitialLives;
         currentLives = initialLives;
         ServiceProvider.GetService<UIManager>().SetCounterValue("LivesLeft", currentLives);
+        ServiceProvider.GetService<UIManager>().SetCounterValue("WidePaddleTimer", 0);
+        ServiceProvider.GetService<UIManager>().SetCounterValue("SpeedBoostTimer", 0);
     }
     
     public void LoseLife()
@@ -122,6 +129,7 @@ public class PaddleController : ScriptableObject
         PaddlePhysics.UpdateWidth(newWidth);
         isWidePaddle = true;
         powerUpTimer = duration;
+        ServiceProvider.GetService<UIManager>().SetCounterValue("WidePaddleTimer", Mathf.CeilToInt(duration));
     }
 
     public void StopWidePaddlePowerUp()
@@ -130,6 +138,7 @@ public class PaddleController : ScriptableObject
         PaddlePhysics.UpdateWidth(originalWidth);
         isWidePaddle = false;
         powerUpTimer = -1f;
+        ServiceProvider.GetService<UIManager>().SetCounterValue("WidePaddleTimer", 0);
     }
     
     public void ActivateSpeedBoost(float speedMultiplier = 1.5f, float duration = 5f)
@@ -138,6 +147,8 @@ public class PaddleController : ScriptableObject
         paddleSO.speed = newSpeed;
         isSpeedBoosted = true;
         speedBoostTimer = duration;
+        ServiceProvider.GetService<UIManager>().SetCounterValue("SpeedUpTimer", Mathf.CeilToInt(duration));
+
     }
 
     public void StopSpeedBoostPowerUp()
@@ -145,5 +156,7 @@ public class PaddleController : ScriptableObject
         paddleSO.speed = originalSpeed;
         isSpeedBoosted = false;
         speedBoostTimer = -1f;
+        ServiceProvider.GetService<UIManager>().SetCounterValue("SpeedUpTimer", 0);
+
     }
 }
