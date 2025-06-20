@@ -17,12 +17,39 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 5938ef037d6959f44b19b7c51d25af7c
   m_SerializeEntries:
-  - m_GUID: 5b09c24faaa82ad408c153184503d144
-    m_Address: Assets/ScriptableObjects/Levels/Level 2.asset
+  - m_GUID: ddcb6150a515a604db610b3d9f8bd633
+    m_Address: Assets/ScriptableObjects/Levels/Level6.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Level6
+    - LevelPack2
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1d24eb3b22f45924a9d3b01b52d7c3fb
+    m_Address: Assets/ScriptableObjects/Levels/Level7.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - LevelPack2
-    - Level2
+    - Level7
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6b3db847a318d904ea682978e46d75a1
+    m_Address: Assets/ScriptableObjects/Levels/Level8.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelPack2
+    - Level8
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9a67cc78537968341982653bb9c6340c
+    m_Address: Assets/ScriptableObjects/Levels/Level9.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Level9
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 32d6b426c35ab8a4e826d81d4649bdd8
+    m_Address: Assets/ScriptableObjects/Levels/Level10.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelPack2
+    - Level10
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: bd0a7609fd9d75b4ca0b9062353e4901, type: 2}

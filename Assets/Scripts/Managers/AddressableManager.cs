@@ -9,6 +9,7 @@ public class AddressableManager
     private Dictionary<int, string> levelKeyMap = new Dictionary<int, string>();
     private Dictionary<int, string> levelToPackMap = new Dictionary<int, string>();
     private Dictionary<string, AsyncOperationHandle> loadedPackHandles = new Dictionary<string, AsyncOperationHandle>();
+    private Dictionary<string, AsyncOperationHandle<LevelData>> loadedLevelHandles = new Dictionary<string, AsyncOperationHandle<LevelData>>();
     private int totalLevels = 10;
     
     public void Init()
@@ -16,7 +17,7 @@ public class AddressableManager
         for (int i = 1; i <= totalLevels; i++)
         {
             levelKeyMap[i] = $"Level{i}";
-            levelToPackMap[i] = i <= 1 ? "LevelPack1" : "LevelPack2";
+            levelToPackMap[i] = i <= 5 ? "LevelPack1" : "LevelPack2";
         }
     }
 
@@ -52,11 +53,10 @@ public class AddressableManager
         {
             LoadLevelData(levelKey, onComplete, onError);
         }
-    }
-
-    private void LoadLevelData(string levelKey, System.Action<LevelData> onComplete, System.Action<string> onError)
+    }    private void LoadLevelData(string levelKey, System.Action<LevelData> onComplete, System.Action<string> onError)
     {
         var levelHandle = Addressables.LoadAssetAsync<LevelData>(levelKey);
+        loadedLevelHandles[levelKey] = levelHandle;
 
         levelHandle.Completed += handle => {
             if (handle.Status == AsyncOperationStatus.Succeeded)
@@ -68,24 +68,55 @@ public class AddressableManager
                 onError?.Invoke($"Failed to load level {levelKey}: {handle.OperationException?.Message}");
             }
         };
-    }
-
-    public void UnloadPackage(string packKey)
+    }    public void UnloadPackage(string packKey)
     {
+        Debug.Log($"Starting to unload package: {packKey}");
+        
+        var levelsToUnload = new List<string>();
+        foreach (var kvp in levelKeyMap)
+        {
+            if (levelToPackMap[kvp.Key] == packKey)
+            {
+                string levelKey = kvp.Value;
+                if (loadedLevelHandles.ContainsKey(levelKey))
+                {
+                    Addressables.Release(loadedLevelHandles[levelKey]);
+                    levelsToUnload.Add(levelKey);
+                    Debug.Log($"Released level handle: {levelKey}");
+                }
+            }
+        }
+        
+        foreach (var levelKey in levelsToUnload)
+        {
+            loadedLevelHandles.Remove(levelKey);
+        }
+        
         if (loadedPackHandles.ContainsKey(packKey))
         {
             Addressables.Release(loadedPackHandles[packKey]);
             loadedPackHandles.Remove(packKey);
+            Debug.Log($"Released pack handle: {packKey}");
         }
-    }
-
-    public void UnloadAllPackages()
+     
+        
+        Debug.Log($"Package {packKey} completely unloaded");
+    }    public void UnloadAllPackages()
     {
+        foreach (var kvp in loadedLevelHandles)
+        {
+            Addressables.Release(kvp.Value);
+        }
+        loadedLevelHandles.Clear();
+        
         foreach (var kvp in loadedPackHandles)
         {
             Addressables.Release(kvp.Value);
         }
         loadedPackHandles.Clear();
+    
+        
+        Debug.Log("All packages unloaded");
     }
 
     public bool IsPackLoaded(string packKey)

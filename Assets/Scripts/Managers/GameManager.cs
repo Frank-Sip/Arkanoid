@@ -95,23 +95,6 @@ public class GameManager : MonoBehaviour
         InitializeUIAtlas();
         InitializeLevelSystem();
         InitializeConsole();
-        ConfigureEventSystem();
-    }
-
-    private void ConfigureEventSystem()
-    {
-        // Find the event system in your scene
-        var eventSystem = FindObjectOfType<EventSystem>();
-        if (eventSystem != null)
-        {
-            // Get or add the Standalone Input Module
-            var inputModule = eventSystem.GetComponent<StandaloneInputModule>();
-            if (inputModule == null)
-                inputModule = eventSystem.gameObject.AddComponent<StandaloneInputModule>();
-
-            // Configure it to work when timeScale is 0
-            inputModule.forceModuleActive = true;
-        }
     }
 
     private void InitializeUIManager()
@@ -224,6 +207,19 @@ public class GameManager : MonoBehaviour
 
     private void CustomUpdate()
     {
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            var bricksCopy = new List<BrickController>(BrickManager.GetActiveBricks());
+            foreach (var brick in bricksCopy)
+            {
+                if (brick != null)
+                {
+                    brick.OnDestroyBrick();
+                }
+            }
+        }
+
         if (!firstFrame)
         {
             firstFrame = true;

@@ -24,6 +24,34 @@ MonoBehaviour:
     - LevelPack1
     - Level1
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5b09c24faaa82ad408c153184503d144
+    m_Address: Assets/ScriptableObjects/Levels/Level 2.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelPack1
+    - Level2
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 022875051db83e641b25a4ab3cb19dec
+    m_Address: Assets/ScriptableObjects/Levels/Level3.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelPack1
+    - Level3
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4d734e8d4cb4d104696c546ef71ec7a3
+    m_Address: Assets/ScriptableObjects/Levels/Level4.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LevelPack1
+    - Level4
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f7f7191cf55b45e47a97dabbbe7d18af
+    m_Address: Assets/ScriptableObjects/Levels/Level5.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Level5
+    - LevelPack1
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: bd0a7609fd9d75b4ca0b9062353e4901, type: 2}
   m_SchemaSet:

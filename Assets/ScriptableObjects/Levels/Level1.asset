@@ -15,6 +15,4 @@ MonoBehaviour:
   levelName: Level1
   levelNumber: 1
   levelPrefabs:
-  - {fileID: 7850776504989180022, guid: 3ec8a95a11bc3c2428cfb56a17e45735, type: 3}
-  - {fileID: 2647650267844983534, guid: 4e19ba0cf4887814e89011d11bea173e, type: 3}
-  - {fileID: 7187534982361040765, guid: fb5900f6ca4380e40b1c59cf3898f6be, type: 3}
+  - {fileID: 7850776504989180022, guid: 0a2f6613ed189d64b9bc81a273620fc7, type: 3}

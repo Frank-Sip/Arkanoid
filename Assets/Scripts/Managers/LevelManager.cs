@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -35,11 +36,15 @@ public class LevelManager
             }
             isLoading = false;
         });
-    }
-
-    private void SetupLevel(LevelData levelData)
+    }    private void SetupLevel(LevelData levelData)
     {
         CleanupCurrentLevel();
+        UnityEngine.Object.FindObjectOfType<MonoBehaviour>().StartCoroutine(SetupLevelAfterCleanup(levelData));
+    }
+
+    private System.Collections.IEnumerator SetupLevelAfterCleanup(LevelData levelData)
+    {
+        yield return null;
         
         foreach (var prefab in levelData.levelPrefabs)
         {
@@ -51,23 +56,32 @@ public class LevelManager
         }
 
         BrickManager.SpawnBricksAtPositions();
-    }
-
-    private void CleanupCurrentLevel()
+    }    
+      private void CleanupCurrentLevel()
     {
         foreach (var instance in currentLevelInstances)
         {
             if (instance != null)
             {
-                GameObject.Destroy(instance);
+                instance.SetActive(false);
+                GameObject.DestroyImmediate(instance);
             }
         }
         currentLevelInstances.Clear();
 
-        GameManager.Instance.ResetGame();
-    }
+        foreach (var deactivated in deactivatedLevels)
+        {
+            if (deactivated != null)
+            {
+                GameObject.DestroyImmediate(deactivated);
+            }
+        }
+        deactivatedLevels.Clear();
 
-    private void HandleLevelCompleted()
+        GameManager.Instance.ResetGame();
+        
+     
+    }    private void HandleLevelCompleted()
     {
         currentLevel++;
 
@@ -77,11 +91,28 @@ public class LevelManager
             return;
         }
 
-        if (currentLevel == 2)
+        if (currentLevel == 6)
         {
+            Debug.Log("Transitioning from LevelPack1 to LevelPack2 - Unloading LevelPack1");
+            
+            CleanupCurrentLevel();
+            
             addressableManager.UnloadPackage("LevelPack1");
+            
+            UnityEngine.Object.FindObjectOfType<MonoBehaviour>().StartCoroutine(LoadNextLevelAfterPackUnload());
         }
-
+        else
+        {
+            LoadCurrentLevel();
+        }
+    }
+    
+    private System.Collections.IEnumerator LoadNextLevelAfterPackUnload()
+    {
+        yield return null;
+        yield return null;
+        
+        Debug.Log($"Loading Level {currentLevel} from LevelPack2");
         LoadCurrentLevel();
     }
 }
