@@ -5,7 +5,9 @@ using UnityEngine;
 public static class BrickPhysics
 {
     private static Dictionary<int, int> lastDamageFrameByBrick = new Dictionary<int, int>();
-    
+    private static Dictionary<int, float> brickCollisionCooldown = new Dictionary<int, float>();
+    private static float minCollisionInterval = 0.05f;
+
     public static void Initiate(Transform brickTransform, Transform visual, BrickSO config, BrickController controller)
     {
         Mesh mesh = visual.GetComponent<MeshFilter>()?.sharedMesh;
@@ -39,7 +41,6 @@ public static class BrickPhysics
         controller.SetBounds(bounds);
     }
 
-
     public static void UpdateBounds(Transform t, BrickSO config, out Rect bounds)
     {
         Vector3 pos = t.position;
@@ -62,6 +63,13 @@ public static class BrickPhysics
                 continue;
 
             if (!brick.bounds.Overlaps(ballRect)) continue;
+
+            int brickId = brick.GetInstanceID();
+            if (brickCollisionCooldown.TryGetValue(brickId, out float lastHitTime) &&
+                Time.time - lastHitTime < minCollisionInterval)
+            {
+                continue;
+            }
 
             Vector2 ballCenter = ballPos;
             Vector2 brickCenter = brick.bounds.center;
@@ -89,30 +97,18 @@ public static class BrickPhysics
         if (closestBrick != null)
         {
             int brickId = closestBrick.GetInstanceID();
-            
-            if (lastDamageFrameByBrick.TryGetValue(brickId, out int lastFrame) && 
-                lastFrame == Time.frameCount)
-            {
-                Vector3 correctionVector = closestNormal * (radius - minDistance);
-                correction = new Vector3(correctionVector.x, correctionVector.y, 0f) * 1.5f;
-                
-                Vector3 direction3D = new Vector3(direction.x, direction.y, 0f);
-                Vector3 normal3D = new Vector3(closestNormal.x, closestNormal.y, 0f);
-                direction3D = Vector3.Reflect(direction3D, normal3D);
-                direction = new Vector3(direction3D.x, direction3D.y, 0f);
-                
-                return true;
-            }
-            
+
+            brickCollisionCooldown[brickId] = Time.time;
             lastDamageFrameByBrick[brickId] = Time.frameCount;
-            
+
             Vector3 directionVector = new Vector3(direction.x, direction.y, 0f);
             Vector3 normalVector = new Vector3(closestNormal.x, closestNormal.y, 0f);
             directionVector = Vector3.Reflect(directionVector, normalVector);
             direction = new Vector3(directionVector.x, directionVector.y, 0f);
-            
+
+            float correctionFactor = 2.0f;
             Vector3 correctionVec = closestNormal * (radius - minDistance);
-            correction = new Vector3(correctionVec.x, correctionVec.y, 0f) * 1.5f;
+            correction = new Vector3(correctionVec.x, correctionVec.y, 0f) * correctionFactor;
 
             closestBrick.TakeDamage();
             return true;
