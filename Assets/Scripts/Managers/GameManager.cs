@@ -33,6 +33,10 @@ public class GameManager : MonoBehaviour
     [Header("PowerUp Settings")]
     public PowerUpController powerUpControllerSO;
     [SerializeField] private Transform powerUpPoolContainer;
+    
+    [Header("Wall Settings")]
+    [SerializeField] private WallController wallControllerSO;
+    [SerializeField] private List<Transform> wallsParent = new List<Transform>();
 
     [Header("Level Settings")] [SerializeField]
     private int totalLevels = 10;
@@ -77,12 +81,14 @@ public class GameManager : MonoBehaviour
         Instance = this;
         InitializeServices();
         firstFrame = false;
+        firstFrame = false;
         bricksSpawned = false;
         ballSpawned = false;
         initialBallSpawned = false;
         MakePlayerLoop();
 
         paddleControllerSO.Init(paddleParent);
+        wallControllerSO.Init(wallsParent);
     }
 
     private void InitializeServices()
@@ -136,6 +142,7 @@ public class GameManager : MonoBehaviour
         ServiceProvider.RegisterService<BallController>(ballControllerSO);
         ServiceProvider.RegisterService<BrickController>(brickControllerSO);
         ServiceProvider.RegisterService<PowerUpController>(powerUpControllerSO);
+        ServiceProvider.RegisterService<WallController>(wallControllerSO);
     }
 
     private void InitializeUIAtlas()

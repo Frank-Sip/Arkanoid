@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a02ecfbe8b6dc0488ce1120538c5a1a, type: 3}
-  m_Name: Edges
+  m_Script: {fileID: 11500000, guid: 7dff6c3dedf5ab04b8ed67b7dc041ab5, type: 3}
+  m_Name: Wall
   m_EditorClassIdentifier: 
-  left: -21.8
-  right: 5.7
-  up: 13
-  down: -13
+  width: 1
+  height: 30
+  length: 5

@@ -10,6 +10,8 @@ public class GameplayState : GameState
         var audioManager = ServiceProvider.GetService<AudioManager>();
         audioManager.PlayBGM(1);
         
+        ServiceProvider.GetService<WallController>().Activate();
+
         gameManager.dynamicCanvas.SetActive(true);
         var uiManager = ServiceProvider.GetService<UIManager>();
         uiManager.SetCounterValue("BrickCounter", BrickManager.GetActiveBricks().Count);
@@ -37,5 +39,6 @@ public class GameplayState : GameState
     {
         gameManager.GameStateLayout.SetActive(false);
         gameManager.dynamicCanvas.SetActive(false);
+        ServiceProvider.GetService<WallController>().Deactivate();
     }
 }
