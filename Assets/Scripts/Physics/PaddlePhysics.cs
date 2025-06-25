@@ -25,18 +25,20 @@ public static class PaddlePhysics
 
             float baseWidth = meshBounds.size.x;
             float baseHeight = meshBounds.size.y;
+            float baseLength = meshBounds.size.z;
 
             float scaleX = paddleConfig.width / baseWidth;
             float scaleY = paddleConfig.height / baseHeight;
+            float scaleZ = paddleConfig.length / baseLength;
 
-            visual.localScale = new Vector3(scaleX, scaleY, 1f);
+            visual.localScale = new Vector3(scaleX, scaleY, scaleZ);
             Vector3 centerOffset = Vector3.Scale(meshBounds.center, visual.localScale);
             visual.localPosition = -centerOffset;
             visual.localRotation = Quaternion.identity;
         }
         else
         {
-            visual.localScale = new Vector3(paddleSO.width, paddleSO.height, 1f);
+            visual.localScale = new Vector3(paddleSO.width, paddleSO.height, paddleSO.length);
             visual.localPosition = Vector3.zero;
         }
     }

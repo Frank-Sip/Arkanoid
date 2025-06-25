@@ -7,4 +7,5 @@ public class BrickSO : ScriptableObject
 {
     public float width = 3f;
     public float height = 0.5f;
+    public float length = 5f;
 }

@@ -8,4 +8,5 @@ public class PaddleSO : ScriptableObject
     public float speed = 10f;
     public float width = 3f;
     public float height = 0.5f;
+    public float length = 5f;
 }

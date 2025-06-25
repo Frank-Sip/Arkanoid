@@ -15,11 +15,13 @@ public static class BrickPhysics
 
             float baseWidth = meshBounds.size.x;
             float baseHeight = meshBounds.size.y;
+            float baseLength = meshBounds.size.z;
 
             float scaleX = config.width / baseWidth;
             float scaleY = config.height / baseHeight;
+            float scaleZ = config.length / baseLength;
 
-            visual.localScale = new Vector3(scaleX, scaleY, 1f);
+            visual.localScale = new Vector3(scaleX, scaleY, scaleZ);
 
             Vector3 centerOffset = Vector3.Scale(meshBounds.center, visual.localScale);
             visual.localPosition = -centerOffset;
@@ -28,7 +30,7 @@ public static class BrickPhysics
         }
         else
         {
-            visual.localScale = new Vector3(config.width, config.height, 1f);
+            visual.localScale = new Vector3(config.width, config.height, config.length);
             visual.localPosition = Vector3.zero;
         }
 
