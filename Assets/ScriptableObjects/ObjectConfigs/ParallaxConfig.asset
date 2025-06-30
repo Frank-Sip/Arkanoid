@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9016dc4c8c7ed324098d2ff5044eace9, type: 3}
-  m_Name: Paddle
+  m_Script: {fileID: 11500000, guid: 4178890a9c51d204aad075e21b26e55a, type: 3}
+  m_Name: ParallaxConfig
   m_EditorClassIdentifier: 
-  speed: 35
-  width: 7
-  height: 0.3
-  length: 1
+  backgroundSpeed: 2
+  middleSpeed: 5
+  foregroundSpeed: 10

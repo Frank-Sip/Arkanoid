@@ -87,7 +87,8 @@ public class PowerUpController : ScriptableObject
 
     private void ActivateMultiball()
     {
-        BallManager.SpawnAndLaunchMultipleBalls(2);
+        int ballCount = currentPowerUp.ballCount;
+        BallManager.SpawnAndLaunchMultipleBalls(ballCount);
     }
 
     private void ActivateWidePaddle()
@@ -95,7 +96,7 @@ public class PowerUpController : ScriptableObject
         PaddleController paddleController = ServiceProvider.GetService<PaddleController>();
         if (paddleController != null)
         {
-            paddleController.ActivateWidePaddle(1.5f, 5f);
+            paddleController.ActivateWidePaddle(currentPowerUp.widthMultiplier, currentPowerUp.widePaddleDuration);
         }
     }
 
@@ -104,7 +105,7 @@ public class PowerUpController : ScriptableObject
         PaddleController paddleController = ServiceProvider.GetService<PaddleController>();
         if (paddleController != null)
         {
-            paddleController.AddLife(extraLife);
+            paddleController.AddLife(currentPowerUp.lifeCount);
         }
     }
     
@@ -113,7 +114,7 @@ public class PowerUpController : ScriptableObject
         PaddleController paddleController = ServiceProvider.GetService<PaddleController>();
         if (paddleController != null)
         {
-            paddleController.ActivateSpeedBoost(1.5f, 5f);
+            paddleController.ActivateSpeedBoost(currentPowerUp.speedMultiplier, currentPowerUp.speedBoostDuration);
         }
     }
 

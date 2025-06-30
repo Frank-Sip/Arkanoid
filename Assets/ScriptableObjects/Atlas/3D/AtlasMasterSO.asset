@@ -125,4 +125,18 @@ MonoBehaviour:
       y: 130
       width: 286
       height: 74
+  - type: 17
+    uvRect:
+      serializedVersion: 2
+      x: 269
+      y: 319
+      width: 243
+      height: 373
+  - type: 18
+    uvRect:
+      serializedVersion: 2
+      x: 269
+      y: 74
+      width: 242
+      height: 113
   sharedMaterial: {fileID: 2100000, guid: a08ad1c4465f68445940fe28e6cb6ca5, type: 2}

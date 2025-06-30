@@ -21,6 +21,9 @@ public class PaddleController : ScriptableObject
     private float originalWidth;
     private bool isWidePaddle;
     private float powerUpTimer = -1f;
+    private RectTransform[] parallaxLayers;
+    private Vector2[] parallaxInitialPositions;
+    private ParallaxConfigSO parallaxConfig;
     
     private float originalSpeed;
     private bool isSpeedBoosted;
@@ -73,6 +76,50 @@ public class PaddleController : ScriptableObject
             {
                 StopSpeedBoostPowerUp();
             }
+        }
+        
+        UpdateParallax();
+    }
+    
+    public void SetupParallax(ParallaxConfigSO config, RectTransform[] layers)
+    {
+        parallaxConfig = config;
+        parallaxLayers = layers;
+    
+        if (parallaxLayers != null && parallaxLayers.Length == 3)
+        {
+            parallaxInitialPositions = new Vector2[3];
+            for (int i = 0; i < 3; i++)
+            {
+                if (parallaxLayers[i] != null)
+                {
+                    parallaxInitialPositions[i] = parallaxLayers[i].anchoredPosition;
+                }
+            }
+        }
+    }
+    
+    private void UpdateParallax()
+    {
+        if (parallaxConfig == null || parallaxLayers == null || paddleTransform == null)
+            return;
+    
+        float paddleX = paddleTransform.position.x;
+
+        if (parallaxLayers[0] != null)
+        {
+            float offset = paddleX * parallaxConfig.backgroundSpeed; parallaxLayers[0].anchoredPosition = new Vector2(parallaxInitialPositions[0].x + offset, parallaxLayers[0].anchoredPosition.y);
+        }
+
+        if (parallaxLayers[1] != null)
+        {
+            float offset = paddleX * parallaxConfig.middleSpeed; parallaxLayers[1].anchoredPosition = new Vector2(parallaxInitialPositions[1].x + offset, parallaxLayers[1].anchoredPosition.y);
+        }
+
+        if (parallaxLayers[2] != null)
+        {
+            float offset = paddleX * parallaxConfig.foregroundSpeed;
+            parallaxLayers[2].anchoredPosition = new Vector2(parallaxInitialPositions[2].x + offset, parallaxLayers[2].anchoredPosition.y);
         }
     }
 

@@ -39,3 +39,7 @@ MonoBehaviour:
     atlasType: 9
   - objectName: BackgroundDefeat
     atlasType: 1
+  - objectName: ParallaxBack
+    atlasType: 17
+  - objectName: ParallaxMid
+    atlasType: 18

@@ -40,6 +40,12 @@ public class GameManager : MonoBehaviour
 
     [Header("Level Settings")] [SerializeField]
     private int totalLevels = 10;
+    
+    [Header("Parallax Settings")]
+    [SerializeField] private ParallaxConfigSO parallaxConfigSO;
+    [SerializeField] private RectTransform backgroundParallax;
+    [SerializeField] private RectTransform middleParallax;
+    [SerializeField] private RectTransform foregroundParallax;
 
     [Header("Audio Settings")]
     [SerializeField] private List<AudioClip> bgTracks;
@@ -101,6 +107,18 @@ public class GameManager : MonoBehaviour
         InitializeUIAtlas();
         InitializeLevelSystem();
         InitializeConsole();
+        InitializeParallax();
+    }
+    
+    private void InitializeParallax()
+    {
+        if (parallaxConfigSO == null)
+            return;
+        
+        RectTransform[] layers = new RectTransform[3]
+        { backgroundParallax, middleParallax, foregroundParallax };
+    
+        paddleControllerSO.SetupParallax(parallaxConfigSO, layers);
     }
 
     private void InitializeUIManager()

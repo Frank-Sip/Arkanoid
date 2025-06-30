@@ -21,5 +21,7 @@ public enum AtlasType
     Resume,
     Menu,
     Arkanoid,
-    Credits
+    Credits,
+    ParallaxBack,
+    ParallaxMid
 }
