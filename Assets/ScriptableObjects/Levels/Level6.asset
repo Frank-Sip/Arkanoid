@@ -15,4 +15,7 @@ MonoBehaviour:
   levelName: Level6
   levelNumber: 6
   levelPrefabs:
-  - {fileID: 7850776504989180022, guid: 3ec8a95a11bc3c2428cfb56a17e45735, type: 3}
+  - {fileID: 8724218510754820226, guid: 6e51e90b1a6147a4c8a75b4dfa9b590c, type: 3}
+  - {fileID: 8317631281465368709, guid: 3e45c2952f0a2144296f2ee90eadab33, type: 3}
+  - {fileID: 119599020366536006, guid: 0a4641bcab3070b438a4957a151b172a, type: 3}
+  - {fileID: 6097130708797910953, guid: 8c03cd583410f944c97a6f77482ffb80, type: 3}

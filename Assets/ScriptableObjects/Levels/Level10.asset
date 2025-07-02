@@ -15,4 +15,5 @@ MonoBehaviour:
   levelName: Level10
   levelNumber: 10
   levelPrefabs:
-  - {fileID: 7850776504989180022, guid: 3ec8a95a11bc3c2428cfb56a17e45735, type: 3}
+  - {fileID: 5585714638376104625, guid: d00a813ced84ce14cac64e21e9353a85, type: 3}
+  - {fileID: 7575892362573887020, guid: 266f324ecd99179439d5046117f47172, type: 3}

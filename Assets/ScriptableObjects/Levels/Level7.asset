@@ -15,4 +15,5 @@ MonoBehaviour:
   levelName: Level7
   levelNumber: 7
   levelPrefabs:
-  - {fileID: 7850776504989180022, guid: 3ec8a95a11bc3c2428cfb56a17e45735, type: 3}
+  - {fileID: 3891037596590929386, guid: c0858c6acab5c1e42990ad98a0b0b07a, type: 3}
+  - {fileID: 975632912422636571, guid: 174cac8be7aaf0f44a4af5051c0f09a1, type: 3}

@@ -15,4 +15,7 @@ MonoBehaviour:
   levelName: Level9
   levelNumber: 9
   levelPrefabs:
-  - {fileID: 7850776504989180022, guid: 3ec8a95a11bc3c2428cfb56a17e45735, type: 3}
+  - {fileID: 4939110473933789909, guid: 9246c53ec5b4ef745a041aa3a9660ca4, type: 3}
+  - {fileID: 4471370185347586515, guid: be733ebfc19c76b4ab0e240560f906b8, type: 3}
+  - {fileID: 1739458369519257954, guid: cf68e5370e69eaa45af2f028a21223d4, type: 3}
+  - {fileID: 4477352852305255388, guid: d2e6048e8878d4b48b73afaf3fb3492a, type: 3}
