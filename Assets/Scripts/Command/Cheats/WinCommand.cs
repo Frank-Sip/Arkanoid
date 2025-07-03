@@ -7,11 +7,10 @@ public class WinCommand : CommandSO
 {
     public override void Execute()
     {
-        GameManager.Instance.ChangeGameStatus( new GameplayState());
         ServiceProvider.GetService<ConsoleManager>().ToggleConsole();
+        GameManager.Instance.ChangeGameStatus(new GameplayState());
         
         var bricksCopy = new List<BrickController>(BrickManager.GetActiveBricks());
-        
         foreach (var brick in bricksCopy)
         {
             if (brick != null)
@@ -19,5 +18,7 @@ public class WinCommand : CommandSO
                 brick.OnDestroyBrick();
             }
         }
+        
+        BrickManager.CheckGameCondition();
     }
 }

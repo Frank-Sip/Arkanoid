@@ -62,7 +62,7 @@ public static class BrickManager
         ServiceProvider.GetService<UIManager>().SetCounterValue("BrickCounter", activeBricks.Count);
     }
 
-    private static void CheckGameCondition()
+    public static void CheckGameCondition()
     {
         if (activeBricks.Count <= 0 && GameManager.Instance.IsInGameplayState())
         {
