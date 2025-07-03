@@ -15,7 +15,9 @@ public class ButtonSO : ScriptableObject
         Play,
         Resume,
         MainMenu,
-        Quit
+        Quit,
+        VolumeUp,
+        VolumeDown
     }
 
     [Header("Button Mappings")]

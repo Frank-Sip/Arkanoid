@@ -43,3 +43,7 @@ MonoBehaviour:
     atlasType: 17
   - objectName: ParallaxMid
     atlasType: 18
+  - objectName: VolumeUp
+    atlasType: 8
+  - objectName: VolumeDown
+    atlasType: 1

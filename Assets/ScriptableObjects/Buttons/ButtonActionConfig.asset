@@ -21,3 +21,7 @@ MonoBehaviour:
     actionType: 1
   - buttonName: MainMenu
     actionType: 2
+  - buttonName: VolumeUp
+    actionType: 4
+  - buttonName: VolumeDown
+    actionType: 5

@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class AudioManager
 {
+    private float globalVolume = 0.5f;
     private AudioSource music;
     private AudioSource sfx;
     private List<AudioClip> bgTracks;
@@ -34,5 +35,20 @@ public class AudioManager
         if (sfx == null || sfxIndex < 0 || sfxIndex >= soundEffects.Count) return;
 
         soundEffects[sfxIndex].PlaySound(sfx);
+    }
+    
+    public float GetGlobalVolume()
+    {
+        return globalVolume;
+    }
+    
+    public void SetGlobalVolume(float volume)
+    {
+        globalVolume = Mathf.Clamp01(volume);
+        music.volume = globalVolume;
+        sfx.volume = globalVolume;
+    
+        PlayerPrefs.SetFloat("GlobalVolume", globalVolume);
+        PlayerPrefs.Save();
     }
 }
