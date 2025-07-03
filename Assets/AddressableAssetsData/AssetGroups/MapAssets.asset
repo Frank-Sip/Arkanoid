@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: MenuUI
+  m_Name: MapAssets
   m_EditorClassIdentifier: 
-  m_GroupName: MenuUI
+  m_GroupName: MapAssets
   m_Data:
     m_SerializedData: []
-  m_GUID: cde6d4ac598e6ee46ba605595c16649f
+  m_GUID: 5fc1407d91abc2947925afe92077ea72
   m_SerializeEntries:
-  - m_GUID: 0f416f7ac0778a94db5412c51295331b
-    m_Address: Static Canvas
+  - m_GUID: f9bd8b5e1e07fcb4a886d74e1478e718
+    m_Address: Walls
     m_ReadOnly: 0
     m_SerializedLabels:
-    - MenuUI
+    - MapAssets
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: bd0a7609fd9d75b4ca0b9062353e4901, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 4436ad2f8a09636489a757ac3650451b, type: 2}
-    - {fileID: 11400000, guid: f10dfcc79313b584ea5c6b41bfaf4058, type: 2}
+    - {fileID: 11400000, guid: ce56e2d29efa6a646bc06f9def04de05, type: 2}
+    - {fileID: 11400000, guid: 9aa237f7a48f7f943a2caa61cbf513d4, type: 2}

@@ -2,8 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameplayState : GameState
-{
-    public override void Enter(GameManager gameManager)
+{    public override void Enter(GameManager gameManager)
     {
         Time.timeScale = 1f;
         gameManager.GameStateLayout.SetActive(true);
@@ -15,6 +14,12 @@ public class GameplayState : GameState
         gameManager.dynamicCanvas.SetActive(true);
         var uiManager = ServiceProvider.GetService<UIManager>();
         uiManager.SetCounterValue("BrickCounter", BrickManager.GetActiveBricks().Count);
+        
+        var addressableManager = ServiceProvider.GetService<AddressableManager>();
+        addressableManager.LoadMapAssetsAsync(
+            onComplete: () => Debug.Log("MapAssets loaded successfully for gameplay"),
+            onError: (error) => Debug.LogError($"Failed to load MapAssets for gameplay: {error}")
+        );
     }
 
     public override void Tick(GameManager gameManager)
@@ -33,12 +38,14 @@ public class GameplayState : GameState
                 ball.Frame();
             }
         }
-    }
-
-    public override void Exit(GameManager gameManager)
+    }    public override void Exit(GameManager gameManager)
     {
         gameManager.GameStateLayout.SetActive(false);
         gameManager.dynamicCanvas.SetActive(false);
         ServiceProvider.GetService<WallController>().Deactivate();
+        
+        var addressableManager = ServiceProvider.GetService<AddressableManager>();
+        addressableManager.UnloadMapAssets();
+        Debug.Log("MapAssets unloaded when exiting gameplay");
     }
 }

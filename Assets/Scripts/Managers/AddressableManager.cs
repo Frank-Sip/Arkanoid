@@ -11,6 +11,10 @@ public class AddressableManager
     private Dictionary<string, AsyncOperationHandle> loadedPackHandles = new Dictionary<string, AsyncOperationHandle>();
     private Dictionary<string, AsyncOperationHandle<LevelData>> loadedLevelHandles = new Dictionary<string, AsyncOperationHandle<LevelData>>();
     private int totalLevels = 10;
+    private AsyncOperationHandle<IList<UnityEngine.Object>> menuUIHandle;
+    private AsyncOperationHandle<IList<UnityEngine.Object>> mapAssetsHandle;
+    private bool isMenuUILoaded = false;
+    private bool isMapAssetsLoaded = false;
     
     public void Init()
     {
@@ -114,7 +118,10 @@ public class AddressableManager
             Addressables.Release(kvp.Value);
         }
         loadedPackHandles.Clear();
-    
+        
+        UnloadMenuUI();
+        UnloadMapAssets();
+
         
         Debug.Log("All packages unloaded");
     }
@@ -128,4 +135,79 @@ public class AddressableManager
     {
         UnloadAllPackages();
     }
+
+    public void LoadMenuUIAsync(System.Action onComplete = null, System.Action<string> onError = null)
+    {
+        if (isMenuUILoaded)
+        {
+            onComplete?.Invoke();
+            return;
+        }
+
+        Debug.Log("Loading MenuUI assets...");
+        menuUIHandle = Addressables.LoadAssetsAsync<UnityEngine.Object>("MenuUI", null);
+        
+        menuUIHandle.Completed += handle => {
+            if (handle.Status == AsyncOperationStatus.Succeeded)
+            {
+                isMenuUILoaded = true;
+                Debug.Log($"MenuUI loaded successfully with {handle.Result.Count} assets");
+                onComplete?.Invoke();
+            }
+            else
+            {
+                Debug.LogError($"Failed to load MenuUI: {handle.OperationException?.Message}");
+                onError?.Invoke($"Failed to load MenuUI: {handle.OperationException?.Message}");
+            }
+        };
+    }
+    
+    public void UnloadMenuUI()
+    {
+        if (isMenuUILoaded && menuUIHandle.IsValid())
+        {
+            Addressables.Release(menuUIHandle);
+            isMenuUILoaded = false;
+            Debug.Log("MenuUI unloaded");
+        }
+    }
+    
+    public void LoadMapAssetsAsync(System.Action onComplete = null, System.Action<string> onError = null)
+    {
+        if (isMapAssetsLoaded)
+        {
+            onComplete?.Invoke();
+            return;
+        }
+
+        Debug.Log("Loading MapAssets...");
+        mapAssetsHandle = Addressables.LoadAssetsAsync<UnityEngine.Object>("MapAssets", null);
+        
+        mapAssetsHandle.Completed += handle => {
+            if (handle.Status == AsyncOperationStatus.Succeeded)
+            {
+                isMapAssetsLoaded = true;
+                Debug.Log($"MapAssets loaded successfully with {handle.Result.Count} assets");
+                onComplete?.Invoke();
+            }
+            else
+            {
+                Debug.LogError($"Failed to load MapAssets: {handle.OperationException?.Message}");
+                onError?.Invoke($"Failed to load MapAssets: {handle.OperationException?.Message}");
+            }
+        };
+    }
+    
+    public void UnloadMapAssets()
+    {
+        if (isMapAssetsLoaded && mapAssetsHandle.IsValid())
+        {
+            Addressables.Release(mapAssetsHandle);
+            isMapAssetsLoaded = false;
+            Debug.Log("MapAssets unloaded");
+        }
+    }
+    
+    public bool IsMenuUILoaded => isMenuUILoaded;
+    public bool IsMapAssetsLoaded => isMapAssetsLoaded;
 }

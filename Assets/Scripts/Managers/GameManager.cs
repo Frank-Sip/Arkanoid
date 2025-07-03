@@ -141,9 +141,7 @@ public class GameManager : MonoBehaviour
         var consoleManager = new ConsoleManager();
         consoleManager.Init(consoleUI, commandInput);
         ServiceProvider.RegisterService(consoleManager);
-    }
-
-    private void InitializeLevelSystem()
+    }    private void InitializeLevelSystem()
     {
         var addressableManager = new AddressableManager();
         addressableManager.Init();
@@ -152,6 +150,11 @@ public class GameManager : MonoBehaviour
         var levelManager = new LevelManager();
         levelManager.Init(addressableManager, totalLevels);
         ServiceProvider.RegisterService(levelManager);
+        
+        addressableManager.LoadMenuUIAsync(
+            onComplete: () => Debug.Log("MenuUI loaded successfully at game start"),
+            onError: (error) => Debug.LogError($"Failed to load MenuUI at game start: {error}")
+        );
     }
 
     private void InitializeControllers()
@@ -231,9 +234,7 @@ public class GameManager : MonoBehaviour
     }
 
     private void CustomUpdate()
-    {
-
-        if (Input.GetKeyDown(KeyCode.K))
+    {        if (Input.GetKeyDown(KeyCode.K))
         {
             var bricksCopy = new List<BrickController>(BrickManager.GetActiveBricks());
             foreach (var brick in bricksCopy)
