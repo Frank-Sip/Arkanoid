@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   brickConfig: {fileID: 11400000, guid: 2013bc294ead9e54a96ca28d658255cb, type: 2}
   brickPrefab: {fileID: 5469870417131497855, guid: 3f943a9f1c0a55542afa927dc8a59d13, type: 3}
-  powerUpDropChance: 1
+  powerUpDropChance: 0.4
   brickTypes:
   - type: 1
     atlas: {fileID: 11400000, guid: f05eebb1efb98b24a800898c5608d93e, type: 2}

@@ -18,7 +18,7 @@ MonoBehaviour:
   m_GUID: cde6d4ac598e6ee46ba605595c16649f
   m_SerializeEntries:
   - m_GUID: 0f416f7ac0778a94db5412c51295331b
-    m_Address: Static Canvas
+    m_Address: Assets/Prefabs/Static Canvas.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - MenuUI
